@@ -56,20 +56,6 @@
     obs.observe(el);
   });
 
-  if (typeof Swiper !== 'undefined') {
-    const hpHero = document.querySelector('.hp-hero__bg');
-    if (hpHero) {
-      new Swiper('.hp-hero__bg', {
-        loop: true,
-        autoplay: { delay: 6000, disableOnInteraction: false },
-        pagination: { el: '.hp-hero__pagination', clickable: true },
-        effect: 'fade',
-        fadeEffect: { crossFade: true },
-        speed: 900
-      });
-    }
-  }
-
   const path = location.pathname;
   document.querySelectorAll('.nav__link, .sidebar__nav a').forEach(a => {
     const href = a.getAttribute('href');

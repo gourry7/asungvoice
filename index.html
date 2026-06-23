@@ -7,15 +7,14 @@
 <meta name="description" content="AI On-Device 비명 인식. 승강기·화장실·세대현관·홈 24시간 보호. ㈜아성보이스">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Round:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="assets/images/logo.png" type="image/png">
 </head>
-<body>
+<body class="page-neu">
 
 <a href="#main" class="skip">본문 바로가기</a>
 
-<header class="header">
+<header class="header header--neu is-solid">
   <div class="container header__inner">
     <a href="index.html" class="logo">
       <img src="assets/images/logo.png" alt="아성보이스" width="32" height="32">
@@ -73,29 +72,22 @@
 
 <!-- Hero -->
 <section class="hp-hero">
-  <div class="swiper hp-hero__bg">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide"><img src="assets/images/pages/main_visual1.jpg" alt=""></div>
-      <div class="swiper-slide"><img src="assets/images/pages/main_visual2_0220.jpg" alt=""></div>
-      <div class="swiper-slide"><img src="assets/images/pages/main_visual3_0220.jpg" alt=""></div>
-    </div>
-  </div>
-  <div class="hp-hero__overlay"></div>
   <div class="container hp-hero__content">
     <div class="hp-hero__text reveal">
-      <span class="hp-hero__badge">On-Device AI · 99% 비명 인식률</span>
+      <span class="hp-hero__badge neu-badge">On-Device AI · 99% 비명 인식률</span>
       <h1>소리로 지키는 안전,<br><strong>워치독</strong></h1>
       <p>딥러닝 비명인식으로 승강기·화장실·세대현관을 24시간 보호합니다.<br>녹음·감청 없이, 비명 발생 시에만 즉시 대응합니다.</p>
       <div class="hp-hero__btns">
-        <a href="#products" class="btn btn--blue">제품 라인업</a>
-        <a href="support/inquiry.html" class="btn btn--outline">도입 문의</a>
+        <a href="#products" class="btn btn--blue neu-btn">제품 라인업</a>
+        <a href="support/inquiry.html" class="btn btn--outline neu-btn-outline">도입 문의</a>
       </div>
     </div>
     <div class="hp-hero__device reveal">
-      <img src="assets/images/products/watchdog-hero.png" alt="워치독 비명감지기" width="300" height="300">
+      <div class="neu-pedestal">
+        <img src="assets/images/products/watchdog-hero.png" alt="워치독 비명감지기" width="300" height="300">
+      </div>
     </div>
   </div>
-  <div class="swiper-pagination hp-hero__pagination"></div>
 </section>
 
 <!-- Partners -->
@@ -115,22 +107,22 @@
       <p class="section__sub">2015년 설립 이후 3,000대 이상 납품, 국내 대표 비명감지 브랜드</p>
     </header>
     <div class="tech-row reveal">
-      <article class="tech-box">
+      <article class="tech-box neu-card">
         <div class="tech-box__icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></div>
         <h4>AI 비명 인식</h4>
         <p>0.1초 On-Device<br>99% 인식률</p>
       </article>
-      <article class="tech-box">
+      <article class="tech-box neu-card">
         <div class="tech-box__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h4>프라이버시 보호</h4>
         <p>녹음·감청 없음<br>비명 시에만 작동</p>
       </article>
-      <article class="tech-box">
+      <article class="tech-box neu-card">
         <div class="tech-box__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
         <h4>24시간 대기</h4>
         <p>365일 무중단<br>자동 경보·출동</p>
       </article>
-      <article class="tech-box">
+      <article class="tech-box neu-card">
         <div class="tech-box__icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01 9 11.01"/></svg></div>
         <h4>현장 검증</h4>
         <p>전국 단지 적용<br>특허 3건 보유</p>
@@ -149,7 +141,7 @@
     </header>
     <div class="hp-products reveal">
 
-      <a href="products/elevator.html" class="hp-product hp-product--featured">
+      <a href="products/elevator.html" class="hp-product hp-product--featured neu-card">
         <div class="hp-product__visual"><img src="assets/images/products/elevator.png" alt=""></div>
         <div class="hp-product__body">
           <span class="hp-product__tag">WatchDog</span>
@@ -159,7 +151,7 @@
         </div>
       </a>
 
-      <a href="products/restroom.html" class="hp-product">
+      <a href="products/restroom.html" class="hp-product neu-card">
         <div class="hp-product__visual"><img src="assets/images/products/restroom.png" alt=""></div>
         <div class="hp-product__body">
           <h3>화장실 비명감지기</h3>
@@ -168,7 +160,7 @@
         </div>
       </a>
 
-      <a href="products/light-switch.html" class="hp-product">
+      <a href="products/light-switch.html" class="hp-product neu-card">
         <div class="hp-product__visual"><img src="assets/images/products/control-panel.png" alt=""></div>
         <div class="hp-product__body">
           <h3>일괄소등스위치</h3>
@@ -177,7 +169,7 @@
         </div>
       </a>
 
-      <a href="products/home-keeper.html" class="hp-product hp-product--soft">
+      <a href="products/home-keeper.html" class="hp-product hp-product--soft neu-card">
         <div class="hp-product__visual"><img src="assets/images/products/home-keeper.png" alt=""></div>
         <div class="hp-product__body">
           <h3>홈 안전지킴이</h3>
@@ -186,7 +178,7 @@
         </div>
       </a>
 
-      <a href="products/module.html" class="hp-product">
+      <a href="products/module.html" class="hp-product neu-card">
         <div class="hp-product__visual"><img src="assets/images/products/pcb-module.png" alt=""></div>
         <div class="hp-product__body">
           <h3>비명인식 모듈</h3>
@@ -200,13 +192,13 @@
 </section>
 
 <!-- Stats -->
-<section class="section section--navy">
+<section class="section">
   <div class="container">
     <div class="stats-row reveal">
-      <div class="stat-box"><div class="stat-box__num" data-count="3000" data-suffix="+">0</div><div class="stat-box__label">누적 납품</div></div>
-      <div class="stat-box"><div class="stat-box__num" data-count="99" data-suffix="%">0</div><div class="stat-box__label">인식률</div></div>
-      <div class="stat-box"><div class="stat-box__num" data-count="10" data-suffix="년+">0</div><div class="stat-box__label">현장 검증</div></div>
-      <div class="stat-box"><div class="stat-box__num" data-count="2015">0</div><div class="stat-box__label">설립</div></div>
+      <div class="stat-box neu-stat"><div class="stat-box__num" data-count="3000" data-suffix="+">0</div><div class="stat-box__label">누적 납품</div></div>
+      <div class="stat-box neu-stat"><div class="stat-box__num" data-count="99" data-suffix="%">0</div><div class="stat-box__label">인식률</div></div>
+      <div class="stat-box neu-stat"><div class="stat-box__num" data-count="10" data-suffix="년+">0</div><div class="stat-box__label">현장 검증</div></div>
+      <div class="stat-box neu-stat"><div class="stat-box__num" data-count="2015">0</div><div class="stat-box__label">설립</div></div>
     </div>
   </div>
 </section>
@@ -214,7 +206,7 @@
 <!-- 마이안심이 -->
 <section class="section">
   <div class="container">
-    <div class="hp-ansimi reveal">
+    <div class="hp-ansimi neu-card reveal">
       <div class="hp-ansimi__text">
         <span class="section__tag">My Ansim-i</span>
         <h2 class="section__title" style="text-align:left">감시가 아닌 위안,<br>불안이 아닌 평온</h2>
@@ -236,20 +228,20 @@
         <h2 class="section__title" style="font-size:1.15rem">공지사항</h2>
         <a href="support/notice.html">더보기</a>
       </div>
-      <ul class="news-list">
+      <ul class="news-list neu-inset">
         <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=207" target="_blank" rel="noopener"><span class="news-list__title">택배 옮기려 문 연 순간 노렸다…여성 집 침입한 30대 검거</span><time class="news-list__date">2026-03-18</time></a></li>
         <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=203" target="_blank" rel="noopener"><span class="news-list__title">비명인식 일괄소등스위치 출시 (매일경제)</span><time class="news-list__date">2025-11-10</time></a></li>
         <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=180" target="_blank" rel="noopener"><span class="news-list__title">아파트 엘리베이터도 '위험지대' SBS뉴스 워치독 소개</span><time class="news-list__date">2023-07-07</time></a></li>
       </ul>
       <div class="hp-support-links">
-        <a href="support/resources.html">자료실</a>
-        <a href="support/cases.html">설치사례</a>
-        <a href="support/faq.html">FAQ</a>
+        <a href="support/resources.html" class="neu-chip">자료실</a>
+        <a href="support/cases.html" class="neu-chip">설치사례</a>
+        <a href="support/faq.html" class="neu-chip">FAQ</a>
       </div>
     </div>
     <div>
       <h2 class="section__title" style="font-size:1.15rem;margin-bottom:16px">홍보 영상</h2>
-      <div class="video-box"><iframe src="https://www.youtube.com/embed/r2_vyABWIIA" title="워치독 홍보영상" allowfullscreen loading="lazy"></iframe></div>
+      <div class="video-box neu-card"><iframe src="https://www.youtube.com/embed/r2_vyABWIIA" title="워치독 홍보영상" allowfullscreen loading="lazy"></iframe></div>
       <a href="https://youtu.be/oWQpMNDT4-E?t=292" class="hp-sbs-link" target="_blank" rel="noopener">SBS 8시 뉴스 보도 영상 보기</a>
     </div>
   </div>
@@ -258,7 +250,7 @@
 <!-- CTA -->
 <section class="cta">
   <div class="container reveal">
-    <div class="card">
+    <div class="card neu-card neu-cta">
       <h2>도입 상담을 시작하세요</h2>
       <p>시범 설치 · OEM/ODM 협업 · 견적 문의를 환영합니다</p>
       <div class="cta__btns">
@@ -302,7 +294,6 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
