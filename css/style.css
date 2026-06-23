@@ -479,3 +479,27 @@ address{font-style:normal}
   .cta-box{padding:36px 24px}
 }
 
+/* Content extras */
+.content-img{margin:16px 0;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border)}
+.content-img img{width:100%;height:auto;display:block}
+.note-box{padding:14px 18px;background:var(--blue-light);border-radius:var(--r-md);font-size:.88rem;color:var(--text-2);line-height:1.7}
+.note-box a{color:var(--blue);font-weight:600}
+.timeline{list-style:none;padding:0}
+.timeline li{padding:10px 0;border-bottom:1px solid var(--border);font-size:.9rem;line-height:1.6}
+.timeline li strong{display:inline-block;min-width:72px;color:var(--navy)}
+.board-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.board-table th,.board-table td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:left}
+.board-table th{background:var(--cream);font-weight:700;color:var(--navy)}
+.board-table a{color:var(--blue)}
+.faq-list{display:flex;flex-direction:column;gap:8px}
+.faq-item{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+.faq-item summary{padding:14px 18px;font-weight:600;cursor:pointer;list-style:none;background:var(--white)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item p{padding:0 18px 14px;font-size:.88rem;color:var(--text-2);line-height:1.7}
+.info-list{list-style:none;padding:0;margin:12px 0}
+.info-list li{padding:6px 0;font-size:.9rem}
+.product-item--amber .product-item__img{background:#FFF8E8}
+.product-grid--5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:1200px){.product-grid--5{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.product-grid--5{grid-template-columns:1fr}}
+
