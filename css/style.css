@@ -693,6 +693,21 @@ address{font-style:normal}
 .page-neu .timeline li{border-bottom-color:rgba(212,216,224,.5)}
 
 .page-neu .prod-hero__img{padding:28px}
+
+/* IR 자료 다이어그램 */
+.ir-figure{margin:0;padding:16px;text-align:center}
+.ir-figure img{width:100%;height:auto;display:block;border-radius:var(--r-md)}
+.ir-figure figcaption{margin-top:12px;font-size:.82rem;color:var(--text-3);line-height:1.5}
+
+/* 워치독 로고 히어로 (화장실·승강기 동일 브랜드) */
+.prod-hero--watchdog .prod-hero__img{background:var(--neu-bg);box-shadow:var(--neu-shadow)}
+.prod-hero__img--logo img{max-height:120px;width:auto}
+
+/* 사업영역 제품 바로가기 */
+.biz-quicklinks{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 32px;justify-content:center}
+.biz-quicklink{padding:12px 18px;font-size:.84rem;font-weight:600;color:var(--navy);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.biz-quicklink:hover{color:var(--blue);transform:translateY(-2px)}
+
 .page-neu .biz-card__img{background:var(--neu-bg);box-shadow:var(--neu-inset);margin:12px;border-radius:var(--r-lg);height:188px;display:flex;align-items:center;justify-content:center}
 .page-neu .biz-card__img img{object-fit:contain;max-height:160px;width:auto}
 .page-neu .biz-card:hover,.page-neu .case-card:hover{box-shadow:var(--neu-shadow-sm);transform:translateY(-2px)}
@@ -865,6 +880,11 @@ address{font-style:normal}
   .partner-grid{gap:8px}
   .partner-chip{padding:10px 14px;font-size:.82rem;flex:1 1 calc(50% - 8px);text-align:center}
   .biz-cred{flex:1 1 100%;text-align:center;font-size:.78rem}
+  .biz-quicklinks{gap:8px;margin-bottom:24px}
+  .biz-quicklink{flex:1 1 calc(50% - 8px);text-align:center;padding:10px 12px;font-size:.78rem}
+  .ir-figure{padding:12px}
+  .ir-figure figcaption{font-size:.76rem}
+  .prod-hero__img--logo img{max-height:90px}
   .inquiry-intro,.compare-row,.as-steps,.form__checks--grid{grid-template-columns:1fr}
   .as-steps{grid-template-columns:repeat(2,1fr)}
   .inquiry-intro{gap:10px}

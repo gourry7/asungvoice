@@ -46,24 +46,9 @@
 <div class="vs-block__badge">VS</div>
 <div class="vs-block__col vs-block__col--solve"><div class="vs-block__label">WATCHDOG SOLUTION</div><ul><li><strong>비접촉 자동 감지</strong><span>"사람살려", "강도야" 등 비명만으로 즉시 작동 — 물리적 제약 극복</span></li><li><strong>능동적 현장 대응</strong><span>비명 인식 즉시 경광등 점멸 및 강력 경고방송으로 범죄자 심리 위축</span></li><li><strong>자동 구조 요청</strong><span>경비실·통합관제센터 자동 호출로 골든타임 내 신속한 구조 연계</span></li></ul></div>
 </div>
-<div class="vs-impact">KEY IMPACT — 범행 의지 사전 차단 &amp; 피해 최소화</div></div>
-<div class="content-block reveal"><h2>시스템 구성</h2>
-<p class="section-sub">비명 인식부터 방재실 출동까지의 통합 관제 프로세스</p>
-<div class="sys-diagram neu-card">
-<div class="sys-diagram__lane"><span class="sys-diagram__tag">IN-CAR</span><strong>엘리베이터 내부</strong>
-<p>고성능 2-Mic 어레이 · 딥러닝 전용 CPU · WD-600MD</p></div>
-<div class="sys-diagram__arrow">→</div>
-<div class="sys-diagram__lane"><span class="sys-diagram__tag">LOCAL</span><strong>즉시 현장 대응</strong>
-<p>경광등 점멸 · 강력 경고방송(35초) · NO 접점 비상호출</p></div>
-<div class="sys-diagram__arrow">→</div>
-<div class="sys-diagram__lane"><span class="sys-diagram__tag">CONTROL</span><strong>방재실 / 경비실</strong>
-<p>CCTV 자동 팝업 · 비상 통화 · 보안 요원 출동 · 112 연계</p></div>
-</div></div>
-
-<div class="content-block reveal"><h2>동작 흐름</h2>
-<div class="flow flow--wrap"><div class="flow__step neu-card"><div class="num">1</div><h4>비명 인식</h4><p>365일 24시간 AI 항시 대기</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">2</div><h4>유효 비명 확인</h4><p>오인식 필터링</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">3</div><h4>즉시 대응</h4><p>경광등·경고방송·비상호출</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">4</div><h4>경비실 접수</h4><p>미접수 시에도 35초간 방송 지속</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">5</div><h4>CCTV·출동</h4><p>영상 확인 및 보안 요원 투입</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">6</div><h4>상황 종료</h4><p>통화·안전 확인 후 리셋</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">7</div><h4>오동작 복구</h4><p>장난·오동작 시 관리자 확인</p></div></div>
-</div>
-
+<div class="vs-impact">KEY IMPACT — 범행 의지 사전 차단 &amp; 피해 최소화</div></div><div class="content-block reveal"><h2>시스템 구성</h2>
+<figure class="ir-figure neu-card"><img src="../assets/images/diagrams/elevator-system.png" alt="승강기용 시스템 구성도" loading="lazy"><figcaption>비명 인식 → 현장 경광등·방송 → 방재실·경비실·112 연동</figcaption></figure></div><div class="content-block reveal"><h2>동작 흐름</h2>
+<figure class="ir-figure neu-card"><img src="../assets/images/diagrams/elevator-flow.png" alt="승강기용 동작 흐름" loading="lazy"><figcaption>비명 인식부터 상황 종료까지 7단계 자동화 대응</figcaption></figure></div>
 <div class="content-block reveal"><h2>제품 특징</h2>
 <div class="feature-grid"><div class="feature-box neu-card"><h4>딥러닝 &amp; 멀티 트리거</h4><p>"사람살려", "강도야", "도와주세요" 등 특정 비명 단어 정확 인식</p></div><div class="feature-box neu-card"><h4>Digital 2-Mic</h4><p>노이즈 캔슬링·장거리 수음 최적화 디지털 듀얼 마이크</p></div><div class="feature-box neu-card"><h4>자체 비명 DB</h4><p>어린이·여성·남성 등 다양한 계층 실제 비명 데이터 학습</p></div><div class="feature-box neu-card"><h4>오인식 최소화</h4><p>단순 고성·생활 소음과 실제 위급 비명 구분</p></div><div class="feature-box neu-card"><h4>Edge AI</h4><p>클라우드 전송 없이 단말기 내 연산 — 사생활 침해 원천 차단</p></div><div class="feature-box neu-card"><h4>표준 호환성</h4><p>NO 무전원 접점 — 기존 비상통화장치·관제 시스템 완벽 호환</p></div></div>
 </div>
