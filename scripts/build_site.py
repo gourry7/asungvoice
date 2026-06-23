@@ -4,6 +4,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
+MOB_PROD_SHORT = {
+    "home-keeper.html": "홈 안전지킴이",
+    "elevator.html": "승강기",
+    "restroom.html": "화장실",
+    "light-switch.html": "일괄소등",
+    "module.html": "모듈",
+}
+
 PRODUCTS = [
     ("home-keeper.html", "홈 안전지킴이"),
     ("elevator.html", "승강기 비명감지기"),
@@ -37,7 +45,7 @@ def header(depth: int, active_nav: str = "") -> str:
         f'<a href="{p}support/{slug}">{label}</a>' for slug, label in SUPPORT
     )
     mob_prod = "".join(
-        f'<a href="{p}products/{slug}">{label.split()[0] if " " in label else label}</a>'
+        f'<a href="{p}products/{slug}">{MOB_PROD_SHORT.get(slug, label)}</a>'
         for slug, label in PRODUCTS
     )
     mob_sup = "".join(
@@ -213,108 +221,123 @@ def build_products():
 
 
 def build_support():
+  import json
+  data = json.loads((ROOT / "scripts" / "support_data.json").read_text(encoding="utf-8"))
   s = ROOT / "support"
 
-  BASE = "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx="
-  manuals = [
-    ("25", "승강기용 비명감지기 WD-600MD 설치메뉴얼", "메뉴얼"),
-    ("24", "실내용 비명감지기(WD-100M) 설치메뉴얼", "메뉴얼"),
-    ("23", "방재실·경비실 대응메뉴얼 (승강기용 WD-100M, DC12V)", "메뉴얼"),
-    ("22", "승강기용 비명감지기(WD-100M, DC12V) 설치메뉴얼", "메뉴얼"),
-    ("21", "화장실·1인여성가구·1인매장용 비명감지기(WD-100M, DC12V) 자료", "자료"),
-    ("20", "홈네트워크연동 세대현관용 비명감지기 동영상", "동영상"),
-    ("19", "홈네트워크연동 세대현관용 비명감지기 자료", "자료"),
-    ("10", "승강기용 비명감지기 설치안내문 양식 (아파트단지)", "양식"),
-    ("9", "방재실·경비실 대응메뉴얼 (승강기용 WD-100E)", "메뉴얼"),
-    ("7", "화장실·1인여성가구·1인매장용 비명감지기(WD-100E, DC5V) 자료", "자료"),
-  ]
-  manual_rows = "".join(
-    f'<tr><td>{10-i}</td><td><a href="{BASE}{idx}" target="_blank" rel="noopener">{title}</a></td><td>{kind}</td></tr>'
-    for i, (idx, title, kind) in enumerate(manuals)
+  # 자료실
+  res_rows = "".join(
+    f'<tr><td>{len(data["resources"])-i}</td>'
+    f'<td><a href="{r["url"]}" target="_blank" rel="noopener">{r["title"]}</a></td>'
+    f'<td><span class="board-badge">다운로드</span></td></tr>'
+    for i, r in enumerate(data["resources"])
   )
-
   write(s / "resources.html", page_shell(1,
-    "자료실",
-    "워치독 비명감지기 설치메뉴얼 및 제품 자료 다운로드",
+    "자료실", "워치독 설치메뉴얼·제품 자료",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>자료실</span>',
-    "자료실",
-    support_sidebar("resources.html"),
-    f"""<div class="content-block reveal"><h2>제품 자료</h2>
-<p>설치메뉴얼·대응매뉴얼·동영상 자료는 아래 목록에서 확인하실 수 있습니다. 파일 다운로드는 기존 게시판에서 제공됩니다.</p>
-<table class="board-table">
-<thead><tr><th>번호</th><th>제목</th><th>형식</th></tr></thead>
-<tbody>{manual_rows}</tbody>
-</table>
+    "자료실", support_sidebar("resources.html"),
+    f"""<div class="content-block reveal"><p>설치메뉴얼·대응매뉴얼·동영상 자료입니다. 제목을 클릭하면 상세 페이지에서 파일을 다운로드할 수 있습니다.</p>
+<table class="board-table"><thead><tr><th>번호</th><th>제목</th><th>비고</th></tr></thead><tbody>{res_rows}</tbody></table>
 <p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_04.php?boardid=data" class="btn btn--blue btn--sm" target="_blank" rel="noopener">자료실 전체 보기 →</a></p></div>"""
   ))
 
-  faq_items = [
-    ("워치독 비명감지기는 어떤 소리를 인식하나요?", "강도야, 사람살려, 도와주세요 등 구조 요청어와 아악, 꺄악 등 비명 소리를 딥러닝으로 인식합니다. 일상 대화는 인식하지 않습니다."),
-    ("화장실에도 CCTV를 설치할 수 없는데 어떻게 안전을 확보하나요?", "워치독은 녹음·감청 없이 소리 패턴만 분석합니다. 비명 발생 시에만 경광등·방송·비상호출이 작동하여 프라이버시를 보호합니다."),
-    ("승강기용과 화장실용 제품이 다른가요?", "동일한 워치독 비명인식 기술을 사용하며, 설치 환경에 따라 승강기용(WD-600MD 등)과 화장실용 노출형·매입형으로 구분됩니다."),
-    ("일괄소등스위치는 언제 비명인식이 작동하나요?", "평상시에는 비활성 상태이며, 방문자 호출·현관문 개방 등 외부인 대면 상황에서만 활성화됩니다. 특허 기술로 생활소음 오작동을 방지합니다."),
-    ("A/S는 어떻게 신청하나요?", "A/S 문의 페이지 또는 대표전화 070-8709-9911로 연락 주시면 담당자가 안내해 드립니다."),
-  ]
+  # FAQ - original dl/dt style
   faq_html = "".join(
-    f'<details class="faq-item"><summary>{q}</summary><p>{a}</p></details>' for q, a in faq_items
+    f'<details class="faq-item"><summary>{f["q"]}</summary><p>{f["a"]}</p></details>'
+    for f in data["faqs"]
   )
-
   write(s / "faq.html", page_shell(1,
-    "자주하는질문",
-    "워치독 비명감지기 FAQ",
+    "자주하는질문", "워치독 비명감지기 FAQ",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>자주하는질문</span>',
-    "자주하는질문",
-    support_sidebar("faq.html"),
-    f'<div class="content-block reveal"><div class="faq-list">{faq_html}</div></div>'
+    "자주하는질문", support_sidebar("faq.html"),
+    f'<div class="content-block reveal"><div class="faq-list">{faq_html}</div>'
+    f'<p style="margin-top:20px"><a href="http://www.asungvoice.com/sub/sub04_03.php?boardid=faq" class="btn btn--outline btn--sm" target="_blank" rel="noopener">FAQ 전체 보기 →</a></p></div>'
   ))
 
+  # A/S - original image content
   write(s / "as-inquiry.html", page_shell(1,
-    "A/S 문의",
-    "워치독 비명감지기 A/S 문의",
+    "A/S 문의", "워치독 A/S 문의",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>A/S 문의</span>',
-    "A/S 문의",
-    support_sidebar("as-inquiry.html"),
-    """<div class="content-block reveal"><h2>A/S 문의 안내</h2>
-<p>설치된 워치독 비명감지기의 점검·수리·교체 문의를 접수합니다.</p>
-<ul class="info-list">
-<li>대표전화: <a href="tel:07087099911">070-8709-9911</a></li>
-<li>팩스: 02-6203-1689</li>
-<li>이메일: <a href="mailto:asungvoice@celtechworld.com">asungvoice@celtechworld.com</a></li>
-</ul>
-<p>제품 모델명, 설치 장소, 증상을 함께 알려주시면 신속히 안내해 드립니다.</p>
-<a href="inquiry.html" class="btn btn--blue">온라인 문의하기</a></div>"""
+    "A/S 문의", support_sidebar("as-inquiry.html"),
+    """<div class="content-block reveal">
+<div class="content-img"><img src="../assets/images/support/as-inquiry.jpg" alt="A/S 문의 안내"></div>
+<p style="margin-top:16px">A/S 문의는 대표전화 <a href="tel:07087099911"><strong>070-8709-9911</strong></a> 또는 팩스 02-6203-1689로 연락 주세요.</p>
+<a href="http://www.asungvoice.com/sub/sub04_02.php" class="btn btn--outline btn--sm" target="_blank" rel="noopener">기존 A/S 페이지 →</a></div>"""
   ))
 
-  CASE_BASE = "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx="
-  cases = [
-    ("11", "삼성 래미안 (영등포 프레비뉴) 아파트", "승강기"),
-    ("8", "부산대학교 여자화장실 워치독 비명감지기", "화장실"),
-    ("7", "대림산업 E편한세상 (수지) 아파트", "승강기"),
-    ("6", "개포우성3차 아파트 (지자체 지원사업)", "승강기"),
-    ("80", "롯데캐슬리버파크시그니처", "승강기"),
-    ("79", "경희궁자이3단지", "승강기"),
-    ("78", "시티오씨엘1단지", "승강기"),
-    ("77", "독립문극동아파트", "승강기"),
-    ("76", "이편한세상고덕어반브릿지", "승강기"),
+  # 설치사례 - gallery grid like original
+  thumbs = [
+    ("11", "41dae014647e3adaf5e9fa359f7870990.jpg", "삼성 래미안 (영등포 프레비뉴)"),
+    ("8", "003eac7cce7a101ca313bbbe6bdca16a0.png", "부산대학교 여자화장실"),
+    ("7", "84ebf4e1f9c5debf43e73ca50a9b9dcb0.jpg", "대림산업 E편한세상 (수지)"),
+    ("6", "0b08395c42464f12a37efb96cc1d4c0d0.png", "개포우성3차 아파트"),
+    ("80", "6550ae467015f7a700da337310e1555b0.png", "롯데캐슬리버파크시그니처"),
+    ("79", "c12f12b4a8f415d89f04413a5d93f23e0.png", "경희궁자이3단지"),
+    ("78", "0a4570f1f6b715f7044be3bc1aa361170.png", "시티오씨엘1단지"),
+    ("77", "ceb0fd28f3a3edb6a60d0b9c4622cc080.png", "독립문극동아파트"),
+    ("76", "f3b7d97fffec38d7214acbc8da7fc6820.png", "이편한세상고덕어반브릿지"),
   ]
-  case_rows = "".join(
-    f'<tr><td>{9-i}</td><td><a href="{CASE_BASE}{idx}" target="_blank" rel="noopener">{name}</a></td><td>{kind}</td></tr>'
-    for i, (idx, name, kind) in enumerate(cases)
+  case_grid = "".join(
+    f'<a class="case-card" href="http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx={idx}" target="_blank" rel="noopener">'
+    f'<img src="http://www.asungvoice.com/uploaded/board/result/{img}" alt="{title}" loading="lazy">'
+    f'<span>{title}</span></a>'
+    for idx, img, title in thumbs
   )
-
   write(s / "cases.html", page_shell(1,
-    "제품설치사례",
-    "워치독 비명감지기 설치 사례",
+    "제품설치사례", "워치독 설치 사례",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품설치사례</span>',
-    "제품설치사례",
-    support_sidebar("cases.html"),
-    f"""<div class="content-block reveal"><h2>설치 사례</h2>
-<p>전국 아파트·대학·공공시설에 설치된 워치독 비명감지기 사례입니다.</p>
-<table class="board-table">
-<thead><tr><th>번호</th><th>현장명</th><th>구분</th></tr></thead>
-<tbody>{case_rows}</tbody>
-</table>
-<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_05.php?boardid=result" class="btn btn--blue btn--sm" target="_blank" rel="noopener">설치사례 전체 보기 →</a></p></div>"""
+    "제품설치사례", support_sidebar("cases.html"),
+    f"""<div class="content-block reveal"><p>전국 아파트·대학·공공시설 설치 사례입니다. 사진을 클릭하면 상세 내용을 확인할 수 있습니다.</p>
+<div class="case-grid">{case_grid}</div>
+<p style="margin-top:20px"><a href="http://www.asungvoice.com/sub/sub04_05.php?boardid=result" class="btn btn--blue btn--sm" target="_blank" rel="noopener">설치사례 전체 보기 →</a></p></div>"""
+  ))
+
+  # 공지사항
+  notice_rows = "".join(
+    f'<tr><td>{n["date"]}</td><td><a href="{n["url"]}" target="_blank" rel="noopener">{n["title"]}</a></td></tr>'
+    for n in data["notices"]
+  )
+  write(s / "notice.html", page_shell(1,
+    "공지사항", "아성보이스 공지사항·언론보도",
+    f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>공지사항</span>',
+    "공지사항", support_sidebar("notice.html"),
+    f"""<div class="content-block reveal"><p>워치독 비명감지기 관련 뉴스·언론보도·제품 소식입니다.</p>
+<table class="board-table"><thead><tr><th>날짜</th><th>제목</th></tr></thead><tbody>{notice_rows}</tbody></table>
+<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice" class="btn btn--blue btn--sm" target="_blank" rel="noopener">공지사항 전체 보기 →</a></p></div>"""
+  ))
+
+  # 제품문의 - original form fields POST
+  write(s / "inquiry.html", page_shell(1,
+    "제품문의", "아성보이스 제품 문의",
+    f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품문의</span>',
+    "제품문의", support_sidebar("inquiry.html"),
+    """<div class="content-block reveal"><p>워치독 비명감지기 도입 상담을 환영합니다.</p></div>
+<form class="form reveal" action="http://www.asungvoice.com/module/online/online_evn.php" method="post" target="_blank">
+<input type="hidden" name="evnMode" value="join">
+<input type="hidden" name="o_type" value="1">
+<input type="hidden" name="returnURL" value="/sub/sub04_01.php">
+<div class="form__row"><div class="form__group"><label class="form__label">회사명 / 단지명 <span class="req">*</span></label><input class="form__input" name="company" required></div>
+<div class="form__group"><label class="form__label">승강기 설치대수</label><input class="form__input" name="serial" placeholder="대"></div></div>
+<div class="form__row"><div class="form__group"><label class="form__label">성명 <span class="req">*</span></label><input class="form__input" name="user_name" required></div>
+<div class="form__group"><label class="form__label">직위</label><input class="form__input" name="duty"></div></div>
+<div class="form__group"><label class="form__label">연락처 <span class="req">*</span></label>
+<div class="form__row"><select name="phone_1" class="form__input"><option>010</option><option>02</option><option>070</option></select>
+<input class="form__input" name="phone_2" placeholder="국번" required> <input class="form__input" name="phone_3" placeholder="번호" required></div></div>
+<div class="form__group"><label class="form__label">이메일</label>
+<input class="form__input" name="email_id" placeholder="계정"> @ <input class="form__input" name="email_domain" placeholder="도메인"></div>
+<div class="form__group"><label class="form__label">관심분야</label>
+<div class="form__checks">
+<label class="form__check"><input type="checkbox" name="field[]" value="1"> 승강기 보안설비</label>
+<label class="form__check"><input type="checkbox" name="field[]" value="2"> 택배/배달 사칭 현관문보안</label>
+<label class="form__check"><input type="checkbox" name="field[]" value="3"> 화장실 보안설비</label>
+<label class="form__check"><input type="checkbox" name="field[]" value="4"> 비명인식 협업</label>
+</div></div>
+<div class="form__group"><label class="form__label">문의사항 <span class="req">*</span></label><textarea class="form__textarea" name="contents" required></textarea></div>
+<label class="form__check"><input type="checkbox" name="agree" value="Y" required> 개인정보 수집 및 이용에 동의합니다.</label>
+<div class="form__actions"><button type="submit" class="btn btn--blue">제출</button>
+<a href="tel:07087099911" class="btn btn--ghost">전화 문의</a></div>
+</form>
+<div class="card reveal" style="margin-top:24px;text-align:center"><p>카카오 플러스친구: <strong>아성보이스</strong></p></div>"""
   ))
 
 
