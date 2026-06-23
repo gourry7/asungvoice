@@ -15,7 +15,7 @@
 
 <a href="#main" class="skip">본문 바로가기</a>
 
-<header class="header is-solid">
+<header class="header">
   <div class="container header__inner">
     <a href="index.html" class="logo">
       <img src="assets/images/logo.png" alt="아성보이스" width="32" height="32">
@@ -68,166 +68,203 @@
 
 <main id="main">
 
-<!-- Hero -->
-<section class="home-hero">
-  <div class="container home-hero__grid">
-    <div class="home-hero__copy">
-      <p class="home-hero__eyebrow">AI On-Device · 99% 비명 인식률</p>
-      <h1>소리로 지키는 안전,<br><em>워치독</em></h1>
-      <p class="home-hero__lead">딥러닝 비명인식으로 승강기·화장실·세대현관을 24시간 보호합니다.<br>비접촉·언택트 방범의 새로운 기준.</p>
-      <div class="home-hero__actions">
+<!-- Hero Slider -->
+<section class="mv-hero">
+  <div class="swiper mv-hero__slider">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <img src="assets/images/pages/main_visual1.jpg" alt="워치독 비명감지기">
+        <div class="mv-hero__overlay"></div>
+      </div>
+      <div class="swiper-slide">
+        <img src="assets/images/pages/main_visual2_0220.jpg" alt="승강기 비명감지">
+        <div class="mv-hero__overlay"></div>
+      </div>
+      <div class="swiper-slide">
+        <img src="assets/images/pages/main_visual3_0220.jpg" alt="화장실 비명감지">
+        <div class="mv-hero__overlay"></div>
+      </div>
+    </div>
+    <div class="swiper-pagination mv-hero__pagination"></div>
+  </div>
+  <div class="container mv-hero__content">
+    <div class="mv-hero__text">
+      <span class="mv-hero__tag"><span class="mv-hero__dot"></span>AI On-Device · 99% 비명 인식률</span>
+      <h1>소리로 지키는 안전,<br><strong>워치독</strong>이 함께합니다</h1>
+      <p>딥러닝 비명인식 기술로 승강기·화장실·세대현관을 24시간 보호합니다.<br>비접촉·언택트 방범의 새로운 표준.</p>
+      <div class="mv-hero__btns">
         <a href="#products" class="btn btn--blue">제품 보기</a>
-        <a href="support/inquiry.html" class="btn btn--outline">도입 문의</a>
+        <a href="support/inquiry.html" class="btn btn--ghost-dark">도입 문의</a>
       </div>
-      <ul class="home-hero__trust">
-        <li>삼성 에스원</li>
-        <li>미쓰비시엘리베이터</li>
-        <li>후지테크코리아</li>
-      </ul>
     </div>
-    <div class="home-hero__visual">
-      <div class="home-hero__slider swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="assets/images/pages/main_visual1.jpg" alt="워치독 비명감지기"></div>
-          <div class="swiper-slide"><img src="assets/images/pages/main_visual2_0220.jpg" alt="승강기 비명감지"></div>
-          <div class="swiper-slide"><img src="assets/images/pages/main_visual3_0220.jpg" alt="화장실 비명감지"></div>
-        </div>
-        <div class="swiper-pagination"></div>
-      </div>
+    <div class="mv-hero__device">
+      <img src="assets/images/products/watchdog-hero.png" alt="워치독 제품" width="280" height="280">
     </div>
   </div>
 </section>
 
-<!-- 핵심 가치 -->
-<section class="home-strip">
-  <div class="container home-strip__grid">
-    <div class="home-strip__item">
-      <strong>0.1초</strong>
-      <span>On-Device AI 인식</span>
-    </div>
-    <div class="home-strip__item">
-      <strong>프라이버시</strong>
-      <span>녹음·감청 없음</span>
-    </div>
-    <div class="home-strip__item">
-      <strong>3,000+</strong>
-      <span>누적 납품</span>
-    </div>
-    <div class="home-strip__item">
-      <strong>2015~</strong>
-      <span>현장 검증</span>
+<!-- Partners -->
+<section class="mv-partners">
+  <div class="container mv-partners__inner">
+    <span class="mv-partners__label">협력 파트너</span>
+    <div class="mv-partners__list">
+      <span>삼성 에스원</span>
+      <span>미쓰비시엘리베이터</span>
+      <span>후지테크코리아</span>
+      <span>(주)스필</span>
+      <span>셀텍월드</span>
     </div>
   </div>
 </section>
 
-<!-- 제품 -->
-<section class="home-section home-section--white" id="products">
+<!-- Core Values -->
+<section class="mv-section">
   <div class="container">
-    <header class="home-section__head">
+    <div class="mv-section__head">
+      <span class="section-tag">Technology</span>
+      <h2>왜 워치독인가</h2>
+      <p>10년 현장 검증, 국내 대표 비명감지 브랜드</p>
+    </div>
+    <div class="mv-features">
+      <article class="mv-feature">
+        <div class="mv-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>
+        </div>
+        <h3>AI 비명 인식</h3>
+        <p>0.1초 On-Device 처리<br>99% 인식률</p>
+      </article>
+      <article class="mv-feature">
+        <div class="mv-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>프라이버시 보호</h3>
+        <p>녹음·감청 없음<br>비명 시에만 작동</p>
+      </article>
+      <article class="mv-feature">
+        <div class="mv-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>24시간 대기</h3>
+        <p>365일 무중단<br>자동 경보·출동</p>
+      </article>
+      <article class="mv-feature">
+        <div class="mv-feature__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>현장 검증</h3>
+        <p>3,000대+ 납품<br>전국 단지 적용</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Products Bento -->
+<section class="mv-section mv-section--white" id="products">
+  <div class="container">
+    <div class="mv-section__head">
+      <span class="section-tag">Products</span>
       <h2>제품 라인업</h2>
       <p>공간별 맞춤 AI 비명 감지 솔루션</p>
-    </header>
-    <div class="home-products">
-
-      <a href="products/elevator.html" class="home-product">
-        <div class="home-product__thumb"><img src="assets/images/products/elevator.png" alt=""></div>
-        <div class="home-product__body">
+    </div>
+    <div class="mv-bento">
+      <a href="products/elevator.html" class="mv-bento__main">
+        <div class="mv-bento__main-text">
+          <span class="mv-bento__tag">WatchDog</span>
           <h3>승강기 비명감지기</h3>
-          <p>WD-600MD · 엘리베이터 비명 자동 인식·비상호출</p>
-          <span class="home-product__link">자세히 보기</span>
+          <p>WD-600MD — 비명 자동 인식·비상호출 연동</p>
+          <span class="mv-bento__arrow">자세히 →</span>
         </div>
+        <img src="assets/images/products/elevator.png" alt="승강기 비명감지기">
       </a>
-
-      <a href="products/restroom.html" class="home-product">
-        <div class="home-product__thumb"><img src="assets/images/products/logo-watchdog.png" alt=""></div>
-        <div class="home-product__body">
-          <h3>화장실 비명감지기</h3>
-          <p>워치독 동일 기술 · 노출형·매입형</p>
-          <span class="home-product__link">자세히 보기</span>
-        </div>
+      <a href="products/restroom.html" class="mv-bento__card mv-bento__card--teal">
+        <img src="assets/images/products/logo-watchdog.png" alt="">
+        <h3>화장실 비명감지기</h3>
+        <p>워치독 동일 기술 · 노출형·매입형</p>
       </a>
-
-      <a href="products/light-switch.html" class="home-product">
-        <div class="home-product__thumb"><img src="assets/images/products/control-panel.png" alt=""></div>
-        <div class="home-product__body">
-          <h3>일괄소등스위치</h3>
-          <p>신축 아파트 HN 연동형 능동 방범</p>
-          <span class="home-product__link">자세히 보기</span>
-        </div>
+      <a href="products/light-switch.html" class="mv-bento__card mv-bento__card--amber">
+        <img src="assets/images/products/control-panel.png" alt="">
+        <h3>일괄소등스위치</h3>
+        <p>신축 아파트 HN 연동형</p>
       </a>
-
-      <a href="products/home-keeper.html" class="home-product">
-        <div class="home-product__thumb"><img src="assets/images/products/home-keeper.png" alt=""></div>
-        <div class="home-product__body">
-          <h3>홈 안전지킴이</h3>
-          <p>마이안심이 · 1인 여성가구</p>
-          <span class="home-product__link">자세히 보기</span>
-        </div>
+      <a href="products/home-keeper.html" class="mv-bento__card mv-bento__card--pink">
+        <img src="assets/images/products/home-keeper.png" alt="">
+        <h3>홈 안전지킴이</h3>
+        <p>마이안심이 · 1인 여성가구</p>
       </a>
-
-      <a href="products/module.html" class="home-product">
-        <div class="home-product__thumb"><img src="assets/images/products/pcb-module.png" alt=""></div>
-        <div class="home-product__body">
-          <h3>비명인식 모듈</h3>
-          <p>주차장 비상벨 · OEM/ODM</p>
-          <span class="home-product__link">자세히 보기</span>
-        </div>
+      <a href="products/module.html" class="mv-bento__card mv-bento__card--green">
+        <img src="assets/images/products/pcb-module.png" alt="">
+        <h3>비명인식 모듈</h3>
+        <p>주차장 비상벨 OEM/ODM</p>
       </a>
-
     </div>
   </div>
 </section>
 
-<!-- 마이안심이 -->
-<section class="home-section home-section--alt">
-  <div class="container home-feature">
-    <div class="home-feature__text">
-      <p class="home-feature__label">홈 안전지킴이</p>
-      <h2>마이안심이</h2>
-      <p>On-Device AI로 사생활을 보호하는 1인 가구 맞춤 솔루션입니다. 상세 스펙과 앱 기능은 제품 페이지에서 확인하세요.</p>
-      <a href="products/home-keeper.html" class="btn btn--blue">제품 페이지</a>
-    </div>
-    <div class="home-feature__media">
-      <img src="assets/images/products/app-mockup.png" alt="마이안심이 앱" loading="lazy">
+<!-- Stats -->
+<section class="mv-stats">
+  <div class="container">
+    <div class="mv-stats__grid">
+      <div class="mv-stat"><div class="mv-stat__num" data-count="3000" data-suffix="+">0</div><div class="mv-stat__label">누적 납품</div></div>
+      <div class="mv-stat"><div class="mv-stat__num" data-count="99" data-suffix="%">0</div><div class="mv-stat__label">인식률</div></div>
+      <div class="mv-stat"><div class="mv-stat__num" data-count="10" data-suffix="년+">0</div><div class="mv-stat__label">협력 경력</div></div>
+      <div class="mv-stat"><div class="mv-stat__num" data-count="2015" data-suffix="">0</div><div class="mv-stat__label">설립</div></div>
     </div>
   </div>
 </section>
 
-<!-- 공지 + 영상 -->
-<section class="home-section home-section--white">
-  <div class="container home-news">
-    <div class="home-news__list-wrap">
-      <div class="home-news__head">
-        <h2>공지사항</h2>
-        <a href="support/notice.html">더보기</a>
+<!-- My Ansim-i -->
+<section class="mv-section">
+  <div class="container mv-ansimi">
+    <div class="mv-ansimi__card">
+      <div class="mv-ansimi__text">
+        <span class="section-tag">My Ansim-i</span>
+        <h2>감시가 아닌 위안,<br>불안이 아닌 평온</h2>
+        <p>On-Device AI로 사생활을 보호하는 마이안심이. 1인 가구를 위한 라이프스타일 안심 솔루션입니다.</p>
+        <a href="products/home-keeper.html" class="btn btn--pink">마이안심이 보기</a>
       </div>
-      <ul class="home-news__list">
-        <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=207" target="_blank" rel="noopener"><time>2026-03-18</time><span>택배 옮기려 문 연 순간 노렸다…여성 집 침입한 30대 검거</span></a></li>
-        <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=203" target="_blank" rel="noopener"><time>2025-11-10</time><span>비명인식 일괄소등스위치 출시 (매일경제)</span></a></li>
-        <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=180" target="_blank" rel="noopener"><time>2023-07-07</time><span>아파트 엘리베이터도 '위험지대' SBS뉴스 워치독 소개</span></a></li>
+      <div class="mv-ansimi__img">
+        <img src="assets/images/products/app-mockup.png" alt="마이안심이 앱" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- News + Video -->
+<section class="mv-section mv-section--white">
+  <div class="container mv-news">
+    <div class="mv-news__col">
+      <div class="mv-news__head">
+        <h2>공지사항</h2>
+        <a href="support/notice.html">더보기 →</a>
+      </div>
+      <ul class="mv-news__list">
+        <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=207" target="_blank" rel="noopener"><span>택배 옮기려 문 연 순간 노렸다…여성 집 침입한 30대 검거</span><time>2026-03-18</time></a></li>
+        <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=203" target="_blank" rel="noopener"><span>비명인식 일괄소등스위치 출시 (매일경제)</span><time>2025-11-10</time></a></li>
+        <li><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=180" target="_blank" rel="noopener"><span>아파트 엘리베이터도 '위험지대' SBS뉴스 워치독 소개</span><time>2023-07-07</time></a></li>
       </ul>
-      <div class="home-news__links">
+      <div class="mv-news__links">
         <a href="support/resources.html">자료실</a>
         <a href="support/cases.html">설치사례</a>
         <a href="support/faq.html">FAQ</a>
       </div>
     </div>
-    <div class="home-news__video">
-      <h2>홍보 영상</h2>
+    <div class="mv-news__col">
+      <h2 class="mv-news__video-title">홍보 영상</h2>
       <div class="video-box"><iframe src="https://www.youtube.com/embed/r2_vyABWIIA" title="워치독 홍보영상" allowfullscreen loading="lazy"></iframe></div>
+      <a href="https://youtu.be/oWQpMNDT4-E?t=292" class="mv-news__sbs" target="_blank" rel="noopener">SBS 8시 뉴스 보도 영상 보기 →</a>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="home-cta">
-  <div class="container home-cta__inner">
-    <div>
+<section class="mv-cta">
+  <div class="container mv-cta__inner">
+    <div class="mv-cta__text">
       <h2>도입 상담을 시작하세요</h2>
-      <p>시범 설치 · OEM/ODM · 견적 문의</p>
+      <p>시범 설치 · OEM/ODM 협업 · 견적 문의 환영</p>
     </div>
-    <div class="home-cta__actions">
-      <a href="tel:07087099911" class="btn btn--outline">070-8709-9911</a>
+    <div class="mv-cta__btns">
+      <a href="tel:07087099911" class="btn btn--ghost">070-8709-9911</a>
       <a href="support/inquiry.html" class="btn btn--blue">온라인 문의</a>
     </div>
   </div>

@@ -73,15 +73,15 @@
         fadeEffect: { crossFade: true }
       });
     }
-    const homeHero = document.querySelector('.home-hero__slider');
-    if (homeHero) {
-      new Swiper('.home-hero__slider', {
+    const mvHero = document.querySelector('.mv-hero__slider');
+    if (mvHero) {
+      new Swiper('.mv-hero__slider', {
         loop: true,
-        autoplay: { delay: 5500, disableOnInteraction: false },
-        pagination: { el: '.home-hero__slider .swiper-pagination', clickable: true },
+        autoplay: { delay: 6000, disableOnInteraction: false },
+        pagination: { el: '.mv-hero__pagination', clickable: true },
         effect: 'fade',
         fadeEffect: { crossFade: true },
-        speed: 800
+        speed: 900
       });
     }
   }
