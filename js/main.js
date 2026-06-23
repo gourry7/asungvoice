@@ -2,7 +2,6 @@
 (function () {
   'use strict';
 
-  // Header scroll
   const header = document.querySelector('.header');
   if (header) {
     const onScroll = () => header.classList.toggle('is-solid', window.scrollY > 50);
@@ -10,7 +9,6 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  // Mobile menu
   const menuBtn = document.querySelector('.menu-btn');
   const mobileNav = document.querySelector('.mobile-nav');
   if (menuBtn && mobileNav) {
@@ -27,18 +25,15 @@
     }));
   }
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  if (reveals.length) {
+  document.querySelectorAll('.reveal').forEach(el => {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-    reveals.forEach(el => obs.observe(el));
-  }
+    obs.observe(el);
+  });
 
-  // Counter
   document.querySelectorAll('[data-count]').forEach(el => {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -61,48 +56,24 @@
     obs.observe(el);
   });
 
-  // Hero swiper (legacy + new main visual)
   if (typeof Swiper !== 'undefined') {
-    const legacyHero = document.querySelector('.hero__slider.swiper');
-    if (legacyHero) {
-      new Swiper('.hero__slider', {
-        loop: true,
-        autoplay: { delay: 5000, disableOnInteraction: false },
-        pagination: { el: '.swiper-pagination', clickable: true },
-        effect: 'fade',
-        fadeEffect: { crossFade: true }
-      });
-    }
-    const mvHero = document.querySelector('.mv-hero__slider');
-    if (mvHero) {
-      new Swiper('.mv-hero__slider', {
+    const hpHero = document.querySelector('.hp-hero__bg');
+    if (hpHero) {
+      new Swiper('.hp-hero__bg', {
         loop: true,
         autoplay: { delay: 6000, disableOnInteraction: false },
-        pagination: { el: '.mv-hero__pagination', clickable: true },
+        pagination: { el: '.hp-hero__pagination', clickable: true },
         effect: 'fade',
         fadeEffect: { crossFade: true },
         speed: 900
       });
     }
-    const neuSwiper = document.querySelector('.neu-swiper');
-    if (neuSwiper) {
-      new Swiper('.neu-swiper', {
-        loop: true,
-        autoplay: { delay: 5000, disableOnInteraction: false },
-        pagination: { el: '.neu-swiper .swiper-pagination', clickable: true },
-        effect: 'fade',
-        fadeEffect: { crossFade: true }
-      });
-    }
   }
 
-  // Neu header — always solid cream on homepage
-  if (document.body.classList.contains('page-neu') && header) {
-    header.classList.add('is-solid');
-  }
   const path = location.pathname;
   document.querySelectorAll('.nav__link, .sidebar__nav a').forEach(a => {
-    if (a.getAttribute('href') && path.includes(a.getAttribute('href').replace(/^\.\./, '').replace(/^\//, ''))) {
+    const href = a.getAttribute('href');
+    if (href && path.includes(href.replace(/^\.\./, '').replace(/^\//, ''))) {
       a.classList.add('is-active');
     }
   });
