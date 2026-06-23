@@ -3,24 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>아성보이스 | 워치독 비명감지기 | 아성보이스</title>
+<title>아성보이스 | 워치독 비명감지기</title>
 <meta name="description" content="AI 음성 인식 기반 비명 감지 → 자동 경보·대응. 승강기·화장실·귀갓길·홈 24시간 보호.">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Round:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="assets/images/logo.png" type="image/png">
 </head>
-<body>
+<body class="page-home">
+
 <a href="#main" class="skip">본문 바로가기</a>
-<header class="header" role="banner">
+
+<!-- Header -->
+<header class="header is-solid">
   <div class="container header__inner">
     <a href="index.html" class="logo">
       <img src="assets/images/logo.png" alt="아성보이스" width="32" height="32">
       <span>아성<em>보이스</em></span>
     </a>
-    <nav class="nav" aria-label="주메뉴">
+    <nav class="nav">
       <div class="nav__item"><a href="company/greeting.html" class="nav__link">회사소개</a>
         <div class="nav__drop"><a href="company/greeting.html">인사말</a><a href="company/location.html">오시는 길</a></div></div>
       <div class="nav__item"><a href="products/elevator.html" class="nav__link">제품소개</a>
@@ -37,11 +38,12 @@
     <div class="header__right">
       <a href="tel:07087099911" class="btn btn--outline btn--sm">070-8709-9911</a>
       <a href="support/inquiry.html" class="btn btn--blue btn--sm">문의하기</a>
-      <button class="menu-btn" aria-label="메뉴" aria-expanded="false"><span></span><span></span><span></span></button>
+      <button class="menu-btn" aria-label="메뉴"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
-<nav class="mobile-nav" aria-label="모바일 메뉴">
+
+<nav class="mobile-nav">
   <div class="mobile-nav__label">회사소개</div>
   <a href="company/greeting.html">인사말</a><a href="company/location.html">오시는 길</a>
   <div class="mobile-nav__label">제품소개</div>
@@ -49,83 +51,122 @@
   <a href="products/elevator.html">승강기 비명감지기</a>
   <a href="products/restroom.html">화장실 비명감지기</a>
   <a href="products/module.html">비명인식 모듈</a>
-  <div class="mobile-nav__label">사업영역</div>
-  <a href="business/index.html">비명인식사업</a>
   <div class="mobile-nav__label">고객지원</div>
   <a href="support/notice.html">공지사항</a><a href="support/inquiry.html">문의하기</a>
 </nav>
+
 <main id="main">
-<section class="hero">
-  <div class="container hero__grid">
-    <div class="reveal">
-      <div class="hero__tag">AI On-Device · 99% 비명 인식률</div>
-      <h1>소리로 지키는 안전,<br><strong>워치독</strong>이 함께합니다</h1>
+
+<!-- Hero -->
+<section class="home-hero">
+  <div class="container home-hero__inner">
+    <div class="home-hero__text">
+      <span class="home-hero__badge">AI On-Device · 99% 비명 인식률</span>
+      <h1>소리로 지키는 안전,<br><em>워치독</em>이 함께합니다</h1>
       <p>AI 비명 감지 기술로 승강기·화장실·귀갓길을 24시간 보호합니다.<br>비접촉 방범, 언택트 방범의 새로운 기준.</p>
-      <div class="hero__btns">
+      <div class="home-hero__btns">
         <a href="#products" class="btn btn--blue">제품 둘러보기</a>
-        <a href="support/inquiry.html" class="btn btn--outline">도입 문의</a>
+        <a href="support/inquiry.html" class="btn btn--ghost-dark">도입 문의</a>
       </div>
     </div>
-    <div class="hero__visual reveal">
-      <div class="swiper hero__slider">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="assets/images/pages/main_visual1.jpg" alt="워치독 승강기 비명감지"></div>
-          <div class="swiper-slide"><img src="assets/images/pages/main_visual2_0220.jpg" alt="워치독 화장실 비명감지"></div>
-          <div class="swiper-slide"><img src="assets/images/pages/main_visual3_0220.jpg" alt="워치독이 함께 합니다"></div>
+    <div class="home-hero__visual">
+      <div class="home-hero__glow"></div>
+      <img src="assets/images/products/watchdog-hero.png" alt="워치독 비명감지기" class="home-hero__product">
+    </div>
+  </div>
+</section>
+
+<!-- App-style status -->
+<div class="container">
+  <div class="app-status">
+    <p>🏠 워치독이 안전하게 공간을 지키고 있습니다</p>
+    <div class="app-toggle" aria-label="시스템 활성"></div>
+  </div>
+</div>
+
+<!-- Tech -->
+<section class="section-home">
+  <div class="container">
+    <div class="tech-row">
+      <div class="tech-box">
+        <div class="tech-box__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></div>
+        <h4>AI 비명 인식</h4><p>0.1초 On-Device<br>99% 인식률</p>
+      </div>
+      <div class="tech-box">
+        <div class="tech-box__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>비접촉 방범</h4><p>음성만으로 감지<br>사생활 100% 보호</p>
+      </div>
+      <div class="tech-box">
+        <div class="tech-box__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <h4>24시간 대기</h4><p>365일 무중단<br>자동 경보·대응</p>
+      </div>
+      <div class="tech-box">
+        <div class="tech-box__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01 9 11.01"/></svg></div>
+        <h4>현장 검증</h4><p>10년+ 협력<br>3,000대+ 납품</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section-home section-home--white" id="products">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">Products</span>
+      <h2>워치독 제품 라인업</h2>
+      <p>공간별 맞춤 AI 비명 감지 솔루션</p>
+    </div>
+    <div class="product-grid">
+
+      <a href="products/home-keeper.html" class="product-item product-item--pink">
+        <div class="product-item__img"><img src="assets/images/products/home-keeper.png" alt="홈 안전지킴이"></div>
+        <div class="product-item__body">
+          <h3>홈 안전지킴이</h3>
+          <p>마이안심이 — 1인 가구 맞춤 라이프스타일 안심 오브제</p>
+          <span class="product-item__link">자세히 보기 →</span>
         </div>
-        <div class="swiper-pagination"></div>
-      </div>
-      <img src="assets/images/products/elevator.png" alt="워치독 제품" class="hero__device" loading="lazy">
-    </div>
-  </div>
-  <div class="hero__scroll" aria-hidden="true">SCROLL ↓</div>
-</section>
+      </a>
 
-<div class="container status-bar"><div class="card reveal"><p class="status-bar__text">🏠 워치독이 안전하게 공간을 지키고 있습니다</p><div class="toggle" role="status" aria-label="시스템 활성"></div></div></div>
+      <a href="products/elevator.html" class="product-item product-item--blue">
+        <div class="product-item__img"><img src="assets/images/products/elevator.png" alt="승강기 비명감지기"></div>
+        <div class="product-item__body">
+          <h3>승강기 비명감지기</h3>
+          <p>WD-600MD — 엘리베이터 비명 자동 인식·비상호출 연동</p>
+          <span class="product-item__link">자세히 보기 →</span>
+        </div>
+      </a>
 
-<section class="section">
-  <div class="container">
-    <div class="tech-row reveal">
-      <div class="tech-box"><div class="tech-box__icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div><h4>AI 비명 인식</h4><p>0.1초 On-Device<br>99% 인식률</p></div>
-      <div class="tech-box"><div class="tech-box__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h4>비접촉 방범</h4><p>음성만으로 감지<br>사생활 100% 보호</p></div>
-      <div class="tech-box"><div class="tech-box__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4>24시간 대기</h4><p>365일 무중단<br>자동 경보·대응</p></div>
-      <div class="tech-box"><div class="tech-box__icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h4>현장 검증</h4><p>10년+ 협력<br>3,000대+ 납품</p></div>
-    </div>
-  </div>
-</section>
+      <a href="products/restroom.html" class="product-item product-item--teal">
+        <div class="product-item__img"><img src="assets/images/products/home-device.png" alt="화장실 비명감지기"></div>
+        <div class="product-item__body">
+          <h3>화장실 비명감지기</h3>
+          <p>화장실 폭행·몰카 방지, 프라이버시 보호 음성 감지</p>
+          <span class="product-item__link">자세히 보기 →</span>
+        </div>
+      </a>
 
-<section class="section section--white" id="products">
-  <div class="container">
-    <div class="section__head reveal"><span class="section__tag">Products</span><h2 class="section__title">워치독 제품 라인업</h2><p class="section__sub">공간별 맞춤 AI 비명 감지 솔루션</p></div>
-    <div class="prod-grid">
-      <a href="products/home-keeper.html" class="prod-card reveal"><div class="prod-card__body card--pink">
-        <div class="prod-card__icon"><svg viewBox="0 0 24 24" stroke="#E8919F"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-        <h3>홈 안전지킴이</h3><p>마이안심이 — 감시가 아닌 위안, 1인 가구 맞춤 독립 방범 오브제</p>
-        <span class="prod-card__more">자세히 보기 →</span>
-        <img src="assets/images/products/home-keeper.png" alt="" class="prod-card__img" loading="lazy"></div></a>
-      <a href="products/elevator.html" class="prod-card reveal"><div class="prod-card__body card--blue">
-        <div class="prod-card__icon"><svg viewBox="0 0 24 24" stroke="#1B6FE8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 6v12M8 10l4-4 4 4"/></svg></div>
-        <h3>승강기 비명감지기</h3><p>WD-600MD — 엘리베이터 내 비명 자동 인식, 경광등·비상호출 연동</p>
-        <span class="prod-card__more">자세히 보기 →</span>
-        <img src="assets/images/products/elevator.png" alt="" class="prod-card__img" loading="lazy"></div></a>
-      <a href="products/restroom.html" class="prod-card reveal"><div class="prod-card__body card--teal">
-        <div class="prod-card__icon"><svg viewBox="0 0 24 24" stroke="#7EB8B0"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg></div>
-        <h3>화장실 비명감지기</h3><p>화장실 폭행·몰카 방지, 프라이버시 보호 비접촉 음성 감지</p>
-        <span class="prod-card__more">자세히 보기 →</span>
-        <img src="assets/images/products/restroom.png" alt="" class="prod-card__img" loading="lazy"></div></a>
-      <a href="products/module.html" class="prod-card reveal"><div class="prod-card__body card--green">
-        <div class="prod-card__icon"><svg viewBox="0 0 24 24" stroke="#3AAF7A"><rect x="2" y="6" width="20" height="12" rx="2"/></svg></div>
-        <h3>비명인식 모듈</h3><p>WD-600MD MODULE V2 — OEM/ODM용 AI 비명 인식 모듈</p>
-        <span class="prod-card__more">자세히 보기 →</span>
-        <img src="assets/images/products/pcb-module.png" alt="" class="prod-card__img" loading="lazy"></div></a>
+      <a href="products/module.html" class="product-item product-item--green">
+        <div class="product-item__img"><img src="assets/images/products/pcb-module.png" alt="비명인식 모듈"></div>
+        <div class="product-item__body">
+          <h3>비명인식 모듈</h3>
+          <p>WD-600MD MODULE V2 — OEM/ODM용 AI 모듈</p>
+          <span class="product-item__link">자세히 보기 →</span>
+        </div>
+      </a>
+
     </div>
   </div>
 </section>
 
-<section class="section section--navy" id="stats">
+<!-- Stats -->
+<section class="section-home section-home--navy">
   <div class="container">
-    <div class="section__head reveal"><span class="section__tag">Trust</span><h2 class="section__title">숫자로 증명하는 신뢰</h2><p class="section__sub">래미안·힐스테이트 등 전국 수십 개 단지 3,000대 이상 검증</p></div>
-    <div class="stats-row reveal">
+    <div class="section-head section-head--light">
+      <span class="section-tag">Trust</span>
+      <h2>숫자로 증명하는 신뢰</h2>
+      <p>래미안·힐스테이트 등 전국 수십 개 단지 3,000대 이상 검증</p>
+    </div>
+    <div class="stats-row">
       <div class="stat-box"><div class="stat-box__num" data-count="3000" data-suffix="+">0</div><div class="stat-box__label">누적 납품</div></div>
       <div class="stat-box"><div class="stat-box__num" data-count="99" data-suffix="%">0</div><div class="stat-box__label">인식률</div></div>
       <div class="stat-box"><div class="stat-box__num" data-count="10" data-suffix="년+">0</div><div class="stat-box__label">협력 경력</div></div>
@@ -134,35 +175,44 @@
   </div>
 </section>
 
-<section class="section" id="business">
+<!-- Business -->
+<section class="section-home" id="business">
   <div class="container">
-    <div class="section__head reveal"><span class="section__tag">Business</span><h2 class="section__title">사업영역</h2><p class="section__sub">언택트 방범이 필요한 모든 공간</p></div>
-    <div class="area-grid reveal">
-      <div class="area-item"><div class="area-item__icon"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 6v12"/></svg></div><h3>승강기</h3><p>엘리베이터 범죄 예방, 경광등·비상호출 자동 연동</p><span class="badge badge--safe">안전함</span></div>
-      <div class="area-item"><div class="area-item__icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg></div><h3>화장실</h3><p>폭행·몰카 방지, 비접촉 음성 감지</p><span class="badge badge--safe">안전함</span></div>
-      <div class="area-item"><div class="area-item__icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><h3>홈·귀갓길</h3><p>1인 가구 돌발침입범죄 방지, 안심 귀갓길</p><span class="badge badge--live">감시 중</span></div>
-      <div class="area-item"><div class="area-item__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><h3>공공공간</h3><p>여성안심구역, 산책길·버스정류장 방범</p><span class="badge badge--safe">안전함</span></div>
+    <div class="section-head">
+      <span class="section-tag">Business</span>
+      <h2>사업영역</h2>
+      <p>언택트 방범이 필요한 모든 공간</p>
     </div>
-    <p style="text-align:center;margin-top:32px" class="reveal"><a href="business/index.html" class="btn btn--blue">사업영역 자세히</a></p>
+    <div class="area-grid">
+      <div class="area-item"><div class="area-item__icon">🛗</div><h3>승강기</h3><p>엘리베이터 범죄 예방</p><span class="badge badge--safe">안전함</span></div>
+      <div class="area-item"><div class="area-item__icon">🚻</div><h3>화장실</h3><p>폭행·몰카 방지</p><span class="badge badge--safe">안전함</span></div>
+      <div class="area-item"><div class="area-item__icon">🏠</div><h3>홈·귀갓길</h3><p>1인 가구 돌발침입 방지</p><span class="badge badge--live">감시 중</span></div>
+      <div class="area-item"><div class="area-item__icon">📍</div><h3>공공공간</h3><p>여성안심구역·버스정류장</p><span class="badge badge--safe">안전함</span></div>
+    </div>
+    <p class="section-cta"><a href="business/index.html" class="btn btn--blue">사업영역 자세히</a></p>
   </div>
 </section>
 
-<section class="section section--white">
-  <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center">
-    <div class="reveal">
-      <span class="section__tag">My Ansim-i</span>
-      <h2 class="section__title" style="text-align:left;margin-bottom:16px">감시가 아닌 위안,<br>불안이 아닌 평온</h2>
-      <p style="color:var(--text-2);line-height:1.8;margin-bottom:20px">On-Device AI로 사생활을 100% 보호하는 마이안심이. 일상에 자연스럽게 스며드는 라이프스타일 안심 오브제입니다.</p>
+<!-- My Ansim-i -->
+<section class="section-home section-home--white">
+  <div class="container app-section">
+    <div class="app-section__text">
+      <span class="section-tag">My Ansim-i</span>
+      <h2>감시가 아닌 위안,<br>불안이 아닌 평온</h2>
+      <p>On-Device AI로 사생활을 100% 보호하는 마이안심이. 일상에 자연스럽게 스며드는 라이프스타일 안심 오브제입니다.</p>
       <a href="products/home-keeper.html" class="btn btn--pink">마이안심이 보기</a>
     </div>
-    <div class="reveal" style="text-align:center"><img src="assets/images/products/app-mockup.png" alt="마이안심이 앱 UI" style="max-width:280px;margin:0 auto;border-radius:24px;box-shadow:var(--shadow-lg)" loading="lazy"></div>
+    <div class="app-section__img">
+      <img src="assets/images/products/app-mockup.png" alt="마이안심이 앱 UI">
+    </div>
   </div>
 </section>
 
-<section class="section">
+<!-- News + Video -->
+<section class="section-home">
   <div class="container news-split">
-    <div class="reveal">
-      <div class="news-head"><h2 class="section__title" style="font-size:1.3rem">공지사항</h2><a href="support/notice.html">더보기 →</a></div>
+    <div>
+      <div class="news-head"><h2>공지사항</h2><a href="support/notice.html">더보기 →</a></div>
       <ul class="news-list">
         <li><a href="support/notice.html"><span class="news-list__title">택배 옮기려 문 연 순간 노렸다…여성 집 침입한 30대 검거</span><time class="news-list__date">2026-03-18</time></a></li>
         <li><a href="support/notice.html"><span class="news-list__title">사형 바라는 유족 … 검, 택배기사 위장침입 살인 '무기징역' 구형</span><time class="news-list__date">2026-06-15</time></a></li>
@@ -171,23 +221,31 @@
         <li><a href="support/notice.html"><span class="news-list__title">아파트 엘리베이터도 '위험지대' SBS뉴스 워치독 소개</span><time class="news-list__date">2023-07-07</time></a></li>
       </ul>
     </div>
-    <div class="reveal">
-      <h2 class="section__title" style="font-size:1.3rem;margin-bottom:16px">홍보 영상</h2>
+    <div>
+      <h2 class="video-title">홍보 영상</h2>
       <div class="video-box"><iframe src="https://www.youtube.com/embed/r2_vyABWIIA" title="워치독 홍보영상" allowfullscreen loading="lazy"></iframe></div>
     </div>
   </div>
 </section>
 
-<section class="cta"><div class="container"><div class="card reveal">
-  <h2>지금 바로 문의하세요</h2><p>도입 상담 · 시범 설치 · OEM/ODM 협업 문의 환영</p>
-  <div class="cta__btns">
-    <a href="tel:07087099911" class="btn btn--ghost">📞 070-8709-9911</a>
-    <a href="support/inquiry.html" class="btn btn--ghost">온라인 문의</a>
-    <a href="support/inquiry.html" class="btn btn--ghost">💬 카카오 채널</a>
+<!-- CTA -->
+<section class="section-home section-home--cta">
+  <div class="container">
+    <div class="cta-box">
+      <h2>지금 바로 문의하세요</h2>
+      <p>도입 상담 · 시범 설치 · OEM/ODM 협업 문의 환영</p>
+      <div class="cta-box__btns">
+        <a href="tel:07087099911" class="btn btn--ghost">📞 070-8709-9911</a>
+        <a href="support/inquiry.html" class="btn btn--ghost">온라인 문의</a>
+        <a href="support/inquiry.html" class="btn btn--ghost">💬 카카오 채널</a>
+      </div>
+    </div>
   </div>
-</div></div></section>
+</section>
+
 </main>
-<footer class="footer" role="contentinfo">
+
+<footer class="footer">
   <div class="container">
     <div class="footer__top">
       <div class="footer__brand">
@@ -195,7 +253,7 @@
         <span>아성보이스</span>
         <p>소리로 지키는 안전, 워치독</p>
       </div>
-      <nav class="footer__links" aria-label="푸터 메뉴">
+      <nav class="footer__links">
         <a href="company/greeting.html">회사소개</a>
         <a href="products/elevator.html">제품소개</a>
         <a href="business/index.html">사업영역</a>
@@ -210,12 +268,13 @@
       <a href="http://www.celtechworld.com/" target="_blank" rel="noopener">(주)셀텍월드</a>
     </div>
     <address class="footer__info">
-      대표: 이승현 | 주소: 서울시 금천구 가산디지털1로 149, 3층 304디-14호 |
-      대표전화: <a href="tel:07087099911">070-8709-9911</a> | 팩스: 02-6203-1689<br>
-      사업자등록번호 118-87-00016 | Copyright &copy; 2016 아성보이스. All Rights Reserved.
+      대표: 이승현 | 서울시 금천구 가산디지털1로 149, 3층 304디-14호 |
+      <a href="tel:07087099911">070-8709-9911</a> | 팩스: 02-6203-1689<br>
+      사업자등록번호 118-87-00016 | Copyright © 2016 아성보이스.
     </address>
   </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 <script src="js/main.js"></script>
-</body></html>
+</body>
+</html>
