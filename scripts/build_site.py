@@ -3,10 +3,19 @@
 import re
 from pathlib import Path
 
+from page_content import (
+    AS_INQUIRY_BODY,
+    BUSINESS_BODY,
+    HOME_KEEPER_BODY,
+    INQUIRY_BODY,
+    LIGHT_SWITCH_BODY,
+    RESTROOM_BODY,
+)
+
 ROOT = Path(__file__).resolve().parent.parent
 
 MOB_PROD_SHORT = {
-    "home-keeper.html": "홈 안전지킴이",
+    "home-keeper.html": "마이안심이",
     "elevator.html": "승강기",
     "restroom.html": "화장실",
     "light-switch.html": "일괄소등",
@@ -14,7 +23,7 @@ MOB_PROD_SHORT = {
 }
 
 PRODUCTS = [
-    ("home-keeper.html", "홈 안전지킴이"),
+    ("home-keeper.html", "마이안심이"),
     ("elevator.html", "승강기 비명감지기"),
     ("restroom.html", "화장실 비명감지기"),
     ("light-switch.html", "비명인식 일괄소등스위치"),
@@ -54,7 +63,7 @@ def header(depth: int, active_nav: str = "") -> str:
     )
     css = f"{p}css/style.css"
     return f"""<a href="#main" class="skip">본문 바로가기</a>
-<header class="header is-solid"><div class="container header__inner">
+<header class="header header--neu is-solid"><div class="container header__inner">
 <a href="{p}index.html" class="logo"><img src="{p}assets/images/logo.png" alt="아성보이스" width="32" height="32"><span>아성<em>보이스</em></span></a>
 <nav class="nav" aria-label="주메뉴">
 <div class="nav__item"><a href="{p}company/greeting.html" class="nav__link">회사소개</a><div class="nav__drop"><a href="{p}company/greeting.html">인사말</a><a href="{p}company/location.html">오시는 길</a></div></div>
@@ -112,7 +121,7 @@ def page_shell(depth, title, desc, breadcrumb, h1, sidebar, body, css_extra=""):
 <link rel="stylesheet" href="{css}">
 {css_extra}
 </head>
-<body>
+<body class="page-neu">
 {header(depth)}
 <section class="page-hero"><div class="container"><div class="breadcrumb">{breadcrumb}</div><h1>{h1}</h1></div></section>
 <main id="main"><div class="container sub-layout">{sidebar}<div class="content-area">
@@ -131,6 +140,15 @@ def write(path: Path, content: str):
 def build_products():
   p = ROOT / "products"
 
+  write(p / "home-keeper.html", page_shell(1,
+    "마이안심이",
+    "마이안심이 — 1인 여성 가구 라이프스타일 안심 오브제, On-Device AI 비명 인식",
+    f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>마이안심이</span>',
+    "마이안심이",
+    product_sidebar("home-keeper.html"),
+    HOME_KEEPER_BODY,
+  ))
+
   # Restroom - WatchDog (same product family as elevator)
   write(p / "restroom.html", page_shell(1,
     "화장실 비명감지기",
@@ -138,43 +156,7 @@ def build_products():
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>화장실 비명감지기</span>',
     "화장실 비명감지기",
     product_sidebar("restroom.html"),
-    """<div class="prod-hero reveal">
-<div class="prod-hero__img"><img src="../assets/images/products/logo-watchdog.png" alt="워치독 화장실 비명감지기"></div>
-<div class="prod-hero__info"><span class="model">워치독 WatchDog · WD 시리즈</span><h2>화장실 비명인식기</h2>
-<p>승강기용 워치독과 <strong>동일한 비명인식 기술</strong>을 적용한 제품입니다. 노출형·매입형으로 화장실 천정에 설치하며, 대화는 녹음·전송되지 않고 비명 발생 시에만 경보합니다.</p>
-<a href="../support/inquiry.html" class="btn btn--blue">도입 문의</a></div></div>
-<div class="content-block reveal"><h2>개발 배경</h2>
-<p>공공 화장실은 개인정보보호법상 CCTV 설치가 불가능한 안전 사각지대입니다. 몰카·성범죄·폭행 등 여성 대상 강력범죄가 빈번하며, 기존 비상벨은 제압당하거나 당황한 상황에서 사용하기 어렵습니다.</p>
-<p>워치독은 "사람살려", "아악" 등 비명만으로 위급 상황을 즉시 인지하여 버튼 조작 없이 112·경비실로 자동 호출합니다.</p></div>
-<div class="content-block reveal"><h2>시스템 구성</h2>
-<p>화장실 센서(노출형/매입형) → 유선·RF 중계기 또는 3G/LTE 모듈 → 112 상황실·경비실·관제센터 연동</p>
-<div class="content-img"><img src="../assets/images/pages/sub2_2.jpg" alt="화장실 비명감지기 시스템 구성도"></div></div>
-<div class="content-block reveal"><h2>제품 유형</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>노출형</h4><p>천정·벽면 표면 부착 설치</p></div>
-<div class="feature-box"><h4>매입형</h4><p>다운라이트 홀 규격 매립, 미관 우수</p></div>
-<div class="feature-box"><h4>유·무선 연동</h4><p>접점식 유선 및 RF 무선 중계 지원</p></div>
-</div></div>
-<div class="content-block reveal"><h2>동작 흐름</h2><div class="flow">
-<div class="flow__step"><div class="num">1</div><h4>비명 대기</h4><p>365일 24시간</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">2</div><h4>AI 비명 인식</h4><p>오인식 필터링</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">3</div><h4>경광등·방송</h4><p>범행 억제</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">4</div><h4>비상호출</h4><p>25초 내 전파</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">5</div><h4>출동·대응</h4><p>음성통화·긴급출동</p></div></div></div>
-<div class="content-block reveal"><h2>적용 사례</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>부산대학교</h4><p>400개소 설치</p></div>
-<div class="feature-box"><h4>여의도 파크원</h4><p>217개소 설치</p></div>
-</div></div>
-<div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
-<tr><th>제품군</th><td>워치독 WatchDog (승강기용과 동일 기술)</td></tr>
-<tr><th>적용기술</th><td>딥러닝, 멀티트리거, 실시간 고속인식</td></tr>
-<tr><th>인식방식</th><td>음원인식 — 여성·아동 음성 최적화</td></tr>
-<tr><th>마이크</th><td>2 MIC (DIGITAL)</td></tr>
-<tr><th>인식 단어</th><td>아악, 꺄악, 강도야, 사람살려, 도와주세요</td></tr>
-<tr><th>프라이버시</th><td>녹음·감청 없음, 소리 패턴만 분석</td></tr>
-<tr><th>설치장소</th><td>화장실, 탈의실, 독서실 등</td></tr></table></div>
-<div class="content-block reveal"><p class="note-box">※ 화장실 비명감지기는 <a href="elevator.html">승강기 비명감지기</a>와 동일한 워치독 제품군이며, 설치 환경에 따라 노출형·매입형을 선택합니다. 세대 현관용 제품은 <a href="light-switch.html">비명인식 일괄소등스위치</a>를 참고하세요.</p></div>"""
+    RESTROOM_BODY,
   ))
 
   # Light switch - separate product
@@ -184,40 +166,18 @@ def build_products():
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>일괄소등스위치</span>',
     "비명인식 일괄소등스위치",
     product_sidebar("light-switch.html"),
-    """<div class="prod-hero reveal">
-<div class="prod-hero__img"><img src="../assets/images/products/control-panel.png" alt="비명인식 일괄소등스위치"></div>
-<div class="prod-hero__info"><span class="model">5&quot; FTS · 홈네트워크 연동</span><h2>비명인식 일괄소등스위치</h2>
-<p>신축 아파트 세대현관에 설치되는 스마트 스위치입니다. 일괄소등·엘리베이터 호출 등 생활편의 기능과 함께, 재택 중 침입 위협 시 비명을 감지하여 월패드·경비실로 즉시 통보합니다.</p>
-<a href="../support/inquiry.html" class="btn btn--blue">도입 문의</a></div></div>
-<div class="content-block reveal"><h2>개발 배경</h2>
-<p>기존 방범은 외출 시 도난 방지에 초점이 맞춰져 있습니다. 택배·배달원 위장 침입, 귀가 직후 도어락 래그 범죄 등 <strong>재실 중 대면 범죄</strong>에 취약합니다.</p>
-<p>비명인식 일괄소등스위치는 현관문 내측에 설치되어, 위급 상황에서 비명만으로 경비실·월패드·휴대폰에 동시 알림을 전송합니다.</p></div>
-<div class="content-block reveal"><h2>시스템 구성</h2>
-<div class="content-img"><img src="../assets/images/pages/sub2_4.jpg" alt="일괄소등스위치 시스템 구성도"></div>
-<p>세대현관 5&quot; FTS 스위치 → HN 월패드(RS-485) → 단지 서버 → 경비실·입주민 스마트폰</p></div>
-<div class="content-block reveal"><h2>특허 기술 — 오작동 방지</h2>
-<p>특허 제10-2132316호, 제10-2237852호. 평상시 비명인식 비활성 → <strong>방문자 호출·현관문 개방 등 외부인 대면 시에만 활성화</strong>하여 TV·생활소음 오작동을 원천 차단합니다.</p></div>
-<div class="content-block reveal"><h2>제품 특징</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>일괄 소등</h4><p>외출 시 세대 조명 일괄 제어</p></div>
-<div class="feature-box"><h4>엘리베이터 호출</h4><p>외출 전 승강기 미리 호출</p></div>
-<div class="feature-box"><h4>비명인식 보안</h4><p>HN 월패드·경비실 자동 연동</p></div>
-<div class="feature-box"><h4>생활 정보</h4><p>날씨·미세먼지·택배 알림</p></div>
-</div></div>
-<div class="content-block reveal"><h2>적용 실적</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>진주 아너스</h4><p>840세대 (2024.08)</p></div>
-<div class="feature-box"><h4>유승한내들</h4><p>444세대</p></div>
-<div class="feature-box"><h4>협력사</h4><p>(주)스필 배선기구 전문</p></div>
-</div></div>
-<div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
-<tr><th>디스플레이</th><td>5&quot; Full Touch LCD (정전식)</td></tr>
-<tr><th>전원</th><td>AC 220V / 60Hz</td></tr>
-<tr><th>통신</th><td>RS-485 (홈넷 연동)</td></tr>
-<tr><th>설치</th><td>세대 현관 벽면 매입</td></tr>
-<tr><th>인식 단어</th><td>강도야, 사람살려, 도와주세요</td></tr>
-<tr><th>특허</th><td>제10-2132316호, 제10-2237852호</td></tr>
-<tr><th>설치위치</th><td>세대현관문 내측</td></tr></table></div>"""
+    LIGHT_SWITCH_BODY,
+  ))
+
+
+def build_business():
+  write(ROOT / "business" / "index.html", page_shell(1,
+    "사업영역",
+    "아성보이스 비명인식 사업 — B2B 워치독, B2C 마이안심이",
+    f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>사업영역</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>비명인식사업</span>',
+    "사업영역",
+    '<aside class="sidebar"><div class="sidebar__title">사업영역</div><nav class="sidebar__nav"><a href="index.html" class="is-active">비명인식사업</a></nav></aside>',
+    BUSINESS_BODY,
   ))
 
 
@@ -255,15 +215,12 @@ def build_support():
     f'<p style="margin-top:20px"><a href="http://www.asungvoice.com/sub/sub04_03.php?boardid=faq" class="btn btn--outline btn--sm" target="_blank" rel="noopener">FAQ 전체 보기 →</a></p></div>'
   ))
 
-  # A/S - original image content
+  # A/S
   write(s / "as-inquiry.html", page_shell(1,
     "A/S 문의", "워치독 A/S 문의",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>A/S 문의</span>',
     "A/S 문의", support_sidebar("as-inquiry.html"),
-    """<div class="content-block reveal">
-<div class="content-img"><img src="../assets/images/support/as-inquiry.jpg" alt="A/S 문의 안내"></div>
-<p style="margin-top:16px">A/S 문의는 대표전화 <a href="tel:07087099911"><strong>070-8709-9911</strong></a> 또는 팩스 02-6203-1689로 연락 주세요.</p>
-<a href="http://www.asungvoice.com/sub/sub04_02.php" class="btn btn--outline btn--sm" target="_blank" rel="noopener">기존 A/S 페이지 →</a></div>"""
+    AS_INQUIRY_BODY,
   ))
 
   # 설치사례 - gallery grid like original
@@ -307,38 +264,12 @@ def build_support():
 <p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice" class="btn btn--blue btn--sm" target="_blank" rel="noopener">공지사항 전체 보기 →</a></p></div>"""
   ))
 
-  # 제품문의 - original form fields POST
+  # 제품문의
   write(s / "inquiry.html", page_shell(1,
     "제품문의", "아성보이스 제품 문의",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품문의</span>',
     "제품문의", support_sidebar("inquiry.html"),
-    """<div class="content-block reveal"><p>워치독 비명감지기 도입 상담을 환영합니다.</p></div>
-<form class="form reveal" action="http://www.asungvoice.com/module/online/online_evn.php" method="post" target="_blank">
-<input type="hidden" name="evnMode" value="join">
-<input type="hidden" name="o_type" value="1">
-<input type="hidden" name="returnURL" value="/sub/sub04_01.php">
-<div class="form__row"><div class="form__group"><label class="form__label">회사명 / 단지명 <span class="req">*</span></label><input class="form__input" name="company" required></div>
-<div class="form__group"><label class="form__label">승강기 설치대수</label><input class="form__input" name="serial" placeholder="대"></div></div>
-<div class="form__row"><div class="form__group"><label class="form__label">성명 <span class="req">*</span></label><input class="form__input" name="user_name" required></div>
-<div class="form__group"><label class="form__label">직위</label><input class="form__input" name="duty"></div></div>
-<div class="form__group"><label class="form__label">연락처 <span class="req">*</span></label>
-<div class="form__row"><select name="phone_1" class="form__input"><option>010</option><option>02</option><option>070</option></select>
-<input class="form__input" name="phone_2" placeholder="국번" required> <input class="form__input" name="phone_3" placeholder="번호" required></div></div>
-<div class="form__group"><label class="form__label">이메일</label>
-<input class="form__input" name="email_id" placeholder="계정"> @ <input class="form__input" name="email_domain" placeholder="도메인"></div>
-<div class="form__group"><label class="form__label">관심분야</label>
-<div class="form__checks">
-<label class="form__check"><input type="checkbox" name="field[]" value="1"> 승강기 보안설비</label>
-<label class="form__check"><input type="checkbox" name="field[]" value="2"> 택배/배달 사칭 현관문보안</label>
-<label class="form__check"><input type="checkbox" name="field[]" value="3"> 화장실 보안설비</label>
-<label class="form__check"><input type="checkbox" name="field[]" value="4"> 비명인식 협업</label>
-</div></div>
-<div class="form__group"><label class="form__label">문의사항 <span class="req">*</span></label><textarea class="form__textarea" name="contents" required></textarea></div>
-<label class="form__check"><input type="checkbox" name="agree" value="Y" required> 개인정보 수집 및 이용에 동의합니다.</label>
-<div class="form__actions"><button type="submit" class="btn btn--blue">제출</button>
-<a href="tel:07087099911" class="btn btn--ghost">전화 문의</a></div>
-</form>
-<div class="card reveal" style="margin-top:24px;text-align:center"><p>카카오 플러스친구: <strong>아성보이스</strong></p></div>"""
+    INQUIRY_BODY,
   ))
 
 
@@ -391,7 +322,7 @@ OLD_PROD_NAV = (
     '<a href="{p}products/module.html">비명인식 모듈</a>'
 )
 NEW_PROD_NAV = (
-    '<a href="{p}products/home-keeper.html">홈 안전지킴이</a>'
+    '<a href="{p}products/home-keeper.html">마이안심이</a>'
     '<a href="{p}products/elevator.html">승강기 비명감지기</a>'
     '<a href="{p}products/restroom.html">화장실 비명감지기</a>'
     '<a href="{p}products/light-switch.html">비명인식 일괄소등스위치</a>'
@@ -416,7 +347,7 @@ OLD_SIDEBAR = (
     '<a href="module.html">비명인식 모듈</a>'
 )
 NEW_SIDEBAR = (
-    '<a href="home-keeper.html">홈 안전지킴이</a>'
+    '<a href="home-keeper.html">마이안심이</a>'
     '<a href="elevator.html">승강기 비명감지기</a>'
     '<a href="restroom.html">화장실 비명감지기</a>'
     '<a href="light-switch.html">비명인식 일괄소등스위치</a>'
@@ -451,6 +382,15 @@ def patch_nav():
             '<a href="products/restroom.html">화장실 비명감지기</a>\n  <a href="products/module.html">비명인식 모듈</a>',
             '<a href="products/restroom.html">화장실 비명감지기</a>\n  <a href="products/light-switch.html">일괄소등스위치</a>\n  <a href="products/module.html">비명인식 모듈</a>',
         )
+        text = text.replace('홈 안전지킴이', '마이안심이')
+        if 'class="page-neu"' not in text:
+            text = text.replace('<body>', '<body class="page-neu">', 1)
+        text = text.replace('class="header is-solid"', 'class="header header--neu is-solid"')
+        text = re.sub(
+            r'\n?<script src="https://cdn\.jsdelivr\.net/npm/swiper@11/swiper-bundle\.min\.js"></script>',
+            '',
+            text,
+        )
         if text != orig:
             path.write_text(text, encoding="utf-8")
             print(f"  patched {path.relative_to(ROOT)}")
@@ -459,6 +399,7 @@ def patch_nav():
 if __name__ == "__main__":
     print("Building site pages...")
     build_products()
+    build_business()
     build_support()
     build_greeting()
     print("Patching navigation...")

@@ -11,13 +11,13 @@
 <link rel="stylesheet" href="../css/style.css">
 
 </head>
-<body>
+<body class="page-neu">
 <a href="#main" class="skip">본문 바로가기</a>
-<header class="header is-solid"><div class="container header__inner">
+<header class="header header--neu is-solid"><div class="container header__inner">
 <a href="../index.html" class="logo"><img src="../assets/images/logo.png" alt="아성보이스" width="32" height="32"><span>아성<em>보이스</em></span></a>
 <nav class="nav" aria-label="주메뉴">
 <div class="nav__item"><a href="../company/greeting.html" class="nav__link">회사소개</a><div class="nav__drop"><a href="../company/greeting.html">인사말</a><a href="../company/location.html">오시는 길</a></div></div>
-<div class="nav__item"><a href="../products/elevator.html" class="nav__link">제품소개</a><div class="nav__drop"><a href="../products/home-keeper.html">홈 안전지킴이</a><a href="../products/elevator.html">승강기 비명감지기</a><a href="../products/restroom.html">화장실 비명감지기</a><a href="../products/light-switch.html">비명인식 일괄소등스위치</a><a href="../products/module.html">비명인식 모듈</a></div></div>
+<div class="nav__item"><a href="../products/elevator.html" class="nav__link">제품소개</a><div class="nav__drop"><a href="../products/home-keeper.html">마이안심이</a><a href="../products/elevator.html">승강기 비명감지기</a><a href="../products/restroom.html">화장실 비명감지기</a><a href="../products/light-switch.html">비명인식 일괄소등스위치</a><a href="../products/module.html">비명인식 모듈</a></div></div>
 <div class="nav__item"><a href="../business/index.html" class="nav__link">사업영역</a></div>
 <div class="nav__item"><a href="../support/inquiry.html" class="nav__link">고객지원</a><div class="nav__drop"><a href="../support/inquiry.html">제품문의</a><a href="../support/as-inquiry.html">A/S 문의</a><a href="../support/faq.html">자주하는질문</a><a href="../support/resources.html">자료실</a><a href="../support/cases.html">제품설치사례</a><a href="../support/notice.html">공지사항</a></div></div>
 </nav>
@@ -26,38 +26,54 @@
 </div></header>
 <nav class="mobile-nav" aria-label="모바일 메뉴">
 <div class="mobile-nav__label">회사소개</div><a href="../company/greeting.html">인사말</a><a href="../company/location.html">오시는 길</a>
-<div class="mobile-nav__label">제품소개</div><a href="../products/home-keeper.html">홈 안전지킴이</a><a href="../products/elevator.html">승강기</a><a href="../products/restroom.html">화장실</a><a href="../products/light-switch.html">일괄소등</a><a href="../products/module.html">모듈</a>
+<div class="mobile-nav__label">제품소개</div><a href="../products/home-keeper.html">마이안심이</a><a href="../products/elevator.html">승강기</a><a href="../products/restroom.html">화장실</a><a href="../products/light-switch.html">일괄소등</a><a href="../products/module.html">모듈</a>
 <div class="mobile-nav__label">고객지원</div><a href="../support/inquiry.html">제품문의</a><a href="../support/as-inquiry.html">A/S 문의</a><a href="../support/faq.html">자주하는질문</a><a href="../support/resources.html">자료실</a><a href="../support/cases.html">제품설치사례</a><a href="../support/notice.html">공지사항</a>
 </nav>
 <section class="page-hero"><div class="container"><div class="breadcrumb"><a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품문의</span></div><h1>제품문의</h1></div></section>
 <main id="main"><div class="container sub-layout"><aside class="sidebar"><div class="sidebar__title">고객지원</div><nav class="sidebar__nav"><a href="inquiry.html" class="is-active">제품문의</a><a href="as-inquiry.html" class="">A/S 문의</a><a href="faq.html" class="">자주하는질문</a><a href="resources.html" class="">자료실</a><a href="cases.html" class="">제품설치사례</a><a href="notice.html" class="">공지사항</a></nav></aside><div class="content-area">
-<div class="content-block reveal"><p>워치독 비명감지기 도입 상담을 환영합니다.</p></div>
-<form class="form reveal" action="http://www.asungvoice.com/module/online/online_evn.php" method="post" target="_blank">
+
+<div class="inquiry-intro reveal">
+<div class="inquiry-card neu-card"><strong>전화 상담</strong><p><a href="tel:07087099911">070-8709-9911</a></p><span>평일 09:00–18:00</span></div>
+<div class="inquiry-card neu-card"><strong>카카오 플러스친구</strong><p>아성보이스</p><span>실시간 상담</span></div>
+<div class="inquiry-card neu-card"><strong>팩스</strong><p>02-6203-1689</p><span>견적·서류 송부</span></div>
+</div>
+
+<div class="form-wrap neu-card reveal">
+<h2 class="form-wrap__title">온라인 제품 문의</h2>
+<p class="form-wrap__sub">워치독 비명감지기 도입·시범설치·OEM/ODM 협업 상담을 환영합니다.</p>
+<form class="form" action="http://www.asungvoice.com/module/online/online_evn.php" method="post" target="_blank">
 <input type="hidden" name="evnMode" value="join">
 <input type="hidden" name="o_type" value="1">
 <input type="hidden" name="returnURL" value="/sub/sub04_01.php">
+<div class="form__section"><h3>기본 정보</h3>
 <div class="form__row"><div class="form__group"><label class="form__label">회사명 / 단지명 <span class="req">*</span></label><input class="form__input" name="company" required></div>
 <div class="form__group"><label class="form__label">승강기 설치대수</label><input class="form__input" name="serial" placeholder="대"></div></div>
 <div class="form__row"><div class="form__group"><label class="form__label">성명 <span class="req">*</span></label><input class="form__input" name="user_name" required></div>
-<div class="form__group"><label class="form__label">직위</label><input class="form__input" name="duty"></div></div>
+<div class="form__group"><label class="form__label">직위</label><input class="form__input" name="duty"></div></div></div>
+<div class="form__section"><h3>연락처</h3>
 <div class="form__group"><label class="form__label">연락처 <span class="req">*</span></label>
-<div class="form__row"><select name="phone_1" class="form__input"><option>010</option><option>02</option><option>070</option></select>
-<input class="form__input" name="phone_2" placeholder="국번" required> <input class="form__input" name="phone_3" placeholder="번호" required></div></div>
+<div class="form__row form__row--phone"><select name="phone_1" class="form__input"><option>010</option><option>02</option><option>070</option></select>
+<input class="form__input" name="phone_2" placeholder="국번" required><input class="form__input" name="phone_3" placeholder="번호" required></div></div>
 <div class="form__group"><label class="form__label">이메일</label>
-<input class="form__input" name="email_id" placeholder="계정"> @ <input class="form__input" name="email_domain" placeholder="도메인"></div>
+<div class="form__row form__row--email"><input class="form__input" name="email_id" placeholder="계정"><span>@</span><input class="form__input" name="email_domain" placeholder="도메인"></div></div></div>
+<div class="form__section"><h3>문의 내용</h3>
 <div class="form__group"><label class="form__label">관심분야</label>
-<div class="form__checks">
-<label class="form__check"><input type="checkbox" name="field[]" value="1"> 승강기 보안설비</label>
-<label class="form__check"><input type="checkbox" name="field[]" value="2"> 택배/배달 사칭 현관문보안</label>
-<label class="form__check"><input type="checkbox" name="field[]" value="3"> 화장실 보안설비</label>
-<label class="form__check"><input type="checkbox" name="field[]" value="4"> 비명인식 협업</label>
+<div class="form__checks form__checks--grid">
+<label class="form__check neu-chip-check"><input type="checkbox" name="field[]" value="1"> 승강기 보안설비</label>
+<label class="form__check neu-chip-check"><input type="checkbox" name="field[]" value="2"> 택배/배달 사칭 현관문보안</label>
+<label class="form__check neu-chip-check"><input type="checkbox" name="field[]" value="3"> 화장실 보안설비</label>
+<label class="form__check neu-chip-check"><input type="checkbox" name="field[]" value="4"> 비명인식 협업·OEM</label>
+<label class="form__check neu-chip-check"><input type="checkbox" name="field[]" value="5"> 마이안심이</label>
 </div></div>
-<div class="form__group"><label class="form__label">문의사항 <span class="req">*</span></label><textarea class="form__textarea" name="contents" required></textarea></div>
+<div class="form__group"><label class="form__label">문의사항 <span class="req">*</span></label><textarea class="form__textarea" name="contents" required placeholder="설치 환경, 대수, 일정 등을 적어주세요."></textarea></div></div>
+<div class="form__privacy neu-inset">
+<p><strong>개인정보 수집 및 이용 안내</strong></p>
+<ul><li>이용 목적: 상담 및 진행</li><li>수집 항목: 이름, 연락처, 이메일, 상담내용</li><li>보유 기간: 상담 종료 후 6개월</li><li>담당: 070-8709-9912 / webmaster@asungvoice.com</li></ul>
 <label class="form__check"><input type="checkbox" name="agree" value="Y" required> 개인정보 수집 및 이용에 동의합니다.</label>
-<div class="form__actions"><button type="submit" class="btn btn--blue">제출</button>
+</div>
+<div class="form__actions"><button type="submit" class="btn btn--blue neu-btn">문의 제출</button>
 <a href="tel:07087099911" class="btn btn--ghost">전화 문의</a></div>
-</form>
-<div class="card reveal" style="margin-top:24px;text-align:center"><p>카카오 플러스친구: <strong>아성보이스</strong></p></div>
+</form></div>
 </div></div></main>
 <footer class="footer"><div class="container">
 <div class="footer__top"><div class="footer__brand"><img src="../assets/images/logo.png" alt="" width="36" height="36"><span>아성보이스</span><p>소리로 지키는 안전, 워치독</p></div>
