@@ -702,6 +702,14 @@ address{font-style:normal}
 .compare-box ul{font-size:.84rem;color:var(--text-2);line-height:1.7;padding-left:16px}
 .ansimi-app-img{max-width:280px;margin:0 auto;border-radius:28px;box-shadow:var(--neu-shadow)}
 
+/* IR 슬라이드 임베드 */
+.ir-section{margin-bottom:36px}
+.ir-section>h2{margin-bottom:14px}
+.ir-slide{border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--neu-shadow);background:var(--neu-light)}
+.ir-slide img{width:100%;height:auto;display:block}
+.ir-slide__cap{padding:10px 16px;font-size:.78rem;color:var(--text-3);text-align:center;background:var(--neu-bg)}
+.page-neu .ir-slide{background:var(--neu-bg);box-shadow:var(--neu-shadow)}
+
 @media(max-width:768px){
   .inquiry-intro,.compare-row,.as-steps,.form__checks--grid{grid-template-columns:1fr}
 }

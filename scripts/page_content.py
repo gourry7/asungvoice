@@ -1,92 +1,54 @@
-"""HTML body fragments for build_site.py"""
+"""HTML body fragments for build_site.py — IR 슬라이드 기반"""
 
-HOME_KEEPER_BODY = """
-<div class="prod-hero reveal prod-hero--pink">
-<div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png" alt="마이안심이"></div>
-<div class="prod-hero__info"><span class="model">My Ansim-i · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
-<p><strong>감시가 아닌 위안, 불안이 아닌 평온.</strong> 1인 여성 가구의 평온한 일상을 지키는 라이프스타일 안심 오브제입니다. 위압적인 CCTV·비상벨이 아닌, 조명·디퓨저처럼 집안에 자연스럽게 스며드는 홈 안전 솔루션입니다.</p>
-<a href="../support/inquiry.html" class="btn btn--pink">도입 문의</a></div></div>
+_SLIDE = "../assets/images/ir-slides/slide-{n:02d}.png"
 
-<div class="content-block reveal"><h2>왜 마이안심이인가</h2>
-<div class="compare-row">
-<div class="compare-box compare-box--old"><h4>기존 보안 기기</h4><ul>
-<li>감시·경고 중심 — 심리적 압박</li><li>투박한 디자인, 인테리어 훼손</li><li>클라우드 전송 — 사생활 우려</li></ul></div>
-<div class="compare-box compare-box--new"><h4>마이안심이</h4><ul>
-<li>위안·평온 — 일상의 오브제</li><li>감성 디자인, 인테리어 친화</li><li>On-Device AI — 데이터 외부 유출 없음</li></ul></div>
-</div></div>
+def _ir(n, alt, title=None):
+    h = f'<h2>{title}</h2>' if title else ''
+    return f'''<div class="ir-section reveal">{h}
+<div class="ir-slide neu-card"><img src="{_SLIDE.format(n=n)}" alt="{alt}" loading="lazy"></div></div>'''
 
-<div class="content-block reveal" style="text-align:center">
-<img src="../assets/images/products/app-mockup.png" alt="마이안심이 앱" class="ansimi-app-img" loading="lazy"></div>
+ELEVATOR_BODY = f"""
+<div class="prod-hero reveal">
+<div class="prod-hero__img"><img src="../assets/images/products/elevator.png" alt="WD-600MD 승강기 비명감지기"></div>
+<div class="prod-hero__info"><span class="model">WD-600MD Series · B2B 승강기</span><h2>승강기 비명인식기</h2>
+<p><strong>AI도 인정한 국내 대표 브랜드.</strong> 승강기 및 공중화장실의 안전을 책임지는 프리미엄 비상 대응 솔루션입니다. 딥러닝 기반 실시간 비명 인식으로 경광등·경고방송·비상통화장치를 즉시 연동합니다.</p>
+<a href="../support/inquiry.html" class="btn btn--blue">도입 문의</a></div></div>
 
-<div class="content-block reveal"><h2>핵심 기술</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>99% 인식률</h4><p>삼성 에스원 협력 10여 년 · 3,000대+ 현장 검증</p></div>
-<div class="feature-box"><h4>On-Device AI</h4><p>0.1초 비명 인식 · 클라우드 전송 없음</p></div>
-<div class="feature-box"><h4>독립 설치형</h4><p>홈네트워크·월패드 불필요 · 기축 원룸·다세대 OK</p></div>
-</div></div>
+{_ir(20, "엘리베이터 비상호출의 한계와 워치독 대안", "기존 시스템의 한계 vs 워치독 즉시 대응")}
 
-<div class="content-block reveal"><h2>3단계 보호 시스템</h2>
-<div class="flow">
-<div class="flow__step"><div class="num">1</div><h4>감지</h4><p>Mic×2 + 자석감지기<br>(창문·현관)</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">2</div><h4>AI 판단</h4><p>0.1초 비명 인식<br>민감·보통·둔감 3단계</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">3</div><h4>대응</h4><p>110dB↑ 사이렌<br>SOS · 보호자 호출</p></div></div></div>
+{_ir(21, "승강기용 시스템 구성도", "시스템 구성")}
 
-<div class="content-block reveal"><h2>실용신안 기반 알고리즘</h2>
-<p>택배기사 사칭 범죄를 막는 1인 가구 맞춤형 독립 방범 시스템. 실용신안 <strong>KR 20-0498161</strong> (2024.07 등록)</p>
-<div class="feature-grid">
-<div class="feature-box"><h4>개인 맞춤 인식</h4><p>사용자별 민감·보통·둔감 3단계 — 오인식 최소화</p></div>
-<div class="feature-box"><h4>2중 시간 게이트</h4><p>제1: 20~60초(택배 사칭) · 제2: 30분~(침입)</p></div>
-<div class="feature-box"><h4>5분 해제 스위치</h4><p>지인 방문 시 방범 일시 정지</p></div>
-</div>
-<p style="margin-top:14px">전원 차단 시 배터리 5분 작동 · 외출·재택 모드 지원 · 3G/LTE·BLE/WiFi 통신</p></div>
+{_ir(22, "승강기용 동작 흐름 7단계", "동작 흐름")}
 
-<div class="content-block reveal"><h2>기술 사양</h2>
-<table class="spec-table">
-<tr><th>제품명</th><td>마이안심이 (My Ansim-i)</td></tr>
-<tr><th>인식 방식</th><td>On-Device AI 비명 인식 (음원 패턴만 분석)</td></tr>
-<tr><th>인식률</th><td>99% (10년+ 현장 검증)</td></tr>
-<tr><th>마이크</th><td>2 MIC + 무선 자석감지기</td></tr>
-<tr><th>알람</th><td>110dB 이상 사이렌 + SOS 비상호출</td></tr>
-<tr><th>통신</th><td>3G/LTE · BLE · WiFi</td></tr>
-<tr><th>특허</th><td>실용신안 제20-0498161호 (2024.07)</td></tr>
-<tr><th>설치</th><td>홈네트워크 불필요 · 독립 설치형</td></tr></table></div>"""
+{_ir(23, "워치독 제품 특징", "제품 특징")}
 
-RESTROOM_BODY = """
+{_ir(24, "기술 비교 테이블", "경쟁 기술 비교")}
+
+<div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
+<tr><th>모델</th><td>WD-600MD / WD-100E</td></tr>
+<tr><th>적용기술</th><td>딥러닝, 멀티트리거, 실시간 고속인식</td></tr>
+<tr><th>마이크</th><td>고성능 Digital 2-Mic 어레이</td></tr>
+<tr><th>인식 단어</th><td>사람살려, 강도야, 도와주세요, 아악, 꺄악</td></tr>
+<tr><th>인식레벨</th><td>90dB / 95dB / 100dB 3단계 선택</td></tr>
+<tr><th>출력</th><td>NO(Normal Open) 무전원 접점 — 기존 비상통화장치 100% 호환</td></tr>
+<tr><th>경고방송</th><td>"비상상황입니다. 지금 즉시 출동합니다." (35초간 반복)</td></tr>
+<tr><th>설치위치</th><td>승객버튼 조작반 직상부 벽면 또는 천정</td></tr></table></div>
+<div class="content-block reveal"><p class="note-box">※ 동일 워치독 기술: <a href="restroom.html">화장실 비명감지기</a> · <a href="light-switch.html">일괄소등스위치</a> · <a href="module.html">비명인식 모듈</a></p></div>"""
+
+RESTROOM_BODY = f"""
 <div class="prod-hero reveal">
 <div class="prod-hero__img"><img src="../assets/images/products/logo-watchdog.png" alt="워치독 화장실 비명감지기"></div>
 <div class="prod-hero__info"><span class="model">워치독 WatchDog · WD 시리즈</span><h2>화장실 비명인식기</h2>
-<p>승강기용 워치독과 <strong>동일한 비명인식 기술</strong>입니다. 노출형·매입형(다운라이트형)으로 설치하며, 화장실 내 대화는 녹음·전송되지 않고 비명 발생 시에만 경보합니다. (3G/LTE 모델 제외 별도 이용료 없음)</p>
+<p>승강기용 워치독과 <strong>동일한 비명인식 기술</strong>입니다. 노출형·매입형(다운라이트형)으로 설치하며, 화장실 내 대화는 녹음·전송되지 않고 비명 발생 시에만 경보합니다.</p>
 <a href="../support/inquiry.html" class="btn btn--blue">도입 문의</a></div></div>
 
-<div class="content-block reveal"><h2>개발 배경</h2>
-<p>공공 화장실은 개인정보보호법상 CCTV 설치가 불가능한 <strong>안전 사각지대</strong>입니다. 몰카·성범죄·폭행 등 여성·아동 대상 강력범죄가 빈번하며, 기존 비상벨은 제압당하거나 당황한 상황에서 버튼을 누르기 어렵습니다.</p>
-<p>워치독은 "사람살려", "아악", "강도야" 등 <strong>비명만으로</strong> 위급 상황을 즉시 인지하여 경광등·경고방송을 울리고 112·경비실로 자동 호출합니다.</p></div>
+{_ir(25, "화장실용 비명감지기 필요성", "안전 사각지대 vs 워치독 자동 호출")}
 
-<div class="content-block reveal"><h2>시스템 구성</h2>
-<p>화장실 비명감지기(노출형/매입형) → 유선·RF 중계기 또는 3G/LTE → 112 상황실 · 경비실 · 관제센터 · 스마트폰</p>
-<div class="content-img"><img src="../assets/images/diagrams/restroom-system-diagram.png" alt="화장실 비명감지기 시스템 구성도"></div></div>
+{_ir(26, "화장실용 시스템 구성도", "시스템 구성")}
 
-<div class="content-block reveal"><h2>제품 유형</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>노출형</h4><p>천정·벽면 표면 부착, 원통형 디자인</p></div>
-<div class="feature-box"><h4>매입형</h4><p>다운라이트 홀 규격 매립, 미관 우수</p></div>
-<div class="feature-box"><h4>유·무선 연동</h4><p>접점식 유선 / RF 무선 / 3G·LTE 직접 연동</p></div>
-</div></div>
+{_ir(27, "화장실용 동작 흐름 7단계", "동작 흐름")}
 
-<div class="content-block reveal"><h2>동작 흐름</h2><div class="flow">
-<div class="flow__step"><div class="num">1</div><h4>비명 대기</h4><p>365일 24시간</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">2</div><h4>AI 판별</h4><p>비명 vs 일상소음</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">3</div><h4>경광등·방송</h4><p>범행 억제</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">4</div><h4>비상호출</h4><p>유선·무선 전파</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">5</div><h4>출동·대응</h4><p>음성통화·긴급출동</p></div></div></div>
-
-<div class="content-block reveal"><h2>제품 특징</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>딥러닝 AI</h4><p>일상소음과 비명 정밀 구분</p></div>
-<div class="feature-box"><h4>고성능 CPU</h4><p>내장형 CPU로 안정적 실시간 처리</p></div>
-<div class="feature-box"><h4>간편 설치</h4><p>매입형 다운라이트 홀 규격 호환</p></div>
-<div class="feature-box"><h4>탬퍼 스위치</h4><p>강제 해체 시 즉시 비상통보</p></div>
-</div></div>
+{_ir(28, "화장실용 적용 기술", "적용 기술")}
 
 <div class="content-block reveal"><h2>적용 사례</h2>
 <div class="feature-grid">
@@ -97,59 +59,87 @@ RESTROOM_BODY = """
 
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
 <tr><th>제품군</th><td>워치독 WatchDog (승강기용과 동일 기술)</td></tr>
-<tr><th>적용기술</th><td>딥러닝, 멀티트리거, 실시간 고속인식</td></tr>
-<tr><th>인식방식</th><td>음원인식 — 여성·아동 음성 최적화</td></tr>
-<tr><th>마이크</th><td>2 MIC (DIGITAL)</td></tr>
-<tr><th>인식 단어</th><td>아악, 꺄악, 강도야, 사람살려, 도와주세요</td></tr>
+<tr><th>설치 타입</th><td>노출형 / 매입형(다운라이트)</td></tr>
+<tr><th>통신</th><td>유선(RS-485) / RF 무선(447MHz) / 3G·LTE Gateway</td></tr>
+<tr><th>인식 단어</th><td>강도야, 사람살려, 도와주세요, 아악, 꺄악</td></tr>
 <tr><th>프라이버시</th><td>녹음·감청 없음, 소리 패턴만 분석</td></tr>
-<tr><th>설치장소</th><td>화장실, 탈의실, 독서실 등</td></tr></table></div>
-<div class="content-block reveal"><p class="note-box">※ <a href="elevator.html">승강기 비명감지기</a>와 동일 워치독 제품군입니다. 세대 현관용은 <a href="light-switch.html">비명인식 일괄소등스위치</a>를 참고하세요.</p></div>"""
+<tr><th>출력</th><td>NO 무전원 접점 — 기존 비상벨·관제 시스템 연동</td></tr></table></div>
+<div class="content-block reveal"><p class="note-box">※ <a href="elevator.html">승강기 비명감지기</a>와 동일 워치독 제품군입니다.</p></div>"""
 
-LIGHT_SWITCH_BODY = """
+LIGHT_SWITCH_BODY = f"""
 <div class="prod-hero reveal">
 <div class="prod-hero__img"><img src="../assets/images/products/control-panel.png" alt="비명인식 일괄소등스위치"></div>
-<div class="prod-hero__info"><span class="model">5&quot; FTS · 홈네트워크 연동</span><h2>비명인식 일괄소등스위치</h2>
-<p>신축 아파트 세대현관에 설치되는 스마트 터치패널입니다. 일괄소등·엘리베이터 호출 등 생활편의 기능과 함께, 방문자 대면 중 침입 위협 시 비명을 감지하여 HN 월패드·경비실·휴대폰으로 즉시 통보합니다.</p>
+<div class="prod-hero__info"><span class="model">5&quot; FTS · 홈네트워크 연동 · 특허 2건</span><h2>비명인식 일괄소등스위치</h2>
+<p>일상의 편리함에 안전을 더한 혁신 특허 제품입니다. 현관 일괄소등 스위치에 비명인식 기능을 탑재하여, 외부인 대면 시 침입 위협을 즉시 감지·통보합니다.</p>
 <a href="../support/inquiry.html" class="btn btn--blue">도입 문의</a></div></div>
 
-<div class="content-block reveal"><h2>개발 배경</h2>
-<p>기존 아파트 방범은 <strong>외출 시 도난 방지</strong>에 초점이 맞춰져 있습니다. 택배·배달원 위장 침입, 귀가 직후 도어락 래그 범죄 등 재실 중 대면 범죄에 취약합니다.</p>
-<p>현관문을 열고 접객하는 순간 범죄가 발생할 수 있으며, SOS 버튼은 범인에게 밀린 상태에서 누르기 어렵습니다. 비명만으로 경비실·월패드에 비상호출하는 것이 핵심입니다.</p></div>
+{_ir(29, "재실 중 강력범죄 위협과 대응 솔루션", "주거 공간 침입 위협 vs 비명인식 일괄소등스위치")}
 
-<div class="content-block reveal"><h2>시스템 구성</h2>
-<p>세대카메라(방문호출) + 자석감지기(현관문 OPEN) → 5&quot; 일괄소등스위치(비명인식) → HN 월패드 → 단지서버 → 경비실 · 휴대폰 · 인접세대 월패드</p>
-<div class="content-img"><img src="../assets/images/diagrams/light-switch-system-diagram.png" alt="일괄소등스위치 시스템 구성도"></div></div>
+{_ir(30, "일괄소등SW 시스템 구성도", "시스템 구성")}
 
-<div class="content-block reveal"><h2>동작 흐름</h2><div class="flow">
-<div class="flow__step"><div class="num">1</div><h4>음향 수집</h4><p>상시 대기</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">2</div><h4>방문자 호출</h4><p>세대카메라 연동</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">3</div><h4>현관문 OPEN</h4><p>자석감지기 작동</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">4</div><h4>비명 인식</h4><p>AI 즉시 판별</p></div><span class="flow__arrow">→</span>
-<div class="flow__step"><div class="num">5</div><h4>비상호출</h4><p>경비실·월패드 경보</p></div></div>
-<p style="margin-top:14px">평상시 비명인식 비활성 → <strong>외부인 대면 시에만 활성화</strong> (특허 제10-2132316호, 제10-2237852호)</p></div>
+{_ir(31, "일괄소등SW 특허 기술", "특허 기술 — 이벤트 기반 능동 활성화")}
 
-<div class="content-block reveal"><h2>제품 특징</h2>
-<div class="feature-grid">
-<div class="feature-box"><h4>일괄 소등</h4><p>외출 시 세대 조명 일괄 제어</p></div>
-<div class="feature-box"><h4>엘리베이터 호출</h4><p>외출 전 승강기 미리 호출</p></div>
-<div class="feature-box"><h4>비명인식 보안</h4><p>HN 월패드·경비실 자동 연동</p></div>
-<div class="feature-box"><h4>오동작 방지</h4><p>TV·생활소음 원천 차단 특허</p></div>
-</div></div>
+{_ir(32, "일괄소등SW 제품 사양", "제품 사양")}
+
+{_ir(33, "언론 보도 및 시장 반응", "언론 보도 및 시장 반응")}
 
 <div class="content-block reveal"><h2>적용 실적</h2>
 <div class="feature-grid">
-<div class="feature-box"><h4>진주 아너스</h4><p>840세대 (2024.08)</p></div>
+<div class="feature-box"><h4>진주 아너스</h4><p>840세대 · 100% 계약 (국내 최초)</p></div>
 <div class="feature-box"><h4>유승한내들</h4><p>444세대</p></div>
 <div class="feature-box"><h4>협력사</h4><p>(주)스필 배선기구 전문</p></div>
+</div></div>"""
+
+HOME_KEEPER_BODY = f"""
+<div class="prod-hero reveal prod-hero--pink">
+<div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png" alt="마이안심이"></div>
+<div class="prod-hero__info"><span class="model">My Ansim-i · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
+<p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구(280만)를 위한 재택 방범 디바이스. 비명 하나로 110dB 이상 강력 경보와 보호자 앱 알림을 즉시 전송합니다.</p>
+<a href="../support/inquiry.html" class="btn btn--pink">도입 문의</a></div></div>
+
+{_ir(34, "1인 여성가구 방범의 필요성", "범죄 노출 vs 마이안심이 솔루션")}
+
+{_ir(35, "마이안심이 시스템 구성도", "시스템 구성")}
+
+{_ir(36, "마이안심이 자석감지기", "자석감지기 센서")}
+
+{_ir(37, "마이안심이 모바일 앱", "모바일 앱")}
+
+<div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
+<tr><th>제품명</th><td>마이안심이 (My Ansim-i)</td></tr>
+<tr><th>인식 방식</th><td>On-Device AI 비명 인식 (음원 패턴만 분석)</td></tr>
+<tr><th>알람</th><td>110dB 이상 사이렌 + SOS 비상호출</td></tr>
+<tr><th>센서</th><td>BLE 자석감지기 (CR2032, 약 1년)</td></tr>
+<tr><th>통신</th><td>WiFi (2.4GHz) · BLE · 3G/LTE</td></tr>
+<tr><th>전원</th><td>DC 5V (USB-C) 상시 전원 + 보조배터리 호환</td></tr>
+<tr><th>특허</th><td>실용신안 제20-0498161호 (2024.07)</td></tr>
+<tr><th>설치</th><td>홈네트워크 불필요 · 독립 설치형</td></tr></table></div>"""
+
+MODULE_BODY = f"""
+<div class="prod-hero reveal">
+<div class="prod-hero__img"><img src="../assets/images/products/pcb-module.png" alt="비명인식 모듈"></div>
+<div class="prod-hero__info"><span class="model">WD-Module-V2 · B2B 연동형</span><h2>비명인식 모듈</h2>
+<p><strong>어디든 적용 가능한 핵심 기술.</strong> 기존 비상벨, CCTV, 주차 시스템에 비명인식 기능을 더해 가치를 높이는 임베디드 모듈입니다. SID 내장 디지털 비명인식 모듈.</p>
+<a href="../support/inquiry.html" class="btn btn--blue">OEM/ODM 문의</a></div></div>
+
+{_ir(38, "비명인식 모듈 소개 및 사양", "모듈 소개 및 사양")}
+
+<div class="content-block reveal"><h2>주요 적용 분야</h2>
+<div class="feature-grid">
+<div class="feature-box"><h4>지하주차장</h4><p>기존 비상벨에 비명감지 기능 추가 (아마노 등)</p></div>
+<div class="feature-box"><h4>승강기</h4><p>비상호출 버튼과 연동하여 자동 호출</p></div>
+<div class="feature-box"><h4>미디어 타운보드</h4><p>승강기 미디어·키오스크 연동</p></div>
+<div class="feature-box"><h4>세대 방범</h4><p>월패드·도어락 Security 연동</p></div>
 </div></div>
 
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
-<tr><th>디스플레이</th><td>5&quot; Full Touch LCD (정전식)</td></tr>
-<tr><th>전원</th><td>AC 220V / 60Hz</td></tr>
-<tr><th>통신</th><td>RS-485 (홈넷 연동)</td></tr>
-<tr><th>인식 단어</th><td>강도야, 사람살려, 도와주세요</td></tr>
-<tr><th>특허</th><td>제10-2132316호, 제10-2237852호</td></tr>
-<tr><th>설치위치</th><td>세대현관문 내측</td></tr></table></div>"""
+<tr><th>모델</th><td>WD-Module-V2</td></tr>
+<tr><th>입력 전원</th><td>DC 5V (USB Standard) Low Power</td></tr>
+<tr><th>출력 방식</th><td>NO (Normally Open) 접점 출력 Dry Contact</td></tr>
+<tr><th>통신 연동</th><td>UART / GPIO</td></tr>
+<tr><th>인식 거리</th><td>Max 5~10m (환경에 따라 조절)</td></tr>
+<tr><th>반응 속도</th><td>비명 감지 후 0.5초 이내 신호 송출</td></tr>
+<tr><th>인식 단어</th><td>사람살려, 강도야, 도와주세요, 아악, 꺄악</td></tr></table></div>"""
 
 BUSINESS_BODY = """
 <div class="content-block reveal"><p>㈜아성보이스는 2015년 설립 이후 AI On-Device 비명 인식 기술을 기반으로 승강기·화장실·세대현관·1인 가구 등 <strong>범죄 사각지대</strong>를 보호하는 언택트 방범 솔루션을 제공합니다.</p></div>

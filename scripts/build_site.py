@@ -6,9 +6,11 @@ from pathlib import Path
 from page_content import (
     AS_INQUIRY_BODY,
     BUSINESS_BODY,
+    ELEVATOR_BODY,
     HOME_KEEPER_BODY,
     INQUIRY_BODY,
     LIGHT_SWITCH_BODY,
+    MODULE_BODY,
     RESTROOM_BODY,
 )
 
@@ -159,7 +161,15 @@ def build_products():
     RESTROOM_BODY,
   ))
 
-  # Light switch - separate product
+  write(p / "elevator.html", page_shell(1,
+    "승강기 비명감지기",
+    "WD-600MD 승강기 비명감지기 — 딥러닝 AI 비명인식, 삼성 에스원 공급",
+    f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>승강기 비명감지기</span>',
+    "승강기 비명감지기",
+    product_sidebar("elevator.html"),
+    ELEVATOR_BODY,
+  ))
+
   write(p / "light-switch.html", page_shell(1,
     "비명인식 일괄소등스위치",
     "신축 아파트 세대현관용 홈네트워크 연동 비명인식 일괄소등스위치",
@@ -167,6 +177,15 @@ def build_products():
     "비명인식 일괄소등스위치",
     product_sidebar("light-switch.html"),
     LIGHT_SWITCH_BODY,
+  ))
+
+  write(p / "module.html", page_shell(1,
+    "비명인식 모듈",
+    "WD-Module-V2 비명인식 임베디드 모듈 — 지하주차장·OEM/ODM",
+    f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>비명인식 모듈</span>',
+    "비명인식 모듈",
+    product_sidebar("module.html"),
+    MODULE_BODY,
   ))
 
 
