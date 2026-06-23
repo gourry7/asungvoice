@@ -340,10 +340,10 @@ AS_INQUIRY_BODY = """
 <p class="form-wrap__sub">워치독 비명감지기 A/S는 전화·팩스·이메일로 접수해 주세요. 현장 방문 전 증상과 설치 위치를 알려주시면 신속히 대응합니다.</p>
 
 <div class="as-steps">
-<div class="flow__step neu-card"><div class="num">1</div><h4>접수</h4><p>전화·팩스·이메일</p></div>
-<div class="flow__step neu-card"><div class="num">2</div><h4>상담</h4><p>증상·설치환경 확인</p></div>
-<div class="flow__step neu-card"><div class="num">3</div><h4>방문/원격</h4><p>기술지원·부품 교체</p></div>
-<div class="flow__step neu-card"><div class="num">4</div><h4>완료</h4><p>동작 테스트·보고</p></div>
+<div class="as-step neu-card"><div class="as-step__num">1</div><h4>접수</h4><p>전화·팩스·이메일</p></div>
+<div class="as-step neu-card"><div class="as-step__num">2</div><h4>상담</h4><p>증상·설치환경 확인</p></div>
+<div class="as-step neu-card"><div class="as-step__num">3</div><h4>방문/원격</h4><p>기술지원·부품 교체</p></div>
+<div class="as-step neu-card"><div class="as-step__num">4</div><h4>완료</h4><p>동작 테스트·보고</p></div>
 </div>
 
 <div class="content-block" style="margin-top:28px"><h3>접수 시 준비 사항</h3>

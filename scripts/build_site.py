@@ -112,7 +112,7 @@ def support_sidebar(active: str) -> str:
     return f'<aside class="sidebar"><div class="sidebar__title">고객지원</div><nav class="sidebar__nav">{links}</nav></aside>'
 
 
-def page_shell(depth, title, desc, breadcrumb, h1, sidebar, body, css_extra=""):
+def page_shell(depth, title, desc, breadcrumb, h1, sidebar, body, css_extra="", script_extra=""):
     p = "../" * depth
     icon = f"{p}assets/images/logo.png"
     css = f"{p}css/style.css"
@@ -132,6 +132,7 @@ def page_shell(depth, title, desc, breadcrumb, h1, sidebar, body, css_extra=""):
 {body}
 </div></div></main>
 {footer(depth)}
+{script_extra}
 </body></html>"""
 
 
@@ -203,27 +204,22 @@ def build_business():
 
 
 def build_support():
-  import json
-  data = json.loads((ROOT / "scripts" / "support_data.json").read_text(encoding="utf-8"))
   s = ROOT / "support"
+  board_script = '<script src="../js/board.js"></script>'
 
-  # 자료실
-  res_rows = "".join(
-    f'<tr><td>{len(data["resources"])-i}</td>'
-    f'<td><a href="{r["url"]}" target="_blank" rel="noopener">{r["title"]}</a></td>'
-    f'<td><span class="board-badge">다운로드</span></td></tr>'
-    for i, r in enumerate(data["resources"])
-  )
   write(s / "resources.html", page_shell(1,
     "자료실", "워치독 설치메뉴얼·제품 자료",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>자료실</span>',
     "자료실", support_sidebar("resources.html"),
-    f"""<div class="content-block reveal"><p>설치메뉴얼·대응매뉴얼·동영상 자료입니다. 제목을 클릭하면 상세 페이지에서 파일을 다운로드할 수 있습니다.</p>
-<table class="board-table"><thead><tr><th>번호</th><th>제목</th><th>비고</th></tr></thead><tbody>{res_rows}</tbody></table>
-<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_04.php?boardid=data" class="btn btn--blue btn--sm" target="_blank" rel="noopener">자료실 전체 보기 →</a></p></div>"""
+    f"""<div class="content-block reveal"><p>설치메뉴얼·대응매뉴얼·동영상 자료입니다. 제목을 클릭하면 파일을 다운로드할 수 있습니다.</p>
+<div data-board="resources"></div>
+<p class="board-admin-link"><a href="admin.html">관리자</a></p></div>""",
+    script_extra=board_script,
   ))
 
-  # FAQ - original dl/dt style
+  # FAQ - from support_data.json
+  import json
+  data = json.loads((ROOT / "scripts" / "support_data.json").read_text(encoding="utf-8"))
   faq_html = "".join(
     f'<details class="faq-item"><summary>{f["q"]}</summary><p>{f["a"]}</p></details>'
     for f in data["faqs"]
@@ -236,7 +232,6 @@ def build_support():
     f'<p style="margin-top:20px"><a href="http://www.asungvoice.com/sub/sub04_03.php?boardid=faq" class="btn btn--outline btn--sm" target="_blank" rel="noopener">FAQ 전체 보기 →</a></p></div>'
   ))
 
-  # A/S
   write(s / "as-inquiry.html", page_shell(1,
     "A/S 문의", "워치독 A/S 문의",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>A/S 문의</span>',
@@ -244,53 +239,102 @@ def build_support():
     AS_INQUIRY_BODY,
   ))
 
-  # 설치사례 - gallery grid like original
-  thumbs = [
-    ("11", "41dae014647e3adaf5e9fa359f7870990.jpg", "삼성 래미안 (영등포 프레비뉴)"),
-    ("8", "003eac7cce7a101ca313bbbe6bdca16a0.png", "부산대학교 여자화장실"),
-    ("7", "84ebf4e1f9c5debf43e73ca50a9b9dcb0.jpg", "대림산업 E편한세상 (수지)"),
-    ("6", "0b08395c42464f12a37efb96cc1d4c0d0.png", "개포우성3차 아파트"),
-    ("80", "6550ae467015f7a700da337310e1555b0.png", "롯데캐슬리버파크시그니처"),
-    ("79", "c12f12b4a8f415d89f04413a5d93f23e0.png", "경희궁자이3단지"),
-    ("78", "0a4570f1f6b715f7044be3bc1aa361170.png", "시티오씨엘1단지"),
-    ("77", "ceb0fd28f3a3edb6a60d0b9c4622cc080.png", "독립문극동아파트"),
-    ("76", "f3b7d97fffec38d7214acbc8da7fc6820.png", "이편한세상고덕어반브릿지"),
-  ]
-  case_grid = "".join(
-    f'<a class="case-card" href="http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx={idx}" target="_blank" rel="noopener">'
-    f'<img src="http://www.asungvoice.com/uploaded/board/result/{img}" alt="{title}" loading="lazy">'
-    f'<span>{title}</span></a>'
-    for idx, img, title in thumbs
-  )
   write(s / "cases.html", page_shell(1,
     "제품설치사례", "워치독 설치 사례",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품설치사례</span>',
     "제품설치사례", support_sidebar("cases.html"),
     f"""<div class="content-block reveal"><p>전국 아파트·대학·공공시설 설치 사례입니다. 사진을 클릭하면 상세 내용을 확인할 수 있습니다.</p>
-<div class="case-grid">{case_grid}</div>
-<p style="margin-top:20px"><a href="http://www.asungvoice.com/sub/sub04_05.php?boardid=result" class="btn btn--blue btn--sm" target="_blank" rel="noopener">설치사례 전체 보기 →</a></p></div>"""
+<div data-board="cases"></div>
+<p class="board-admin-link"><a href="admin.html">관리자</a></p></div>""",
+    script_extra=board_script,
   ))
 
-  # 공지사항
-  notice_rows = "".join(
-    f'<tr><td>{n["date"]}</td><td><a href="{n["url"]}" target="_blank" rel="noopener">{n["title"]}</a></td></tr>'
-    for n in data["notices"]
-  )
   write(s / "notice.html", page_shell(1,
     "공지사항", "아성보이스 공지사항·언론보도",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>공지사항</span>',
     "공지사항", support_sidebar("notice.html"),
     f"""<div class="content-block reveal"><p>워치독 비명감지기 관련 뉴스·언론보도·제품 소식입니다.</p>
-<table class="board-table"><thead><tr><th>날짜</th><th>제목</th></tr></thead><tbody>{notice_rows}</tbody></table>
-<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_06.php?boardid=notice" class="btn btn--blue btn--sm" target="_blank" rel="noopener">공지사항 전체 보기 →</a></p></div>"""
+<div data-board="notices"></div>
+<p class="board-admin-link"><a href="admin.html">관리자</a></p></div>""",
+    script_extra=board_script,
   ))
 
-  # 제품문의
   write(s / "inquiry.html", page_shell(1,
     "제품문의", "아성보이스 제품 문의",
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품문의</span>',
     "제품문의", support_sidebar("inquiry.html"),
     INQUIRY_BODY,
+  ))
+
+  admin_body = """
+<div id="admin-login" class="admin-panel neu-card">
+<h2>관리자 로그인</h2>
+<p class="admin-hint">자료실 · 설치사례 · 공지사항을 등록·수정합니다.<br>초기 비밀번호: <code>asungvoice</code></p>
+<form id="login-form"><label class="form__label">비밀번호</label>
+<input type="password" id="login-pass" class="form__input" required autocomplete="current-password">
+<button type="submit" class="btn btn--blue neu-btn">로그인</button></form>
+</div>
+
+<div id="admin-app" hidden>
+<div class="admin-toolbar">
+<div class="admin-tabs">
+<button type="button" class="admin-tab is-active" data-tab="resources">자료실</button>
+<button type="button" class="admin-tab" data-tab="cases">설치사례</button>
+<button type="button" class="admin-tab" data-tab="notices">공지사항</button>
+</div>
+<div class="admin-toolbar__actions">
+<button type="button" id="btn-new" class="btn btn--blue btn--sm">+ 새 글</button>
+<button type="button" id="btn-save-github" class="btn btn--blue btn--sm">사이트에 저장</button>
+<button type="button" id="btn-export" class="btn btn--ghost btn--sm">JSON 내보내기</button>
+<button type="button" id="btn-import" class="btn btn--ghost btn--sm">JSON 가져오기</button>
+<input type="file" id="import-file" accept=".json" hidden>
+<button type="button" id="btn-logout" class="btn btn--ghost btn--sm">로그아웃</button>
+</div></div>
+<p id="save-status" class="admin-status"></p>
+<div id="admin-list"></div>
+
+<div id="admin-form" class="admin-form neu-card" hidden>
+<h3 id="form-title">새 글</h3>
+<form id="item-form">
+<label class="form__label">제목 <span class="req">*</span></label>
+<input id="f-title" class="form__input" required>
+<div class="admin-field" data-field="date"><label class="form__label">날짜</label><input type="date" id="f-date" class="form__input"></div>
+<label class="form__label">링크 URL <span class="admin-optional">(외부 링크 또는 업로드 파일 URL)</span></label>
+<input id="f-url" class="form__input" placeholder="https://...">
+<div class="admin-field" data-field="note"><label class="form__label">비고</label><input id="f-note" class="form__input" value="다운로드"></div>
+<div class="admin-field" data-field="image"><label class="form__label">이미지 URL</label><input id="f-image" class="form__input" placeholder="https://..."></div>
+<div class="admin-field" data-field="content"><label class="form__label">본문 <span class="admin-optional">(링크 없을 때 모달로 표시)</span></label><textarea id="f-content" class="form__textarea" rows="5"></textarea></div>
+<label class="form__label">파일 업로드 <span class="admin-optional">(GitHub 토큰 필요)</span></label>
+<input type="file" id="f-file" class="form__input">
+<div class="form__actions"><button type="submit" class="btn btn--blue neu-btn">항목 저장</button>
+<button type="button" id="btn-cancel" class="btn btn--ghost">취소</button></div>
+</form></div>
+
+<details class="admin-github neu-card">
+<summary>GitHub 저장 설정 (최초 1회)</summary>
+<p class="admin-hint">Personal Access Token (<code>repo</code> 권한)을 발급해 입력하면 「사이트에 저장」으로 바로 반영됩니다.<br>
+저장소: gourry7/asungvoice · 파일: data/support-board.json</p>
+<form id="github-form">
+<label class="form__label">GitHub 사용자</label><input id="gh-owner" class="form__input" placeholder="gourry7">
+<label class="form__label">저장소 이름</label><input id="gh-repo" class="form__input" placeholder="asungvoice">
+<label class="form__label">브랜치</label><input id="gh-branch" class="form__input" value="main">
+<label class="form__label">Pages URL <span class="admin-optional">(파일 업로드 시)</span></label>
+<input id="gh-pages" class="form__input" placeholder="https://gourry7.github.io/asungvoice">
+<label class="form__label">Personal Access Token</label>
+<input type="password" id="gh-token" class="form__input" autocomplete="off">
+<button type="submit" class="btn btn--outline btn--sm">설정 저장</button>
+</form></details>
+</div>"""
+  write(s / "admin.html", page_shell(1,
+    "게시판 관리", "고객지원 게시판 관리",
+    f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>관리자</span>',
+    "게시판 관리",
+    support_sidebar("resources.html").replace(
+      '</nav></aside>',
+      '<a href="admin.html" class="is-active">게시판 관리</a></nav></aside>',
+    ),
+    admin_body,
+    script_extra='<script src="../js/admin.js"></script>',
   ))
 
 

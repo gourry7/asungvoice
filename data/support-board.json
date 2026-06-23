@@ -1,0 +1,201 @@
+{
+  "resources": [
+    {
+      "id": "res-25",
+      "title": "승강기용 비명감지기 WD-600MD 설치메뉴얼",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=25",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-24",
+      "title": "실내용 비명감지기(WD-100M) 설치메뉴얼",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=24",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-23",
+      "title": "방재실·경비실 대응메뉴얼 (승강기용 WD-100M, DC12V)",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=23",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-22",
+      "title": "승강기용 비명감지기(WD-100M, DC12V) 설치메뉴얼",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=22",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-21",
+      "title": "화장실·1인여성가구·1인매장용 비명감지기(WD-100M, DC12V) 자료",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=21",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-20",
+      "title": "홈네트워크연동 세대현관용 비명감지기 동영상",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=20",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-19",
+      "title": "홈네트워크연동 세대현관용 비명감지기 자료",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=19",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-10",
+      "title": "승강기용 비명감지기 설치안내문 양식 (아파트단지)",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=10",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-9",
+      "title": "방재실·경비실 대응메뉴얼 (승강기용 WD-100E)",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=9",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-7",
+      "title": "화장실·1인여성가구·1인매장용 비명감지기(WD-100E, DC5V) 자료",
+      "url": "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx=7",
+      "note": "다운로드"
+    }
+  ],
+  "cases": [
+    {
+      "id": "case-11",
+      "title": "삼성 래미안 (영등포 프레비뉴)",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=11",
+      "image": "http://www.asungvoice.com/uploaded/board/result/41dae014647e3adaf5e9fa359f7870990.jpg",
+      "content": ""
+    },
+    {
+      "id": "case-8",
+      "title": "부산대학교 여자화장실",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=8",
+      "image": "http://www.asungvoice.com/uploaded/board/result/003eac7cce7a101ca313bbbe6bdca16a0.png",
+      "content": ""
+    },
+    {
+      "id": "case-7",
+      "title": "대림산업 E편한세상 (수지)",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=7",
+      "image": "http://www.asungvoice.com/uploaded/board/result/84ebf4e1f9c5debf43e73ca50a9b9dcb0.jpg",
+      "content": ""
+    },
+    {
+      "id": "case-6",
+      "title": "개포우성3차 아파트",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=6",
+      "image": "http://www.asungvoice.com/uploaded/board/result/0b08395c42464f12a37efb96cc1d4c0d0.png",
+      "content": ""
+    },
+    {
+      "id": "case-80",
+      "title": "롯데캐슬리버파크시그니처",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=80",
+      "image": "http://www.asungvoice.com/uploaded/board/result/6550ae467015f7a700da337310e1555b0.png",
+      "content": ""
+    },
+    {
+      "id": "case-79",
+      "title": "경희궁자이3단지",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=79",
+      "image": "http://www.asungvoice.com/uploaded/board/result/c12f12b4a8f415d89f04413a5d93f23e0.png",
+      "content": ""
+    },
+    {
+      "id": "case-78",
+      "title": "시티오씨엘1단지",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=78",
+      "image": "http://www.asungvoice.com/uploaded/board/result/0a4570f1f6b715f7044be3bc1aa361170.png",
+      "content": ""
+    },
+    {
+      "id": "case-77",
+      "title": "독립문극동아파트",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=77",
+      "image": "http://www.asungvoice.com/uploaded/board/result/ceb0fd28f3a3edb6a60d0b9c4622cc080.png",
+      "content": ""
+    },
+    {
+      "id": "case-76",
+      "title": "이편한세상고덕어반브릿지",
+      "url": "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx=76",
+      "image": "http://www.asungvoice.com/uploaded/board/result/f3b7d97fffec38d7214acbc8da7fc6820.png",
+      "content": ""
+    }
+  ],
+  "notices": [
+    {
+      "id": "notice-207",
+      "date": "2026-03-18",
+      "title": "택배 옮기려 문 연 순간 노렸다…여성 집 침입한 30대 검거 (하남)",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=207&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-205",
+      "date": "2026-01-22",
+      "title": "택배기사로 위장하여 침입후 어머니 지인을 살해한 20대...",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=205&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-203",
+      "date": "2025-11-10",
+      "title": "비명인식 일괄소등스위치 출시 기사 입니다(매일경제 2025-11-03 일자)",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=203&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-180",
+      "date": "2023-07-07",
+      "title": "아파트 엘리베이터도 '위험지대'  SBS뉴스_워치독 비명감지기 소개",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=180&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-210",
+      "date": "2026-06-15",
+      "title": "사형 바라는 유족 ... 검, 택배기사 위장침입.살인 '무기징역' 구형",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=210&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-209",
+      "date": "2026-05-12",
+      "title": "층간소음 갈등에…엘리베이터서 마주친 윗집 주민 살해한 20대",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=209&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-208",
+      "date": "2026-03-30",
+      "title": "여성 홀로 사는 오피스텔서 강도행각 벌인 남성4명 체포돼..",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=208&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-206",
+      "date": "2026-02-09",
+      "title": "집앞에서 문이 열리기를 기다려, 세모녀를 살해하려 해...",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=206&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-204",
+      "date": "2025-11-18",
+      "title": "아파트 엘리베이터서 7살 아이 무차별 폭행한 10대 여성 집행유예",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=204&sk=&sw=&offset=&category=",
+      "content": ""
+    },
+    {
+      "id": "notice-202",
+      "date": "2025-10-20",
+      "title": "메뉴보니 혼자사는 여자? 문 앞에서 죽치고 기다리는 배달기사",
+      "url": "http://www.asungvoice.com/sub/sub04_06.php?boardid=notice&mode=view&idx=202&sk=&sw=&offset=&category=",
+      "content": ""
+    }
+  ]
+}
