@@ -444,6 +444,8 @@ address{font-style:normal}
 .hp-product--featured .hp-product__body p{color:rgba(255,255,255,.65)}
 .hp-product--featured .hp-product__visual{background:rgba(255,255,255,.06)}
 .hp-product--soft .hp-product__visual{background:var(--pink-bg)}
+.hp-product--watchdog .hp-product__visual{background:#1a1a1a}
+.hp-product__visual--logo img{max-height:72px;object-fit:contain}
 .hp-product__visual{
   height:140px;display:flex;align-items:center;justify-content:center;
   background:#F4F6FA;padding:20px;
@@ -584,6 +586,8 @@ address{font-style:normal}
 .page-neu .hp-product__tag{background:var(--neu-bg);color:var(--blue);box-shadow:var(--neu-inset)}
 .page-neu .hp-product__visual{background:var(--neu-bg)!important;box-shadow:var(--neu-inset);border-radius:var(--r-md);margin:12px 12px 0}
 .page-neu .hp-product--soft .hp-product__visual{background:var(--pink-bg)!important;box-shadow:var(--neu-inset)}
+.page-neu .hp-product--watchdog .hp-product__visual{background:#1a1a1a!important;box-shadow:var(--neu-inset)}
+.page-neu .hp-product__visual--logo img{max-height:72px;max-width:85%;object-fit:contain}
 
 .page-neu .neu-stat{
   background:var(--neu-bg);border:none;
