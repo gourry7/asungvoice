@@ -215,21 +215,22 @@ def build_products():
 def build_support():
   s = ROOT / "support"
 
+  BASE = "http://www.asungvoice.com/sub/sub04_04.php?boardid=data&mode=view&idx="
   manuals = [
-    ("승강기용 비명감지기 WD-600MD 설치메뉴얼", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("실내용 비명감지기 WD-100M 설치메뉴얼", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("방재실·경비실 대응메뉴얼 (WD-100M, DC12V)", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("승강기용 비명감지기 WD-100M 설치메뉴얼", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("화장실·1인여성가구·1인매장용 WD-100M 자료", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("홈네트워크연동 세대현관용 비명감지기 동영상", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("홈네트워크연동 세대현관용 비명감지기 자료", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("승강기용 비명감지기 설치안내문 양식 (아파트단지)", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("방재실·경비실 대응메뉴얼 (WD-100E)", "http://www.asungvoice.com/sub/sub04_05.php"),
-    ("화장실·1인여성가구·1인매장용 WD-100E 자료", "http://www.asungvoice.com/sub/sub04_05.php"),
+    ("25", "승강기용 비명감지기 WD-600MD 설치메뉴얼", "메뉴얼"),
+    ("24", "실내용 비명감지기(WD-100M) 설치메뉴얼", "메뉴얼"),
+    ("23", "방재실·경비실 대응메뉴얼 (승강기용 WD-100M, DC12V)", "메뉴얼"),
+    ("22", "승강기용 비명감지기(WD-100M, DC12V) 설치메뉴얼", "메뉴얼"),
+    ("21", "화장실·1인여성가구·1인매장용 비명감지기(WD-100M, DC12V) 자료", "자료"),
+    ("20", "홈네트워크연동 세대현관용 비명감지기 동영상", "동영상"),
+    ("19", "홈네트워크연동 세대현관용 비명감지기 자료", "자료"),
+    ("10", "승강기용 비명감지기 설치안내문 양식 (아파트단지)", "양식"),
+    ("9", "방재실·경비실 대응메뉴얼 (승강기용 WD-100E)", "메뉴얼"),
+    ("7", "화장실·1인여성가구·1인매장용 비명감지기(WD-100E, DC5V) 자료", "자료"),
   ]
   manual_rows = "".join(
-    f'<tr><td>{i+1}</td><td><a href="{url}" target="_blank" rel="noopener">{title}</a></td><td>PDF/동영상</td></tr>'
-    for i, (title, url) in enumerate(manuals)
+    f'<tr><td>{10-i}</td><td><a href="{BASE}{idx}" target="_blank" rel="noopener">{title}</a></td><td>{kind}</td></tr>'
+    for i, (idx, title, kind) in enumerate(manuals)
   )
 
   write(s / "resources.html", page_shell(1,
@@ -244,7 +245,7 @@ def build_support():
 <thead><tr><th>번호</th><th>제목</th><th>형식</th></tr></thead>
 <tbody>{manual_rows}</tbody>
 </table>
-<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_05.php" class="btn btn--outline" target="_blank" rel="noopener">자료실 전체 보기 →</a></p></div>"""
+<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_04.php?boardid=data" class="btn btn--blue btn--sm" target="_blank" rel="noopener">자료실 전체 보기 →</a></p></div>"""
   ))
 
   faq_items = [
@@ -284,15 +285,21 @@ def build_support():
 <a href="inquiry.html" class="btn btn--blue">온라인 문의하기</a></div>"""
   ))
 
+  CASE_BASE = "http://www.asungvoice.com/sub/sub04_05.php?boardid=result&mode=view&idx="
   cases = [
-    ("부산대학교", "화장실 비명감지기", "400개소"),
-    ("여의도 파크원", "화장실 비명감지기", "217개소"),
-    ("진주 아너스", "일괄소등스위치", "840세대"),
-    ("유승한내들", "일괄소등스위치", "444세대"),
-    ("전국 아파트 단지", "승강기 비명감지기", "3,000대+"),
+    ("11", "삼성 래미안 (영등포 프레비뉴) 아파트", "승강기"),
+    ("8", "부산대학교 여자화장실 워치독 비명감지기", "화장실"),
+    ("7", "대림산업 E편한세상 (수지) 아파트", "승강기"),
+    ("6", "개포우성3차 아파트 (지자체 지원사업)", "승강기"),
+    ("80", "롯데캐슬리버파크시그니처", "승강기"),
+    ("79", "경희궁자이3단지", "승강기"),
+    ("78", "시티오씨엘1단지", "승강기"),
+    ("77", "독립문극동아파트", "승강기"),
+    ("76", "이편한세상고덕어반브릿지", "승강기"),
   ]
   case_rows = "".join(
-    f'<tr><td>{n}</td><td>{p}</td><td>{c}</td></tr>' for n, p, c in cases
+    f'<tr><td>{9-i}</td><td><a href="{CASE_BASE}{idx}" target="_blank" rel="noopener">{name}</a></td><td>{kind}</td></tr>'
+    for i, (idx, name, kind) in enumerate(cases)
   )
 
   write(s / "cases.html", page_shell(1,
@@ -301,12 +308,13 @@ def build_support():
     f'<a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>고객지원</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품설치사례</span>',
     "제품설치사례",
     support_sidebar("cases.html"),
-    f"""<div class="content-block reveal"><h2>주요 설치 사례</h2>
+    f"""<div class="content-block reveal"><h2>설치 사례</h2>
+<p>전국 아파트·대학·공공시설에 설치된 워치독 비명감지기 사례입니다.</p>
 <table class="board-table">
-<thead><tr><th>현장명</th><th>제품</th><th>규모</th></tr></thead>
+<thead><tr><th>번호</th><th>현장명</th><th>구분</th></tr></thead>
 <tbody>{case_rows}</tbody>
 </table>
-<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_04.php" class="btn btn--outline" target="_blank" rel="noopener">설치사례 게시판 보기 →</a></p></div>"""
+<p style="margin-top:16px"><a href="http://www.asungvoice.com/sub/sub04_05.php?boardid=result" class="btn btn--blue btn--sm" target="_blank" rel="noopener">설치사례 전체 보기 →</a></p></div>"""
   ))
 
 

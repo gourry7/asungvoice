@@ -61,15 +61,29 @@
     obs.observe(el);
   });
 
-  // Hero swiper
-  if (typeof Swiper !== 'undefined' && document.querySelector('.hero__slider.swiper')) {
-    new Swiper('.hero__slider', {
-      loop: true,
-      autoplay: { delay: 5000, disableOnInteraction: false },
-      pagination: { el: '.swiper-pagination', clickable: true },
-      effect: 'fade',
-      fadeEffect: { crossFade: true }
-    });
+  // Hero swiper (legacy + new main visual)
+  if (typeof Swiper !== 'undefined') {
+    const legacyHero = document.querySelector('.hero__slider.swiper');
+    if (legacyHero) {
+      new Swiper('.hero__slider', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+      });
+    }
+    const mvHero = document.querySelector('.mv-hero__slider');
+    if (mvHero) {
+      new Swiper('.mv-hero__slider', {
+        loop: true,
+        autoplay: { delay: 6000, disableOnInteraction: false },
+        pagination: { el: '.mv-hero__pagination', clickable: true },
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        speed: 900
+      });
+    }
   }
 
   // Active nav highlight
