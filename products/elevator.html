@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Round:wght@700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="../assets/images/logo.png" type="image/png">
@@ -28,6 +29,7 @@
 <div class="mobile-nav__label">회사소개</div><a href="../company/greeting.html">인사말</a><a href="../company/location.html">오시는 길</a>
 <div class="mobile-nav__label">제품소개</div><a href="../products/home-keeper.html">마이안심이</a><a href="../products/elevator.html">승강기</a><a href="../products/restroom.html">화장실</a><a href="../products/light-switch.html">일괄소등</a><a href="../products/module.html">모듈</a>
 <div class="mobile-nav__label">고객지원</div><a href="../support/inquiry.html">제품문의</a><a href="../support/as-inquiry.html">A/S 문의</a><a href="../support/faq.html">자주하는질문</a><a href="../support/resources.html">자료실</a><a href="../support/cases.html">제품설치사례</a><a href="../support/notice.html">공지사항</a>
+<a href="tel:07087099911" class="mobile-nav__tel">070-8709-9911</a>
 </nav>
 <section class="page-hero"><div class="container"><div class="breadcrumb"><a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>승강기 비명감지기</span></div><h1>승강기 비명감지기</h1></div></section>
 <main id="main"><div class="container sub-layout"><aside class="sidebar"><div class="sidebar__title">제품소개</div><nav class="sidebar__nav"><a href="home-keeper.html" class="">마이안심이</a><a href="elevator.html" class="is-active">승강기 비명감지기</a><a href="restroom.html" class="">화장실 비명감지기</a><a href="light-switch.html" class="">비명인식 일괄소등스위치</a><a href="module.html" class="">비명인식 모듈</a></nav></aside><div class="content-area">
@@ -37,30 +39,52 @@
 <div class="prod-hero__info"><span class="model">WD-600MD Series · B2B 승강기</span><h2>승강기 비명인식기</h2>
 <p><strong>AI도 인정한 국내 대표 브랜드.</strong> 승강기 및 공중화장실의 안전을 책임지는 프리미엄 비상 대응 솔루션입니다. 딥러닝 기반 실시간 비명 인식으로 경광등·경고방송·비상통화장치를 즉시 연동합니다.</p>
 <a href="../support/inquiry.html" class="btn btn--blue">도입 문의</a></div></div>
+<div class="content-block reveal"><h2>기존 시스템의 한계 vs 워치독 즉시 대응</h2>
+<p class="section-sub">수동적 감시 시스템과 능동적 즉시 대응 시스템 비교</p>
+<div class="vs-block">
+<div class="vs-block__col vs-block__col--risk"><div class="vs-block__label">CURRENT LIMITATIONS</div><ul><li><strong>조작 불가능한 비상버튼</strong><span>피해자가 제압당하거나 당황하여 물리적 버튼 조작이 불가능한 상황 빈번</span></li><li><strong>CCTV의 수동적 한계</strong><span>단순 녹화 위주로 실시간 범죄 제지가 어려움</span></li><li><strong>골든타임 확보 실패</strong><span>밀폐 공간 특성상 신속한 외부 도움 요청 실패로 피해 확대</span></li></ul></div>
+<div class="vs-block__badge">VS</div>
+<div class="vs-block__col vs-block__col--solve"><div class="vs-block__label">WATCHDOG SOLUTION</div><ul><li><strong>비접촉 자동 감지</strong><span>"사람살려", "강도야" 등 비명만으로 즉시 작동 — 물리적 제약 극복</span></li><li><strong>능동적 현장 대응</strong><span>비명 인식 즉시 경광등 점멸 및 강력 경고방송으로 범죄자 심리 위축</span></li><li><strong>자동 구조 요청</strong><span>경비실·통합관제센터 자동 호출로 골든타임 내 신속한 구조 연계</span></li></ul></div>
+</div>
+<div class="vs-impact">KEY IMPACT — 범행 의지 사전 차단 &amp; 피해 최소화</div></div>
+<div class="content-block reveal"><h2>시스템 구성</h2>
+<p class="section-sub">비명 인식부터 방재실 출동까지의 통합 관제 프로세스</p>
+<div class="sys-diagram neu-card">
+<div class="sys-diagram__lane"><span class="sys-diagram__tag">IN-CAR</span><strong>엘리베이터 내부</strong>
+<p>고성능 2-Mic 어레이 · 딥러닝 전용 CPU · WD-600MD</p></div>
+<div class="sys-diagram__arrow">→</div>
+<div class="sys-diagram__lane"><span class="sys-diagram__tag">LOCAL</span><strong>즉시 현장 대응</strong>
+<p>경광등 점멸 · 강력 경고방송(35초) · NO 접점 비상호출</p></div>
+<div class="sys-diagram__arrow">→</div>
+<div class="sys-diagram__lane"><span class="sys-diagram__tag">CONTROL</span><strong>방재실 / 경비실</strong>
+<p>CCTV 자동 팝업 · 비상 통화 · 보안 요원 출동 · 112 연계</p></div>
+</div></div>
 
-<div class="ir-section reveal"><h2>기존 시스템의 한계 vs 워치독 즉시 대응</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-20.png" alt="엘리베이터 비상호출의 한계와 워치독 대안" loading="lazy"></div></div>
+<div class="content-block reveal"><h2>동작 흐름</h2>
+<div class="flow flow--wrap"><div class="flow__step neu-card"><div class="num">1</div><h4>비명 인식</h4><p>365일 24시간 AI 항시 대기</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">2</div><h4>유효 비명 확인</h4><p>오인식 필터링</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">3</div><h4>즉시 대응</h4><p>경광등·경고방송·비상호출</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">4</div><h4>경비실 접수</h4><p>미접수 시에도 35초간 방송 지속</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">5</div><h4>CCTV·출동</h4><p>영상 확인 및 보안 요원 투입</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">6</div><h4>상황 종료</h4><p>통화·안전 확인 후 리셋</p></div><span class="flow__arrow">→</span><div class="flow__step neu-card"><div class="num">7</div><h4>오동작 복구</h4><p>장난·오동작 시 관리자 확인</p></div></div>
+</div>
 
-<div class="ir-section reveal"><h2>시스템 구성</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-21.png" alt="승강기용 시스템 구성도" loading="lazy"></div></div>
+<div class="content-block reveal"><h2>제품 특징</h2>
+<div class="feature-grid"><div class="feature-box neu-card"><h4>딥러닝 &amp; 멀티 트리거</h4><p>"사람살려", "강도야", "도와주세요" 등 특정 비명 단어 정확 인식</p></div><div class="feature-box neu-card"><h4>Digital 2-Mic</h4><p>노이즈 캔슬링·장거리 수음 최적화 디지털 듀얼 마이크</p></div><div class="feature-box neu-card"><h4>자체 비명 DB</h4><p>어린이·여성·남성 등 다양한 계층 실제 비명 데이터 학습</p></div><div class="feature-box neu-card"><h4>오인식 최소화</h4><p>단순 고성·생활 소음과 실제 위급 비명 구분</p></div><div class="feature-box neu-card"><h4>Edge AI</h4><p>클라우드 전송 없이 단말기 내 연산 — 사생활 침해 원천 차단</p></div><div class="feature-box neu-card"><h4>표준 호환성</h4><p>NO 무전원 접점 — 기존 비상통화장치·관제 시스템 완벽 호환</p></div></div>
+</div>
 
-<div class="ir-section reveal"><h2>동작 흐름</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-22.png" alt="승강기용 동작 흐름 7단계" loading="lazy"></div></div>
-
-<div class="ir-section reveal"><h2>제품 특징</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-23.png" alt="워치독 제품 특징" loading="lazy"></div></div>
-
-<div class="ir-section reveal"><h2>경쟁 기술 비교</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-24.png" alt="기술 비교 테이블" loading="lazy"></div></div>
+<div class="content-block reveal"><h2>경쟁 기술 비교</h2>
+<div class="table-scroll"><table class="spec-table compare-table">
+<thead><tr><th>구분</th><th>워치독</th><th>승강기 업체</th><th>CCTV 업체</th></tr></thead>
+<tbody>
+<tr><td>적용기술</td><td>딥러닝 AI + 자체 DB</td><td>단순 dB 감지</td><td>영상 행동 분석</td></tr>
+<tr><td>인식 단어</td><td>사람살려·강도야·아악 등</td><td>모든 큰 소리 반응</td><td>시각 정보 의존</td></tr>
+<tr><td>오인식률</td><td>매우 낮음</td><td>높음 (생활소음)</td><td>환경 변화에 취약</td></tr>
+<tr><td>지속 운영</td><td>안정적 지속 운영</td><td>잦은 오작동 중단</td><td>관리자 피로도 증가</td></tr>
+</tbody></table></div></div>
 
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
 <tr><th>모델</th><td>WD-600MD / WD-100E</td></tr>
-<tr><th>적용기술</th><td>딥러닝, 멀티트리거, 실시간 고속인식</td></tr>
 <tr><th>마이크</th><td>고성능 Digital 2-Mic 어레이</td></tr>
 <tr><th>인식 단어</th><td>사람살려, 강도야, 도와주세요, 아악, 꺄악</td></tr>
-<tr><th>인식레벨</th><td>90dB / 95dB / 100dB 3단계 선택</td></tr>
-<tr><th>출력</th><td>NO(Normal Open) 무전원 접점 — 기존 비상통화장치 100% 호환</td></tr>
-<tr><th>경고방송</th><td>"비상상황입니다. 지금 즉시 출동합니다." (35초간 반복)</td></tr>
+<tr><th>인식레벨</th><td>90dB / 95dB / 100dB 3단계</td></tr>
+<tr><th>출력</th><td>NO(Normal Open) 무전원 접점</td></tr>
+<tr><th>경고방송</th><td>"비상상황입니다. 지금 즉시 출동합니다." (35초)</td></tr>
 <tr><th>설치위치</th><td>승객버튼 조작반 직상부 벽면 또는 천정</td></tr></table></div>
 <div class="content-block reveal"><p class="note-box">※ 동일 워치독 기술: <a href="restroom.html">화장실 비명감지기</a> · <a href="light-switch.html">일괄소등스위치</a> · <a href="module.html">비명인식 모듈</a></p></div>
 </div></div></main>

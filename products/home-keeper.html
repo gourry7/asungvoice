@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Round:wght@700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="../assets/images/logo.png" type="image/png">
@@ -28,35 +29,57 @@
 <div class="mobile-nav__label">회사소개</div><a href="../company/greeting.html">인사말</a><a href="../company/location.html">오시는 길</a>
 <div class="mobile-nav__label">제품소개</div><a href="../products/home-keeper.html">마이안심이</a><a href="../products/elevator.html">승강기</a><a href="../products/restroom.html">화장실</a><a href="../products/light-switch.html">일괄소등</a><a href="../products/module.html">모듈</a>
 <div class="mobile-nav__label">고객지원</div><a href="../support/inquiry.html">제품문의</a><a href="../support/as-inquiry.html">A/S 문의</a><a href="../support/faq.html">자주하는질문</a><a href="../support/resources.html">자료실</a><a href="../support/cases.html">제품설치사례</a><a href="../support/notice.html">공지사항</a>
+<a href="tel:07087099911" class="mobile-nav__tel">070-8709-9911</a>
 </nav>
 <section class="page-hero"><div class="container"><div class="breadcrumb"><a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>마이안심이</span></div><h1>마이안심이</h1></div></section>
 <main id="main"><div class="container sub-layout"><aside class="sidebar"><div class="sidebar__title">제품소개</div><nav class="sidebar__nav"><a href="home-keeper.html" class="is-active">마이안심이</a><a href="elevator.html" class="">승강기 비명감지기</a><a href="restroom.html" class="">화장실 비명감지기</a><a href="light-switch.html" class="">비명인식 일괄소등스위치</a><a href="module.html" class="">비명인식 모듈</a></nav></aside><div class="content-area">
 
 <div class="prod-hero reveal prod-hero--pink">
 <div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png" alt="마이안심이"></div>
-<div class="prod-hero__info"><span class="model">My Ansim-i · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
+<div class="prod-hero__info"><span class="model">마이안심이 · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
 <p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구(280만)를 위한 재택 방범 디바이스. 비명 하나로 110dB 이상 강력 경보와 보호자 앱 알림을 즉시 전송합니다.</p>
 <a href="../support/inquiry.html" class="btn btn--pink">도입 문의</a></div></div>
+<div class="content-block reveal"><h2>범죄 노출 vs 마이안심이 솔루션</h2>
+<p class="section-sub">1인 여성가구 방범의 필요성</p>
+<div class="vs-block">
+<div class="vs-block__col vs-block__col--risk"><div class="vs-block__label">TARGET RISK · 280만 가구</div><ul><li><strong>택배/배달 가장 침입</strong><span>택배·배달원 위장하여 현관문을 열게 한 뒤 침입하는 강력 범죄</span></li><li><strong>현관 개방 시 취약점</strong><span>귀가 직후·배달 수령 시 문이 열린 찰나의 순간이 범죄 표적</span></li><li><strong>귀가길 미행·침입</strong><span>늦은 밤 귀가 시 미행·침입 시도에 즉각적 구조 요청 어려움</span></li></ul></div>
+<div class="vs-block__badge">VS</div>
+<div class="vs-block__col vs-block__col--solve"><div class="vs-block__label">마이안심이 SOLUTION</div><ul><li><strong>110dB 이상 강력 경보</strong><span>비명 인식 즉시 강력 경고음 송출 — 범죄자 퇴치</span></li><li><strong>지정 보호자 즉시 통보</strong><span>부모님·지인 등 사전 등록 연락처로 비상 상황 자동 전송</span></li><li><strong>모바일 앱 연동</strong><span>집안 상태 모니터링·설정 — 언제 어디서나 나만의 보안관</span></li></ul></div>
+</div>
+<div class="vs-impact">KEY VALUE — 나만의 든든한 AI 보안관</div></div>
+<div class="content-block reveal"><h2>시스템 구성</h2>
+<p class="section-sub">WiFi/BLE 기반 1인 가구 맞춤형 스마트 방범 체계</p>
+<div class="sys-diagram neu-card">
+<div class="sys-diagram__lane"><span class="sys-diagram__tag">SENSOR</span><strong>자석감지기</strong>
+<p>BLE 무선 · 문열림 감지 → 비명인식 대기모드</p></div>
+<div class="sys-diagram__arrow">→</div>
+<div class="sys-diagram__lane"><span class="sys-diagram__tag">MAIN</span><strong>마이안심이 본체</strong>
+<p>On-Device AI · 110dB 경보 · IoT Hub</p></div>
+<div class="sys-diagram__arrow">→</div>
+<div class="sys-diagram__lane"><span class="sys-diagram__tag">APP</span><strong>보호자 알림</strong>
+<p>실시간 Push · 비상 문자 · 보안 로그</p></div>
+</div>
+<p style="margin-top:12px;font-size:.88rem;color:var(--text-2)">이중 보안: 문열림 감지 후 비명 인식 시에만 알람 동작 (오작동 방지) · DC 5V USB-C · 홈네트워크 불필요</p></div>
 
-<div class="ir-section reveal"><h2>범죄 노출 vs 마이안심이 솔루션</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-34.png" alt="1인 여성가구 방범의 필요성" loading="lazy"></div></div>
+<div class="content-block reveal"><h2>자석감지기 센서</h2>
+<div class="feature-grid">
+<div class="feature-box neu-card"><h4>BLE 무선 연동</h4><p>Magnetic Reed Switch · CR2032 배터리 약 1년</p></div>
+<div class="feature-box neu-card"><h4>간편 설치</h4><p>무타공 양면테이프 — 배선 공사 불필요</p></div>
+<div class="feature-box neu-card"><h4>연동 시나리오</h4><p>문 열림 → 대기모드 → 비명 인식 → 경보·통보</p></div>
+</div></div>
 
-<div class="ir-section reveal"><h2>시스템 구성</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-35.png" alt="마이안심이 시스템 구성도" loading="lazy"></div></div>
-
-<div class="ir-section reveal"><h2>자석감지기 센서</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-36.png" alt="마이안심이 자석감지기" loading="lazy"></div></div>
-
-<div class="ir-section reveal"><h2>모바일 앱</h2>
-<div class="ir-slide neu-card"><img src="../assets/images/ir-slides/slide-37.png" alt="마이안심이 모바일 앱" loading="lazy"></div></div>
+<div class="content-block reveal"><h2>모바일 앱</h2>
+<div class="feature-grid"><div class="feature-box neu-card"><h4>실시간 모니터링</h4><p>재택/외출 모드 전환 · 보안 상태 확인</p></div><div class="feature-box neu-card"><h4>비상 즉시 알림</h4><p>비명 감지 시 경보 화면 전환 · 위치 정보 전송</p></div><div class="feature-box neu-card"><h4>보호자 연락망</h4><p>비상시 연락할 보호자(부모님·지인) 관리</p></div><div class="feature-box neu-card"><h4>이벤트 로그</h4><p>출입·비상 이력 시간대별 확인</p></div></div>
+<div style="text-align:center;margin-top:20px">
+<img src="../assets/images/products/app-mockup.png" alt="마이안심이 앱" class="ansimi-app-img" loading="lazy"></div></div>
 
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
-<tr><th>제품명</th><td>마이안심이 (My Ansim-i)</td></tr>
+<tr><th>제품명</th><td>마이안심이</td></tr>
 <tr><th>인식 방식</th><td>On-Device AI 비명 인식 (음원 패턴만 분석)</td></tr>
 <tr><th>알람</th><td>110dB 이상 사이렌 + SOS 비상호출</td></tr>
 <tr><th>센서</th><td>BLE 자석감지기 (CR2032, 약 1년)</td></tr>
 <tr><th>통신</th><td>WiFi (2.4GHz) · BLE · 3G/LTE</td></tr>
-<tr><th>전원</th><td>DC 5V (USB-C) 상시 전원 + 보조배터리 호환</td></tr>
+<tr><th>전원</th><td>DC 5V (USB-C) + 보조배터리 호환</td></tr>
 <tr><th>특허</th><td>실용신안 제20-0498161호 (2024.07)</td></tr>
 <tr><th>설치</th><td>홈네트워크 불필요 · 독립 설치형</td></tr></table></div>
 </div></div></main>

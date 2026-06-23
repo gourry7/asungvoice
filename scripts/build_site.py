@@ -42,7 +42,8 @@ SUPPORT = [
 ]
 
 HEAD = """<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Round:wght@700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="{icon}" type="image/png">"""
@@ -80,6 +81,7 @@ def header(depth: int, active_nav: str = "") -> str:
 <div class="mobile-nav__label">회사소개</div><a href="{p}company/greeting.html">인사말</a><a href="{p}company/location.html">오시는 길</a>
 <div class="mobile-nav__label">제품소개</div>{mob_prod}
 <div class="mobile-nav__label">고객지원</div>{mob_sup}
+<a href="tel:07087099911" class="mobile-nav__tel">070-8709-9911</a>
 </nav>"""
 
 
@@ -402,6 +404,16 @@ def patch_nav():
             '<a href="products/restroom.html">화장실 비명감지기</a>\n  <a href="products/light-switch.html">일괄소등스위치</a>\n  <a href="products/module.html">비명인식 모듈</a>',
         )
         text = text.replace('홈 안전지킴이', '마이안심이')
+        text = text.replace(
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">',
+        )
+        if 'format-detection' not in text and '<head>' in text:
+            text = text.replace(
+                '<meta charset="UTF-8">',
+                '<meta charset="UTF-8">\n<meta name="format-detection" content="telephone=no">',
+                1,
+            )
         if 'class="page-neu"' not in text:
             text = text.replace('<body>', '<body class="page-neu">', 1)
         text = text.replace('class="header is-solid"', 'class="header header--neu is-solid"')
