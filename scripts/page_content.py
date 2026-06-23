@@ -90,8 +90,8 @@ ELEVATOR_BODY = """
 <div class="content-block reveal"><p class="note-box">※ 동일 워치독 기술: <a href="restroom.html">화장실 비명감지기</a> · <a href="light-switch.html">일괄소등스위치</a> · <a href="module.html">비명인식 모듈</a></p></div>"""
 
 RESTROOM_BODY = """
-<div class="prod-hero reveal prod-hero--watchdog">
-<div class="prod-hero__img prod-hero__img--logo"><img src="../assets/images/products/logo-watchdog.png" alt="워치독"></div>
+<div class="prod-hero reveal">
+<div class="prod-hero__img"><img src="../assets/images/products/watchdog-hero.png" alt="워치독 화장실 비명감지기"></div>
 <div class="prod-hero__info"><span class="model">워치독 WatchDog · WD 시리즈</span><h2>화장실 비명인식기</h2>
 <p>승강기용 워치독과 <strong>동일한 비명인식 기술</strong>입니다. 노출형·매입형으로 설치하며, 화장실 내 대화는 녹음·전송되지 않고 비명 발생 시에만 경보합니다.</p>
 <a href="../support/inquiry.html" class="btn btn--blue">도입 문의</a></div></div>

@@ -1004,7 +1004,22 @@ address{font-style:normal}
 .faq-item summary::-webkit-details-marker{display:none}
 .faq-item p{padding:0 18px 14px;font-size:.88rem;color:var(--text-2);line-height:1.7}
 .info-list{list-style:none;padding:0;margin:12px 0}
-.info-list li{padding:6px 0;font-size:.9rem}
+.info-list li{
+  padding:8px 0 8px 24px;
+  position:relative;
+  font-size:.9rem;
+  line-height:1.65;
+  color:var(--text-2);
+}
+.content-block .info-list li::before{
+  left:6px;
+  top:1.15em;
+  width:7px;
+  height:7px;
+}
+.form-wrap .content-block{margin-top:28px;margin-bottom:0}
+.form-wrap .content-block h3{margin-top:0}
+.as-steps{margin-bottom:8px}
 .product-item--amber .product-item__img{background:#FFF8E8}
 .product-grid--5{grid-template-columns:repeat(5,1fr)}
 @media(max-width:1200px){.product-grid--5{grid-template-columns:repeat(3,1fr)}}
