@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate shared layout fragments and update all site pages."""
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -435,6 +436,12 @@ def patch_nav():
                 text = text.replace(OLD_SUP_NAV.format(p=p), NEW_SUP_NAV.format(p=p))
         if path.parent.name == "products":
             text = text.replace(OLD_SIDEBAR, NEW_SIDEBAR)
+            text = re.sub(
+                r'(<a href="restroom\.html"(?: class="[^"]*")?>화장실 비명감지기</a>)'
+                r'(<a href="module\.html")',
+                r'\1<a href="light-switch.html">비명인식 일괄소등스위치</a>\2',
+                text,
+            )
         # mobile nav product lines
         text = text.replace(
             '<a href="../products/restroom.html">화장실</a><a href="../products/module.html">모듈</a>',

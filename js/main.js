@@ -84,9 +84,22 @@
         speed: 900
       });
     }
+    const neuSwiper = document.querySelector('.neu-swiper');
+    if (neuSwiper) {
+      new Swiper('.neu-swiper', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.neu-swiper .swiper-pagination', clickable: true },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+      });
+    }
   }
 
-  // Active nav highlight
+  // Neu header — always solid cream on homepage
+  if (document.body.classList.contains('page-neu') && header) {
+    header.classList.add('is-solid');
+  }
   const path = location.pathname;
   document.querySelectorAll('.nav__link, .sidebar__nav a').forEach(a => {
     if (a.getAttribute('href') && path.includes(a.getAttribute('href').replace(/^\.\./, '').replace(/^\//, ''))) {
