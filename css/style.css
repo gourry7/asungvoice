@@ -44,7 +44,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{scroll-behavior:smooth;font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
 body{font-family:var(--font);color:var(--text);background:#F4F6FA;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
@@ -336,7 +336,7 @@ address{font-style:normal}
 @media(max-width:768px){
   .nav,.header__right .btn--outline{display:none}
   .menu-btn{display:flex}
-  .container{width:min(1140px,calc(100vw - 32px))}
+  .container{width:min(1140px,calc(100% - 32px));padding-left:max(16px,env(safe-area-inset-left,0));padding-right:max(16px,env(safe-area-inset-right,0))}
   .section{padding:52px 0}
   .section__head{margin-bottom:32px}
   .hero__grid{grid-template-columns:1fr;text-align:center;padding:40px 0 70px}
@@ -743,10 +743,10 @@ address{font-style:normal}
 
 /* IR 자료 다이어그램 */
 .ir-figure{margin:0;padding:16px;text-align:center}
-.ir-figure img{width:100%;height:auto;display:block;border-radius:var(--r-md);object-fit:contain;max-height:none}
-.ir-figure--full img{width:100%;height:auto;max-height:none;object-fit:contain}
+.ir-figure img,.ir-figure picture,.ir-figure picture img{width:100%;height:auto;display:block;border-radius:var(--r-md);object-fit:contain;max-height:none}
+.ir-figure--full img,.ir-figure--full picture,.ir-figure--full picture img{width:100%;height:auto;max-height:none;object-fit:contain}
 .ir-figure--fit{padding:12px 16px}
-.ir-figure--fit img{width:auto;max-width:100%;height:auto;display:block;margin:0 auto}
+.ir-figure--fit img,.ir-figure--fit picture img{width:auto;max-width:100%;height:auto;display:block;margin:0 auto}
 .ir-figure figcaption{margin-top:12px;font-size:.82rem;color:var(--text-3);line-height:1.5}
 
 /* 워치독 로고 히어로 (화장실·승강기 동일 브랜드) */
@@ -972,8 +972,16 @@ address{font-style:normal}
   .biz-cred{flex:1 1 100%;text-align:center;font-size:.78rem}
   .biz-quicklinks{gap:8px;margin-bottom:24px}
   .biz-quicklink{flex:1 1 calc(50% - 8px);text-align:center;padding:10px 12px;font-size:.78rem}
-  .ir-figure{padding:12px}
+  .ir-figure{padding:10px}
   .ir-figure figcaption{font-size:.76rem}
+  .ir-figure--pan{overflow-x:auto;-webkit-overflow-scrolling:touch;text-align:left;max-width:100%}
+  .ir-figure--pan img{min-width:880px;max-width:none;width:auto}
+  .ir-figure--responsive picture,.ir-figure--responsive img{width:100%;min-width:0;max-width:100%}
+  .ir-figure--pan::after,.ir-figure--fit.ir-figure--pan::after{
+    content:'← 좌우로 밀어 전체 보기 →';display:block;text-align:center;
+    font-size:.72rem;color:var(--text-3);margin-top:8px;line-height:1.4
+  }
+  .ir-figure--responsive::after{display:none}
   .prod-hero__img--logo img{max-height:90px}
   .inquiry-intro,.compare-row,.as-steps,.form__checks--grid{grid-template-columns:1fr}
   .as-steps{grid-template-columns:repeat(2,1fr);gap:10px}

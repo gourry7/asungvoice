@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets/images/diagrams/lightswitch-system.png"
+OUT_MOBILE = ROOT / "assets/images/diagrams/lightswitch-system-mobile.png"
 FB = "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf"
 FR = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"
 
@@ -54,6 +55,58 @@ def center(d, rect, text, f, fill, sp=8):
 def arrow(d, x0, y, x1):
     d.line((x0, y, x1 - 18, y), fill=BLUE, width=5)
     d.polygon([(x1, y), (x1 - 20, y - 11), (x1 - 20, y + 11)], fill=BLUE)
+
+
+def arrow_down(d, x, y0, y1):
+    d.line((x, y0, x, y1 - 18), fill=BLUE, width=5)
+    d.polygon([(x, y1), (x - 11, y1 - 20), (x + 11, y1 - 20)], fill=BLUE)
+
+
+def draw_step(d, i, px, py, pw, ph):
+    box(d, (px + 3, py + 5, px + pw + 3, py + ph + 5), (231, 237, 247), 24)
+    box(d, (px, py, px + pw, py + ph), WHITE, 24, BORDER, 2)
+
+    d.ellipse((px + 22, py + 22, px + 74, py + 74), fill=RED if i in (2, 4) else BLUE)
+    center(d, (px + 22, py + 22, px + 74, py + 74), str(i + 1), ft(True, 30), WHITE)
+    center(d, (px + 86, py + 27, px + pw - 18, py + 70), f"STEP {i + 1}", ft(True, 20), MUTED)
+
+    icon_h = min(260, ph - 200)
+    box(d, (px + 24, py + 98, px + pw - 24, py + 98 + icon_h), STEPS[i][2], 20)
+    PICS[i](d, px + pw // 2, py + 98 + icon_h // 2)
+
+    center(d, (px + 16, py + ph - 118, px + pw - 16, py + ph - 72), STEPS[i][0], ft(True, 29), NAVY)
+    center(d, (px + 18, py + ph - 68, px + pw - 18, py + ph - 24), STEPS[i][1], ft(False, 22), TEXT, sp=10)
+
+
+def build_desktop():
+    img = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(img)
+    pw, gap, x0, top = 280, 18, 44, 30
+    ph = 560
+    for i in range(5):
+        px = x0 + i * (pw + gap)
+        draw_step(d, i, px, top, pw, ph)
+        if i < 4:
+            arrow(d, px + pw + 4, top + ph // 2, px + pw + gap - 4)
+    img.save(OUT, "PNG")
+    print(f"Wrote {OUT}")
+
+
+def build_mobile():
+    mw, pad, gap, card_h = 720, 20, 14, 470
+    mh = pad * 2 + card_h * 5 + gap * 4
+    img = Image.new("RGB", (mw, mh), BG)
+    d = ImageDraw.Draw(img)
+    pw = mw - pad * 2
+    y = pad
+    for i in range(5):
+        draw_step(d, i, pad, y, pw, card_h)
+        y += card_h
+        if i < 4:
+            arrow_down(d, mw // 2, y + 4, y + gap - 4)
+            y += gap
+    img.save(OUT_MOBILE, "PNG")
+    print(f"Wrote {OUT_MOBILE}")
 
 
 def pill(d, xy, text, fill, outline, text_fill=NAVY, size=21):
@@ -127,35 +180,8 @@ PICS = [pic_visit, pic_scream, pic_wallpad, pic_server, pic_alert]
 
 
 def main():
-    img = Image.new("RGB", (W, H), BG)
-    d = ImageDraw.Draw(img)
-
-    pw, gap, x0, top = 280, 18, 44, 30
-    ph = 560
-
-    for i, (title, desc, bg) in enumerate(STEPS):
-        px = x0 + i * (pw + gap)
-        py = top
-
-        # subtle shadow
-        box(d, (px + 4, py + 6, px + pw + 4, py + ph + 6), (231, 237, 247), 24)
-        box(d, (px, py, px + pw, py + ph), WHITE, 24, BORDER, 2)
-
-        d.ellipse((px + 22, py + 22, px + 74, py + 74), fill=RED if i in (2, 4) else BLUE)
-        center(d, (px + 22, py + 22, px + 74, py + 74), str(i + 1), ft(True, 30), WHITE)
-        center(d, (px + 86, py + 27, px + pw - 18, py + 70), f"STEP {i + 1}", ft(True, 20), MUTED)
-
-        box(d, (px + 24, py + 98, px + pw - 24, py + 372), bg, 20)
-        PICS[i](d, px + pw // 2, py + 225)
-
-        center(d, (px + 16, py + 392, px + pw - 16, py + 438), title, ft(True, 29), NAVY)
-        center(d, (px + 18, py + 452, px + pw - 18, py + ph - 34), desc, ft(False, 22), TEXT, sp=10)
-
-        if i < 4:
-            arrow(d, px + pw + 4, py + ph // 2, px + pw + gap - 4)
-
-    img.save(OUT, "PNG")
-    print(f"Wrote {OUT}")
+    build_desktop()
+    build_mobile()
 
 
 if __name__ == "__main__":
