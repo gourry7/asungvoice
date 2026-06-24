@@ -452,7 +452,9 @@ address{font-style:normal}
 }
 .hp-product--featured .hp-product__visual{height:200px;flex:1;min-height:200px}
 .hp-product__visual img{max-height:100px;max-width:90%;object-fit:contain}
+.hp-product__visual img[src*="intro/"]{max-height:100%;max-width:100%;object-fit:cover;border-radius:var(--r-md)}
 .hp-product--featured .hp-product__visual img{max-height:160px}
+.hp-product--featured .hp-product__visual img[src*="intro/"]{max-height:100%;object-fit:cover}
 .hp-product__body{padding:18px 16px 20px;flex:1;display:flex;flex-direction:column}
 .hp-product__tag{
   display:inline-block;font-size:.68rem;font-weight:700;color:#8EC4FF;
