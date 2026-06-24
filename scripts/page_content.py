@@ -28,28 +28,18 @@ def _features(items):
   return f'<div class="feature-grid">{boxes}</div>'
 
 
-def _fig(file, alt, title=None, cap=None, full=False, fit=False, ver=None, mobile=None):
+def _fig(file, alt, title=None, cap=None, full=False, fit=False, ver=None):
     h = f'<h2>{title}</h2>' if title else ''
     c = f'<figcaption>{cap}</figcaption>' if cap else ''
     if full:
         cls = 'ir-figure ir-figure--full'
     elif fit:
-        cls = 'ir-figure ir-figure--fit ir-figure--pan'
+        cls = 'ir-figure ir-figure--fit'
     else:
         cls = 'ir-figure'
     v = f'?v={ver}' if ver else ''
-    src = f'../assets/images/diagrams/{file}{v}'
-    if mobile:
-        mob = f'../assets/images/diagrams/{mobile}{v}'
-        media = f'<source media="(max-width: 768px)" srcset="{mob}">'
-        img = f'<picture>{media}<img src="{src}" alt="{alt}" loading="lazy"></picture>'
-        cls += ' ir-figure--responsive'
-    else:
-        img = f'<img src="{src}" alt="{alt}" loading="lazy">'
-        if full or fit:
-            cls += ' ir-figure--pan'
     return f'''<div class="content-block reveal">{h}
-<figure class="{cls} neu-card">{img}{c}</figure></div>'''
+<figure class="{cls} neu-card"><img src="../assets/images/diagrams/{file}{v}" alt="{alt}" loading="lazy">{c}</figure></div>'''
 
 
 def _fig_video(fig_file, video_file, alt, title=None, cap=None):
@@ -177,7 +167,7 @@ LIGHT_SWITCH_BODY = """
     ("24시간 빈틈없는 경계", "재택/외출 구분 없이 현관 보안"),
   ],
   "",
-) + _fig("lightswitch-system.png", "일괄소등SW 시스템 구성도", "시스템 구성", "", full=True, ver=8, mobile="lightswitch-system-mobile.png") + _fig("lightswitch-flow.png", "일괄소등SW 동작 흐름도", "동작 흐름", "방문·문열림 확인 → 비명 인식 → 긴급호출·월패드 경보 → 정상 해제", ver=1, fit=True) + """
+) + _fig("lightswitch-system.png", "일괄소등SW 시스템 구성도", "시스템 구성", "", full=True, ver=7) + _fig("lightswitch-flow.png", "일괄소등SW 동작 흐름도", "동작 흐름", "방문·문열림 확인 → 비명 인식 → 긴급호출·월패드 경보 → 정상 해제", ver=1, fit=True) + """
 <div class="content-block reveal"><h2>제품 사양</h2>
 <table class="spec-table">
 <tr><th>디스플레이</th><td>5&quot; Full Touch LCD (정전식)</td></tr>
@@ -262,7 +252,8 @@ BUSINESS_BODY = """
 <div class="content-block reveal biz-intro">
 <p class="biz-intro__lead">㈜아성보이스는 <strong>AI On-Device 비명 인식</strong> 기술로 승강기·화장실·세대현관·1인 가구 등 범죄 사각지대를 보호하는 <strong>생활안전 표준화 솔루션</strong>을 제공합니다.</p>
 </div>
-) + _fig("biz-overview.png", "비명인식 Smart Security 사업 소개", "비명인식 사업", "", full=True, ver=3, mobile="biz-overview-mobile.png") + """
+<div class="content-block reveal"><h2>비명인식 사업</h2>
+<figure class="ir-figure ir-figure--full neu-card"><img src="../assets/images/diagrams/biz-overview.png?v=2" alt="비명인식 Smart Security 사업 소개" loading="lazy" width="1600" height="1100"></figure></div>"""
 
 INQUIRY_BODY = """
 <div class="inquiry-intro reveal">

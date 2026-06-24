@@ -8,7 +8,6 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets/images/diagrams/biz-overview.png"
-OUT_MOBILE = ROOT / "assets/images/diagrams/biz-overview-mobile.png"
 FB = "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf"
 FR = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"
 
@@ -102,47 +101,32 @@ def draw_panel(base: Image.Image, idx: int, rect: tuple[int, int, int, int]):
     center(d, (x0 + 24, desc_y0 + 6, x1 - 24, y1 - 20), area["desc"], ft(False, 22), TEXT)
 
 
-def build_desktop():
+def main():
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
+
+    # Title band
     box(d, (36, 28, W - 36, 118), BLUE, 24)
     center(d, (60, 40, W - 60, 106), "비명인식 기반의 Smart Security 시스템", ft(True, 40), WHITE)
+
+    # 2x2 grid
     margin_x, margin_y = 40, 140
     gap = 24
     cell_w = (W - margin_x * 2 - gap) // 2
     cell_h = (H - margin_y - 40 - gap) // 2
+
+    positions = []
     for row in range(2):
         for col in range(2):
-            i = row * 2 + col
             x0 = margin_x + col * (cell_w + gap)
             y0 = margin_y + row * (cell_h + gap)
-            draw_panel(img, i, (x0, y0, x0 + cell_w, y0 + cell_h))
+            positions.append((x0, y0, x0 + cell_w, y0 + cell_h))
+
+    for i, rect in enumerate(positions):
+        draw_panel(img, i, rect)
+
     img.save(OUT, "PNG", optimize=True)
     print(f"Wrote {OUT}")
-
-
-def build_mobile():
-    mw, pad, gap = 720, 20, 16
-    title_h = 88
-    card_h = 520
-    mh = pad + title_h + gap + card_h * 4 + gap * 3 + pad
-    img = Image.new("RGB", (mw, mh), BG)
-    d = ImageDraw.Draw(img)
-    box(d, (pad, pad, mw - pad, pad + title_h), BLUE, 20)
-    center(d, (pad + 12, pad + 10, mw - pad - 12, pad + title_h - 10),
-           "비명인식 기반의\nSmart Security 시스템", ft(True, 30), WHITE, sp=4)
-    y = pad + title_h + gap
-    pw = mw - pad * 2
-    for i in range(4):
-        draw_panel(img, i, (pad, y, pad + pw, y + card_h))
-        y += card_h + gap
-    img.save(OUT_MOBILE, "PNG", optimize=True)
-    print(f"Wrote {OUT_MOBILE}")
-
-
-def main():
-    build_desktop()
-    build_mobile()
 
 
 if __name__ == "__main__":
