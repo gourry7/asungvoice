@@ -1,0 +1,6 @@
+{
+  "passwordHash": "055086e2ad2e71b77d0f55c4b1a277ad1cb23d47447fd05a6965a0e41c4f2592",
+  "sessionMinutes": 30,
+  "maxAttempts": 5,
+  "lockoutMinutes": 15
+}

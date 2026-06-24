@@ -1,0 +1,138 @@
+<div id="admin-login" class="admin-panel neu-card">
+<h2>관리자 로그인</h2>
+<p class="admin-hint">자료실 · 설치사례 · 공지사항을 등록·수정합니다.<br>권한이 있는 관리자만 로그인할 수 있습니다.</p>
+<p id="login-error" class="admin-login-error" hidden></p>
+<form id="login-form">
+<label class="form__label">관리자 비밀번호</label>
+<input type="password" id="login-pass" class="form__input" required autocomplete="current-password" minlength="4">
+<button type="submit" class="btn btn--blue neu-btn">로그인</button>
+</form>
+</div>
+
+<div id="admin-app" hidden>
+<div id="github-banner" class="admin-banner" hidden>
+<strong>GitHub 연결이 필요합니다</strong>
+<p>파일·사진 업로드와 사이트 저장을 위해 아래 GitHub 설정을 완료해 주세요.</p>
+</div>
+
+<div class="admin-toolbar">
+<div class="admin-tabs">
+<button type="button" class="admin-tab is-active" data-tab="resources">자료실</button>
+<button type="button" class="admin-tab" data-tab="cases">설치사례</button>
+<button type="button" class="admin-tab" data-tab="notices">공지사항</button>
+</div>
+<div class="admin-toolbar__actions">
+<span id="session-badge" class="admin-session-badge" hidden></span>
+<button type="button" id="btn-new" class="btn btn--blue btn--sm">+ 새 글</button>
+<button type="button" id="btn-save-github" class="btn btn--blue btn--sm">사이트에 저장</button>
+<button type="button" id="btn-export" class="btn btn--ghost btn--sm">JSON보내기</button>
+<button type="button" id="btn-import" class="btn btn--ghost btn--sm">JSON 가져오기</button>
+<input type="file" id="import-file" accept=".json" hidden>
+<button type="button" id="btn-logout" class="btn btn--ghost btn--sm">로그아웃</button>
+</div></div>
+<p id="save-status" class="admin-status"></p>
+<div id="admin-list"></div>
+
+<div id="admin-form" class="admin-form neu-card" hidden>
+<h3 id="form-title">새 글</h3>
+<p id="form-guide" class="admin-form-guide"></p>
+<form id="item-form">
+<label class="form__label">제목 <span class="req">*</span></label>
+<input id="f-title" class="form__input" required>
+
+<div class="admin-field" data-field="date">
+<label class="form__label">날짜</label>
+<input type="date" id="f-date" class="form__input">
+</div>
+
+<div class="admin-field" data-field="file-upload">
+<label class="form__label">자료 파일 <span class="req">*</span></label>
+<div id="zone-file" class="admin-upload" tabindex="0" role="button" aria-label="자료 파일 업로드">
+<div class="admin-upload__inner">
+<div class="admin-upload__icon">📄</div>
+<p><strong>파일을 끌어다 놓거나 클릭</strong></p>
+<p class="admin-upload__hint">PDF, DOC, ZIP, HWP 등 (최대 20MB)</p>
+<input type="file" hidden>
+</div>
+<div class="admin-upload__progress" hidden><div class="admin-upload__bar-wrap"><div class="admin-upload__bar"></div></div></div>
+<div class="admin-upload__done" hidden></div>
+</div>
+</div>
+
+<div class="admin-field" data-field="image-upload">
+<label class="form__label">설치 사진 <span class="req">*</span></label>
+<div class="admin-image-row">
+<div id="zone-image" class="admin-upload admin-upload--image" tabindex="0" role="button" aria-label="설치 사진 업로드">
+<div class="admin-upload__inner">
+<div class="admin-upload__icon">📷</div>
+<p><strong>사진을 끌어다 놓거나 클릭</strong></p>
+<p class="admin-upload__hint">JPG, PNG, WEBP (최대 8MB)</p>
+<input type="file" hidden accept="image/*">
+</div>
+<div class="admin-upload__progress" hidden><div class="admin-upload__bar-wrap"><div class="admin-upload__bar"></div></div></div>
+<div class="admin-upload__done" hidden></div>
+</div>
+<div class="admin-image-preview">
+<img id="image-preview" alt="미리보기" hidden>
+<div id="image-preview-empty" class="admin-image-preview__empty">미리보기</div>
+<button type="button" id="btn-clear-image" class="btn btn--ghost btn--sm">사진 제거</button>
+</div>
+</div>
+</div>
+
+<div class="admin-field" data-field="note">
+<label class="form__label">비고</label>
+<input id="f-note" class="form__input" value="다운로드">
+</div>
+
+<div class="admin-field" data-field="content">
+<label class="form__label">본문 <span class="admin-optional">(링크 없을 때 모달로 표시)</span></label>
+<textarea id="f-content" class="form__textarea" rows="5"></textarea>
+</div>
+
+<details class="admin-field admin-advanced" data-field="url-advanced">
+<summary>고급 — URL 직접 입력</summary>
+<label class="form__label">링크 URL</label>
+<input id="f-url" class="form__input" placeholder="https://...">
+<div data-field="image-url">
+<label class="form__label">이미지 URL</label>
+<input id="f-image" class="form__input" placeholder="https://...">
+</div>
+</details>
+
+<div class="form__actions">
+<button type="submit" class="btn btn--blue neu-btn">항목 저장</button>
+<button type="button" id="btn-cancel" class="btn btn--ghost">취소</button>
+</div>
+</form></div>
+
+<details id="github-setup" class="admin-github neu-card" open>
+<summary>GitHub 연결 (파일 업로드 · 사이트 저장)</summary>
+<p class="admin-hint">GitHub Personal Access Token (<code>repo</code> 권한)을 발급해 입력하면 파일 업로드와 「사이트에 저장」이 가능합니다.<br>
+토큰은 이 브라우저에만 저장되며 서버로 전송되지 않습니다.</p>
+<form id="github-form">
+<label class="form__label">GitHub 사용자</label><input id="gh-owner" class="form__input" placeholder="gourry7">
+<label class="form__label">저장소 이름</label><input id="gh-repo" class="form__input" placeholder="asungvoice">
+<label class="form__label">브랜치</label><input id="gh-branch" class="form__input" value="main">
+<label class="form__label">Pages URL <span class="admin-optional">(업로드 파일 주소)</span></label>
+<input id="gh-pages" class="form__input" placeholder="https://gourry7.github.io/asungvoice">
+<label class="form__label">Personal Access Token</label>
+<input type="password" id="gh-token" class="form__input" autocomplete="off" placeholder="ghp_...">
+<button type="submit" class="btn btn--outline btn--sm">연결 저장</button>
+</form>
+</details>
+
+<details class="admin-github neu-card">
+<summary>비밀번호 변경</summary>
+<p class="admin-hint">8자 이상의 새 비밀번호를 설정하세요. GitHub 연결 시 자동으로 저장됩니다.</p>
+<form id="pw-form">
+<label class="form__label">현재 비밀번호</label>
+<input type="password" id="pw-current" class="form__input" autocomplete="current-password">
+<label class="form__label">새 비밀번호</label>
+<input type="password" id="pw-new" class="form__input" autocomplete="new-password" minlength="8">
+<label class="form__label">새 비밀번호 확인</label>
+<input type="password" id="pw-confirm" class="form__input" autocomplete="new-password" minlength="8">
+<button type="submit" class="btn btn--outline btn--sm">비밀번호 변경</button>
+</form>
+</details>
+</div>

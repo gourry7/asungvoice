@@ -63,4 +63,61 @@
       a.classList.add('is-active');
     }
   });
+
+  const heroCarousel = document.querySelector('[data-hero-carousel]');
+  if (heroCarousel) {
+    const slides = [
+      { src: 'assets/images/products/elevator.png', alt: '승강기 비명감지기', label: '승강기 비명감지기' },
+      { src: 'assets/images/products/restroom-hero.png?v=1', alt: '화장실 비명감지기', label: '화장실 비명감지기' },
+      { src: 'assets/images/products/control-panel.png', alt: '일괄소등스위치', label: '세대현관 · 일괄소등스위치' },
+      { src: 'assets/images/products/home-keeper.png', alt: '마이안심이', label: '마이안심이' },
+      { src: 'assets/images/products/pcb-module.png', alt: '비명인식 모듈', label: '비명인식 모듈' }
+    ];
+    const img = heroCarousel.querySelector('.hp-hero__img');
+    const label = heroCarousel.querySelector('.hp-hero__label');
+    const dotsWrap = heroCarousel.querySelector('.hp-hero__dots');
+    let index = 0;
+    let timer = null;
+    const interval = 3500;
+
+    slides.forEach((slide, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'hp-hero__dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', slide.label);
+      dot.addEventListener('click', () => { go(i); restart(); });
+      dotsWrap.appendChild(dot);
+    });
+
+    const dots = [...dotsWrap.querySelectorAll('.hp-hero__dot')];
+
+    function go(i) {
+      index = i;
+      const slide = slides[i];
+      img.classList.add('is-fading');
+      setTimeout(() => {
+        img.src = slide.src;
+        img.alt = slide.alt;
+        label.textContent = slide.label;
+        img.classList.remove('is-fading');
+      }, 220);
+      dots.forEach((d, n) => {
+        d.classList.toggle('is-active', n === i);
+        d.setAttribute('aria-selected', n === i ? 'true' : 'false');
+      });
+    }
+
+    function next() { go((index + 1) % slides.length); }
+
+    function restart() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(next, interval);
+    }
+
+    heroCarousel.addEventListener('mouseenter', () => { if (timer) clearInterval(timer); });
+    heroCarousel.addEventListener('mouseleave', restart);
+    slides.slice(1).forEach(s => { const preload = new Image(); preload.src = s.src; });
+    restart();
+  }
 })();
