@@ -125,7 +125,7 @@ def page_shell(depth, title, desc, breadcrumb, h1, sidebar, body, css_extra="", 
 <link rel="stylesheet" href="{css}">
 {css_extra}
 </head>
-<body class="page-neu">
+<body class="page-neu page-sub">
 {header(depth)}
 <section class="page-hero"><div class="container"><div class="breadcrumb">{breadcrumb}</div><h1>{h1}</h1></div></section>
 <main id="main"><div class="container sub-layout">{sidebar}<div class="content-area">
@@ -540,8 +540,13 @@ def patch_nav():
                 '<meta charset="UTF-8">\n<meta name="format-detection" content="telephone=no">',
                 1,
             )
-        if 'class="page-neu"' not in text:
-            text = text.replace('<body>', '<body class="page-neu">', 1)
+        if path.name != "index.html":
+            if 'class="page-neu page-sub"' not in text:
+                text = text.replace('class="page-neu"', 'class="page-neu page-sub"', 1)
+            if 'class="page-neu"' not in text and "<body>" in text:
+                text = text.replace('<body>', '<body class="page-neu page-sub">', 1)
+        elif 'class="page-neu"' not in text:
+            text = text.replace('<body>', '<body class="page-neu page-home">', 1)
         text = text.replace('class="header is-solid"', 'class="header header--neu is-solid"')
         text = re.sub(
             r'\n?<script src="https://cdn\.jsdelivr\.net/npm/swiper@11/swiper-bundle\.min\.js"></script>',
