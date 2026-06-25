@@ -3,7 +3,9 @@
   'use strict';
 
   const DATA_URL = new URL('../data/support-board.json', document.currentScript.src).href;
-  const CACHE_KEY = 'asung_board_cache';
+  const CACHE_KEY = 'asung_board_v2';
+  const PAGE_SIZE = 15;
+  const CASE_PAGE_SIZE = 12;
 
   function esc(s) {
     return String(s ?? '')
@@ -13,9 +15,16 @@
       .replace(/"/g, '&quot;');
   }
 
-  function linkAttrs(url) {
-    if (!url || url.startsWith('#')) return '';
-    return ' target="_blank" rel="noopener"';
+  /** support/*.html 기준 로컬 에셋 경로 */
+  function assetUrl(path) {
+    if (!path) return '';
+    if (/^https?:\/\//i.test(path)) return path;
+    const clean = path.replace(/^(\.\.\/)+/, '');
+    return '../' + clean.replace(/^\/+/, '');
+  }
+
+  function isLocalPath(path) {
+    return path && !/^https?:\/\//i.test(path);
   }
 
   async function loadBoard() {
@@ -32,18 +41,15 @@
     }
   }
 
-  function renderResources(el, items) {
-    const rows = items.map((r, i) =>
-      `<tr><td>${items.length - i}</td>` +
-      `<td><a href="${esc(r.url || '#')}"${linkAttrs(r.url)}>${esc(r.title)}</a></td>` +
-      `<td><span class="board-badge">${esc(r.note || '다운로드')}</span></td></tr>`
-    ).join('');
-    el.innerHTML =
-      `<table class="board-table"><thead><tr><th>번호</th><th>제목</th><th>비고</th></tr></thead>` +
-      `<tbody>${rows || '<tr><td colspan="3">등록된 자료가 없습니다.</td></tr>'}</tbody></table>`;
+  function rewriteHtmlAssets(html) {
+    if (!html) return '';
+    return html.replace(
+      /((?:src|href)=["'])(\.\/)?(\.\.\/)?(data\/[^"']+)(["'])/gi,
+      (_, pre, _dot, _up, p, suf) => pre + assetUrl(p) + suf
+    );
   }
 
-  function openModal(title, body) {
+  function openModal(title, bodyHtml, isHtml) {
     let modal = document.getElementById('board-modal');
     if (!modal) {
       modal = document.createElement('div');
@@ -60,56 +66,112 @@
       });
     }
     modal.querySelector('.board-modal__title').textContent = title;
-    modal.querySelector('.board-modal__body').innerHTML = body.replace(/\n/g, '<br>');
+    const body = modal.querySelector('.board-modal__body');
+    if (isHtml) body.innerHTML = rewriteHtmlAssets(bodyHtml) || '<p>내용이 없습니다.</p>';
+    else body.textContent = bodyHtml || '';
     modal.hidden = false;
   }
 
-  function caseHref(item) {
-    if (item.url) return item.url;
-    if (item.content) return '#';
-    return '#';
+  function paginate(items, page, size) {
+    const pageSize = size || PAGE_SIZE;
+    const total = Math.max(1, Math.ceil(items.length / pageSize));
+    const p = Math.min(Math.max(1, page), total);
+    const start = (p - 1) * pageSize;
+    return { page: p, total, slice: items.slice(start, start + pageSize) };
+  }
+
+  function pagerHtml(page, total, id) {
+    if (total <= 1) return '';
+    let btns = '';
+    for (let i = 1; i <= total; i++) {
+      btns += `<button type="button" class="board-page${i === page ? ' is-active' : ''}" data-board-page="${id}" data-page="${i}">${i}</button>`;
+    }
+    return `<nav class="board-pager" aria-label="페이지">${btns}</nav>`;
+  }
+
+  function bindPager(el, id, renderPage) {
+    el.querySelectorAll(`[data-board-page="${id}"]`).forEach(btn => {
+      btn.addEventListener('click', () => {
+        renderPage(Number(btn.dataset.page));
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function resourceHref(item) {
+    if (item.file) return assetUrl(item.file);
+    if (item.url && isLocalPath(item.url)) return assetUrl(item.url);
+    return item.url || '';
+  }
+
+  function renderResources(el, items) {
+    const draw = p => {
+      const { slice, total, page: cp } = paginate(items, p);
+      const rows = slice.map((r, i) => {
+        const num = items.length - ((cp - 1) * PAGE_SIZE + i);
+        const href = resourceHref(r);
+        const isFile = !!(r.file || (r.url && isLocalPath(r.url)));
+        const title = href
+          ? `<a href="${esc(href)}"${isFile ? '' : ' target="_blank" rel="noopener"'}>${esc(r.title)}</a>`
+          : esc(r.title);
+        const date = r.date ? `<td>${esc(r.date)}</td>` : '<td></td>';
+        const note = isFile ? '다운로드' : (r.note || '링크');
+        return `<tr><td>${num}</td><td>${title}</td>${date}<td><span class="board-badge">${esc(note)}</span></td></tr>`;
+      }).join('');
+      el.innerHTML =
+        `<table class="board-table"><thead><tr><th>번호</th><th>제목</th><th>등록일</th><th>비고</th></tr></thead>` +
+        `<tbody>${rows || '<tr><td colspan="4">등록된 자료가 없습니다.</td></tr>'}</tbody></table>` +
+        pagerHtml(cp, total, 'resources');
+      bindPager(el, 'resources', draw);
+    };
+    draw(1);
   }
 
   function renderCases(el, items) {
-    const cards = items.map(c => {
-      const href = caseHref(c);
-      const hasModal = !c.url && c.content;
-      const attrs = hasModal
-        ? ` href="#" data-case-id="${esc(c.id)}" class="case-card case-card--modal"`
-        : ` href="${esc(href)}"${linkAttrs(href)} class="case-card"`;
-      const img = c.image
-        ? `<img src="${esc(c.image)}" alt="${esc(c.title)}" loading="lazy">`
-        : '<div class="case-card__placeholder">사진 없음</div>';
-      return `<a${attrs}>${img}<span>${esc(c.title)}</span></a>`;
-    }).join('');
-    el.innerHTML = `<div class="case-grid">${cards || '<p>등록된 설치사례가 없습니다.</p>'}</div>`;
-    el.querySelectorAll('[data-case-id]').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        const item = items.find(x => x.id === a.dataset.caseId);
-        if (item) openModal(item.title, item.content || '');
+    const draw = p => {
+      const { slice, total, page: cp } = paginate(items, p, CASE_PAGE_SIZE);
+      const cards = slice.map(c => {
+        const img = c.image
+          ? `<img src="${esc(assetUrl(c.image))}" alt="${esc(c.title)}" loading="lazy">`
+          : '<div class="case-card__placeholder">사진 없음</div>';
+        return `<a href="#" data-case-id="${esc(c.id)}" class="case-card case-card--modal">${img}<span>${esc(c.title)}</span></a>`;
+      }).join('');
+      el.innerHTML =
+        `<div class="case-grid">${cards || '<p>등록된 설치사례가 없습니다.</p>'}</div>` +
+        pagerHtml(cp, total, 'cases');
+      el.querySelectorAll('[data-case-id]').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          const item = items.find(x => x.id === a.dataset.caseId);
+          if (item) openModal(item.title, item.contentHtml || item.content || '', !!(item.contentHtml || item.content));
+        });
       });
-    });
+      bindPager(el, 'cases', draw);
+    };
+    draw(1);
   }
 
   function renderNotices(el, items) {
-    const rows = items.map(n => {
-      const hasModal = !n.url && n.content;
-      if (hasModal) {
-        return `<tr><td>${esc(n.date)}</td><td><a href="#" data-notice-id="${esc(n.id)}">${esc(n.title)}</a></td></tr>`;
-      }
-      return `<tr><td>${esc(n.date)}</td><td><a href="${esc(n.url || '#')}"${linkAttrs(n.url)}>${esc(n.title)}</a></td></tr>`;
-    }).join('');
-    el.innerHTML =
-      `<table class="board-table"><thead><tr><th>날짜</th><th>제목</th></tr></thead>` +
-      `<tbody>${rows || '<tr><td colspan="2">등록된 공지가 없습니다.</td></tr>'}</tbody></table>`;
-    el.querySelectorAll('[data-notice-id]').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        const item = items.find(x => x.id === a.dataset.noticeId);
-        if (item) openModal(item.title, item.content || '');
+    const draw = p => {
+      const { slice, total, page: cp } = paginate(items, p);
+      const rows = slice.map(n => {
+        const pin = n.pinned ? ' <span class="board-badge">공지</span>' : '';
+        return `<tr><td>${esc(n.date)}</td><td><a href="#" data-notice-id="${esc(n.id)}">${esc(n.title)}</a>${pin}</td></tr>`;
+      }).join('');
+      el.innerHTML =
+        `<table class="board-table"><thead><tr><th>날짜</th><th>제목</th></tr></thead>` +
+        `<tbody>${rows || '<tr><td colspan="2">등록된 공지가 없습니다.</td></tr>'}</tbody></table>` +
+        pagerHtml(cp, total, 'notices');
+      el.querySelectorAll('[data-notice-id]').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          const item = items.find(x => x.id === a.dataset.noticeId);
+          if (item) openModal(item.title, item.contentHtml || item.content || '', !!(item.contentHtml || item.content));
+        });
       });
-    });
+      bindPager(el, 'notices', draw);
+    };
+    draw(1);
   }
 
   async function init() {

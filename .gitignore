@@ -1,3 +1,5 @@
 .DS_Store
 *.log
 _gen_pages.py
+# GitHub 100MB file limit — notice-139 video linked via YouTube in content
+data/downloads/notices/notice-139-142.mp4
