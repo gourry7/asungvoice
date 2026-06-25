@@ -2,10 +2,14 @@
 (function () {
   'use strict';
 
-  const DATA_URL = new URL('../data/support-board.json', document.currentScript.src).href;
-  const CACHE_KEY = 'asung_board_v2';
+  const CACHE_PREFIX = 'asung_board_v3';
   const PAGE_SIZE = 15;
   const CASE_PAGE_SIZE = 12;
+  const DATA_FILES = {
+    resources: '../data/board-resources.json',
+    cases: '../data/board-cases.json',
+    notices: '../data/board-notices.json'
+  };
 
   function esc(s) {
     return String(s ?? '')
@@ -13,6 +17,13 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  }
+
+  function dataUrl(type) {
+    const mount = document.querySelector('[data-board]');
+    const custom = mount && mount.dataset.boardSrc;
+    const rel = custom || DATA_FILES[type] || '../data/support-board.json';
+    return new URL(rel, window.location.href).href;
   }
 
   /** support/*.html 기준 로컬 에셋 경로 */
@@ -27,18 +38,40 @@
     return path && !/^https?:\/\//i.test(path);
   }
 
-  async function loadBoard() {
+  function readCache(type) {
     try {
-      const res = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
-      if (!res.ok) throw new Error('fetch failed');
-      const data = await res.json();
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
-      return data;
-    } catch {
-      const cached = sessionStorage.getItem(CACHE_KEY);
+      const cached = sessionStorage.getItem(CACHE_PREFIX + ':' + type);
       if (cached) return JSON.parse(cached);
+    } catch { /* ignore corrupt cache */ }
+    return null;
+  }
+
+  function writeCache(type, items) {
+    try {
+      sessionStorage.setItem(CACHE_PREFIX + ':' + type, JSON.stringify(items));
+    } catch { /* quota / private mode — fetch result still usable */ }
+  }
+
+  async function loadBoard(type) {
+    if (window.location.protocol === 'file:') {
+      throw new Error('로컬 파일로는 게시판을 불러올 수 없습니다. GitHub Pages 또는 로컬 서버에서 확인해 주세요.');
+    }
+
+    let items;
+    try {
+      const res = await fetch(dataUrl(type) + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) throw new Error('fetch failed');
+      const json = await res.json();
+      items = Array.isArray(json) ? json : (json[type] || []);
+      if (!Array.isArray(items)) throw new Error('invalid data');
+    } catch {
+      items = readCache(type);
+      if (items) return items;
       throw new Error('게시판 데이터를 불러올 수 없습니다.');
     }
+
+    writeCache(type, items);
+    return items;
   }
 
   function rewriteHtmlAssets(html) {
@@ -178,12 +211,14 @@
     const mount = document.querySelector('[data-board]');
     if (!mount) return;
     const type = mount.dataset.board;
+    if (!type) return;
     mount.innerHTML = '<p class="board-loading">불러오는 중…</p>';
     try {
-      const data = await loadBoard();
-      if (type === 'resources') renderResources(mount, data.resources || []);
-      else if (type === 'cases') renderCases(mount, data.cases || []);
-      else if (type === 'notices') renderNotices(mount, data.notices || []);
+      const items = await loadBoard(type);
+      if (type === 'resources') renderResources(mount, items);
+      else if (type === 'cases') renderCases(mount, items);
+      else if (type === 'notices') renderNotices(mount, items);
+      else mount.innerHTML = '<p class="board-error">알 수 없는 게시판 유형입니다.</p>';
     } catch (err) {
       mount.innerHTML = `<p class="board-error">${esc(err.message)}</p>`;
     }

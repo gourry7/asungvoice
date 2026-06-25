@@ -352,13 +352,24 @@ def migrate_notices() -> list[dict]:
     return out
 
 
+def write_board_files(data: dict) -> None:
+    OUT_JSON.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    for key, fname in (
+        ("resources", "board-resources.json"),
+        ("cases", "board-cases.json"),
+        ("notices", "board-notices.json"),
+    ):
+        path = ROOT / "data" / fname
+        path.write_text(json.dumps(data[key], ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def main():
     data = {
         "resources": migrate_resources(),
         "cases": migrate_cases(),
         "notices": migrate_notices(),
     }
-    OUT_JSON.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_board_files(data)
     print(
         f"\nDone: {len(data['resources'])} resources, "
         f"{len(data['cases'])} cases, {len(data['notices'])} notices"
