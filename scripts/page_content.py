@@ -72,8 +72,8 @@ ELEVATOR_BODY = """
     ("능동적 현장 대응", "비명 인식 즉시 경광등 점멸 및 강력 경고방송으로 범죄자 심리 위축"),
     ("자동 구조 요청", "경비실·통합관제센터 자동 호출로 골든타임 내 신속한 구조 연계"),
   ],
-  "KEY IMPACT — 범행 의지 사전 차단 &amp; 피해 최소화",
-) + _fig("elevator-system.png", "워치독 비명감지기 연동 시스템 흐름도", "시스템 구성", "비명감지 → NO 접점·비상벨 → 경비실 알람 → CCTV 확인 → 경비·112·119 출동") + _fig("elevator-flow.png", "승강기용 동작 흐름도", "동작 흐름", "비명인식 → 워치독 경광등·경고방송 → 접점 비상호출 → 경비실 CCTV 확인 → 출동") + """
+  "",
+) + _fig("elevator-system.png", "승강기 비명감지기 시스템 구성도", "시스템 구성", full=True, ver=2) + """
 <div class="content-block reveal"><h2>제품 특징</h2>
 """ + _features([
   ("딥러닝 &amp; 멀티 트리거", '"사람살려", "강도야", "도와주세요" 등 특정 비명 단어 정확 인식'),
@@ -85,11 +85,10 @@ ELEVATOR_BODY = """
 ]) + """
 </div>
 
-<div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
+<div class="content-block reveal"><h2>기능</h2><table class="spec-table">
 <tr><th>모델</th><td>WD-600MD</td></tr>
 <tr><th>마이크</th><td>고성능 Digital 2-Mic 어레이</td></tr>
-<tr><th>인식 단어</th><td>아악, 캬악악, 강도야, 사람살려, 살려주세요, 도둑이야, 도와주세요</td></tr>
-<tr><th>인식레벨</th><td>90dB / 95dB / 100dB 3단계</td></tr>
+<tr><th>대표 인식단어</th><td>강도야, 사람살려, 도와주세요</td></tr>
 <tr><th>출력</th><td>NO(Normal Open) 무전원 접점</td></tr>
 <tr><th>경고방송</th><td>35초 경고방송 출력</td></tr>
 <tr><th>설치위치</th><td>승객버튼 조작반 직상부 벽면 또는 천정</td></tr></table></div>"""
@@ -136,11 +135,10 @@ RESTROOM_BODY = """
 <div class="stat-box neu-stat"><div class="stat-box__num">50만</div><div class="stat-box__label">전국 공중화장실 TAM</div></div>
 </div></div>
 
-<div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
+<div class="content-block reveal"><h2>기능</h2><table class="spec-table">
 <tr><th>모델</th><td>WD-600MD</td></tr>
 <tr><th>마이크</th><td>고성능 Digital 2-Mic 어레이</td></tr>
-<tr><th>인식 단어</th><td>아악, 캬악악, 강도야, 사람살려, 살려주세요, 도둑이야, 도와주세요</td></tr>
-<tr><th>인식레벨</th><td>90dB / 95dB / 100dB 3단계</td></tr>
+<tr><th>대표 인식단어</th><td>강도야, 사람살려, 도와주세요</td></tr>
 <tr><th>출력</th><td>NO(Normal Open) 무전원 접점</td></tr>
 <tr><th>경고방송</th><td>25초 경고방송 출력</td></tr>
 <tr><th>설치타입</th><td>노출형 / 매입형(다운라이트)</td></tr></table></div>"""
@@ -226,27 +224,18 @@ MODULE_BODY = """
 <p><strong>어디든 적용 가능한 핵심 기술.</strong> 기존 비상벨, CCTV, 주차 시스템에 비명인식 기능을 더해 가치를 높이는 임베디드 모듈입니다.</p>
 <a href="../support/inquiry.html" class="btn btn--blue">OEM/ODM 문의</a></div></div>
 
-<div class="content-block reveal"><h2>모듈 소개</h2>
-<p>기존 시스템의 하드웨어 변경 없이 <strong>간단한 결선만으로</strong> 지능형 비명감지 기능을 추가합니다. SID 내장 디지털 비명인식 모듈로 지하주차장 비상벨, 승강기 미디어 타운보드, 키오스크 등 다양한 기존 장비에 탑재 가능합니다.</p>
+<div class="content-block reveal"><h2>모듈 개요</h2>
+<ul class="info-list">
+<li>날이 갈수록 증가하는 범죄취약계층인 여성/아동에 대한 묻지마 폭행 또는 성범죄로부터 보호하기 위하여 지하 주차장에는 비상벨/비상통화장치 설치가 법제화 되어 누름식 또는 터치식 비상벨 설치되고 있습니다.</li>
+<li>아성보이스 비명인식은 사전에 범죄징후를 인지하거나 범죄발생시 손으로 비상벨을 누르지 못하는 상황에는 어디에서든 소리를 질러 방재실/경비실로 구조요청 할 수 있어 효과적으로 범죄를 예방함은 물론 즉각적인 범죄 대응을 할 수 있습니다. 누름식 비상벨 또는 비상통화장치에 비명인식모듈을 내장하여 비명인식 비상벨 시스템으로 업그레이드 할 수 있습니다.</li>
+</ul>
 </div>
-""" + _fig("module-overview.png", "비명인식 모듈 소개 및 사양", "모듈 개요", "WD-Module-V2 · NO 접점 · UART/GPIO 연동") + """
-<div class="content-block reveal"><h2>주요 적용 분야</h2>
-""" + _features([
-  ("지하주차장", "기존 비상벨에 비명감지 기능 추가 (아마노 등)"),
-  ("승강기", "비상호출 버튼과 연동하여 자동 호출"),
-  ("미디어 타운보드", "승강기 미디어·키오스크 연동"),
-  ("세대 방범", "월패드·도어락 Security 연동"),
-]) + """
-</div>
+""" + _fig("module-application.png", "비명인식 모듈 적용 분야", "모듈 적용", full=True, ver=1) + _fig("module-flow.png", "비명인식 모듈 동작 흐름도", "동작 흐름", "비명입력대기 → 소음발생 → 비명인식 → 비상호출 → 비상벨(VoIP 3G, LTE) → CCTV모니터 확인 → 음성통화 → 통화/감청 → 긴급출동", ver=1, fit=True) + """
 
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
 <tr><th>모델</th><td>WD-Module-V2</td></tr>
-<tr><th>입력 전원</th><td>DC 5V (USB Standard) Low Power</td></tr>
-<tr><th>출력 방식</th><td>NO (Normally Open) 접점 출력 Dry Contact</td></tr>
-<tr><th>통신 연동</th><td>UART / GPIO</td></tr>
-<tr><th>인식 거리</th><td>Max 5~10m (환경에 따라 조절)</td></tr>
-<tr><th>반응 속도</th><td>비명 감지 후 0.5초 이내 신호 송출</td></tr>
-<tr><th>인식 단어</th><td>아악, 캬악악, 강도야, 사람살려, 살려주세요, 도둑이야, 도와주세요</td></tr></table></div>"""
+<tr><th>통신 연동</th><td>UART / GPIO (3.3V)</td></tr>
+<tr><th>대표 인식단어</th><td>강도야, 사람살려, 도와주세요</td></tr></table></div>"""
 
 BUSINESS_BODY = """
 <div class="content-block reveal biz-intro">
