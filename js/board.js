@@ -4,7 +4,7 @@
 
   const CACHE_PREFIX = 'asung_board_v3';
   const PAGE_SIZE = 15;
-  const CASE_PAGE_SIZE = 12;
+  const CASE_PAGE_SIZE = 9;
   const DATA_FILES = {
     resources: '../data/board-resources.json',
     cases: '../data/board-cases.json',

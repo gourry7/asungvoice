@@ -1,5 +1,33 @@
 [
   {
+    "id": "case-11",
+    "title": "삼성 래미안 (영등포 프레비뉴) 아파트",
+    "date": "2018-09-05",
+    "image": "data/board/cases/case-11-thumb.jpg",
+    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-11-0.jpg\"/>\n</div>"
+  },
+  {
+    "id": "case-8",
+    "title": "부산대학교 여자화장실의 워치독 비명감지기",
+    "date": "2018-07-25",
+    "image": "data/board/cases/case-8-thumb.png",
+    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-8-0.png\"/>\n</div>"
+  },
+  {
+    "id": "case-7",
+    "title": "대림산업 E편한세상 (수지) 아파트",
+    "date": "2018-05-02",
+    "image": "data/board/cases/case-7-thumb.jpg",
+    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-7-0.jpg\"/>\n</div>\n 비명감지기 설치 사진\n 비명감지기 설치후 스티커 부착 사진"
+  },
+  {
+    "id": "case-6",
+    "title": "개포우성3차 아파트 설치(지자체 지원사업)",
+    "date": "2017-05-12",
+    "image": "data/board/cases/case-6-thumb.png",
+    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-6-0.png\"/>\n</div>"
+  },
+  {
     "id": "case-80",
     "title": "롯데캐슬리버파크시그니처",
     "date": "2026-04-17",
@@ -469,13 +497,6 @@
     "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-12-0.png\"/>\n</div>"
   },
   {
-    "id": "case-11",
-    "title": "삼성 래미안 (영등포 프레비뉴) 아파트",
-    "date": "2018-09-05",
-    "image": "data/board/cases/case-11-thumb.jpg",
-    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-11-0.jpg\"/>\n</div>"
-  },
-  {
     "id": "case-10",
     "title": "부산대학교 여자화장실 내 설치 운영중인 비명감지기",
     "date": "2018-09-03",
@@ -488,27 +509,6 @@
     "date": "2018-08-10",
     "image": "data/board/cases/case-9-thumb.png",
     "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-9-0.png\"/>\n</div>\n\t\t\t\t\t\t\t여의도 \"파크원\" 초고층빌딩에 워치독 비명감지기가\n판매시설(현대백화점 여의도점 입점예정)의 엘리베이터와 여자화장실,\n사무동 여자화장실에 적용예정이며\n여자화장실에는 인테리어와 잘어울어지는 천정매입형을...\n엘리베이터는 백화점이라는 고급판매시설 특성을 고려하여 고객의 격과 니즈에 맞도록 설치하여\n누구나 안심하고 이용하는 범죄 Free 안심엘리베이터, 안심화장실을 만들어 가겠습니다."
-  },
-  {
-    "id": "case-8",
-    "title": "부산대학교 여자화장실의 워치독 비명감지기",
-    "date": "2018-07-25",
-    "image": "data/board/cases/case-8-thumb.png",
-    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-8-0.png\"/>\n</div>"
-  },
-  {
-    "id": "case-7",
-    "title": "대림산업 E편한세상 (수지) 아파트",
-    "date": "2018-05-02",
-    "image": "data/board/cases/case-7-thumb.jpg",
-    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-7-0.jpg\"/>\n</div>\n 비명감지기 설치 사진\n 비명감지기 설치후 스티커 부착 사진"
-  },
-  {
-    "id": "case-6",
-    "title": "개포우성3차 아파트 설치(지자체 지원사업)",
-    "date": "2017-05-12",
-    "image": "data/board/cases/case-6-thumb.png",
-    "contentHtml": "<div align=\"center\" id=\"file0\">\n<img src=\"../data/board/cases/case-6-0.png\"/>\n</div>"
   },
   {
     "id": "case-5",

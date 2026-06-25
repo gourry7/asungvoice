@@ -266,7 +266,7 @@ def migrate_resources() -> list[dict]:
 def migrate_cases() -> list[dict]:
     print("Migrating cases…")
     rows = collect_paginated("/sub/sub04_05.php", "result", 9)
-    rows.sort(key=lambda x: int(x["idx"]), reverse=True)
+    # 원본 사이트 순서 유지 (대표 4건 → 최신순). idx 내림차순 정렬하면 순서가 달라짐.
     out = []
     for row in rows:
         idx = row["idx"]
