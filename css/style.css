@@ -453,15 +453,17 @@ address{font-style:normal}
 .hp-partners{padding:48px 0 64px}
 .hp-partners .section__head{margin-bottom:28px;text-align:center}
 .hp-partners__grid{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
+  max-width:720px;margin:0 auto;
 }
 .hp-partners__logo{
-  flex:0 1 calc(25% - 12px);max-width:calc(25% - 12px);min-width:150px;
   display:flex;align-items:center;justify-content:center;
-  min-height:88px;padding:16px 20px;background:var(--white);
+  height:96px;padding:18px 20px;background:var(--white);
 }
 .hp-partners__logo img{
-  max-width:100%;max-height:52px;width:auto;height:auto;object-fit:contain;
+  display:block;width:auto;height:auto;
+  max-width:min(100%,140px);max-height:48px;
+  object-fit:contain;object-position:center;
 }
 
 .hp-products{
@@ -546,8 +548,9 @@ address{font-style:normal}
   .hp-products{grid-template-columns:1fr}
   .hp-product__visual{height:120px}
   .hp-product--featured .hp-product__visual{min-height:160px;height:160px}
-  .hp-partners__logo{flex:0 1 calc(50% - 8px);max-width:calc(50% - 8px);min-width:0;min-height:76px;padding:12px 14px}
-  .hp-partners__logo img{max-height:44px}
+  .hp-partners__grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:420px;gap:12px}
+  .hp-partners__logo{height:80px;padding:14px 16px}
+  .hp-partners__logo img{max-height:40px;max-width:min(100%,120px)}
   .hp-support-links{justify-content:flex-start}
   .page-neu .neu-cta{padding:32px 24px!important}
   .page-neu .neu-cta h2{font-size:1.25rem}
