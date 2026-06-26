@@ -90,7 +90,7 @@ def footer(depth: int) -> str:
     return f"""<footer class="footer"><div class="container">
 <div class="footer__top"><div class="footer__brand"><img src="{p}assets/images/logo.png" alt="" width="36" height="36"><span>아성보이스</span><p>소리로 지키는 안전, 워치독</p></div>
 <nav class="footer__links"><a href="{p}company/greeting.html">회사소개</a><a href="{p}products/elevator.html">제품소개</a><a href="{p}business/index.html">사업영역</a><a href="{p}support/resources.html">자료실</a><a href="{p}support/notice.html">공지사항</a><a href="{p}support/inquiry.html">문의하기</a><a href="{p}sitemap.html">사이트맵</a></nav></div>
-<div class="footer__legal"><a href="http://www.asungvoice.com/sub/pop_privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><span>|</span><a href="http://www.asungvoice.com/sub/pop_email.html" target="_blank" rel="noopener">이메일수집거부</a><span>|</span><a href="http://www.celtechworld.com/" target="_blank" rel="noopener">(주)셀텍월드</a></div>
+<div class="footer__legal"><a href="http://www.asungvoice.com/sub/pop_privacy.html" target="_blank" rel="noopener">개인정보처리방침</a><span>|</span><a href="http://www.asungvoice.com/sub/pop_email.html" target="_blank" rel="noopener">이메일수집거부</a></div>
 <address class="footer__info">대표: 이승현 | 서울시 금천구 가산디지털1로 149, 3층 304디-14호 | <a href="tel:07087099911">070-8709-9911</a> | 팩스: 02-6203-1689<br>사업자등록번호 118-87-00016 | Copyright &copy; 2016 아성보이스.</address>
 </div></footer>
 <script src="{p}js/main.js"></script>"""
