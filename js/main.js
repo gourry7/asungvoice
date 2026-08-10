@@ -70,7 +70,7 @@
       { src: 'assets/images/products/elevator.png', alt: '승강기 비명감지기', label: '승강기 비명감지기' },
       { src: 'assets/images/products/restroom-hero.png?v=1', alt: '화장실 비명감지기', label: '화장실 비명감지기' },
       { src: 'assets/images/products/control-panel.png', alt: '일괄소등스위치', label: '세대현관 · 일괄소등스위치' },
-      { src: 'assets/images/products/home-keeper.png?v=2', alt: '마이안심이', label: '마이안심이' },
+      { src: 'assets/images/products/home-keeper.png?v=3', alt: '마이안심이', label: '마이안심이' },
       { src: 'assets/images/products/pcb-module.png', alt: '비명인식 모듈', label: '비명인식 모듈' }
     ];
     const img = heroCarousel.querySelector('.hp-hero__img');

@@ -186,7 +186,7 @@ LIGHT_SWITCH_BODY = """
 
 HOME_KEEPER_BODY = """
 <div class="prod-hero reveal prod-hero--pink">
-<div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png?v=2" alt="마이안심이"></div>
+<div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png?v=3" alt="마이안심이"></div>
 <div class="prod-hero__info"><span class="model">마이안심이 · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
 <p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구(280만)를 위한 재택 방범 디바이스. 비명 하나로 110dB 이상 강력 경보와 보호자 앱 알림을 즉시 전송합니다.</p>
 <div class="prod-hero__actions">
@@ -221,7 +221,7 @@ HOME_KEEPER_BODY = """
 <div class="vs-block__col vs-block__col--solve"><div class="vs-block__label">마이안심이 SOLUTION</div><ul><li><strong>110dB 이상 강력 경보</strong><span>비명 인식 즉시 강력 경고음 송출 — 범죄자 퇴치</span></li><li><strong>지정 보호자 즉시 통보</strong><span>부모님·지인 등 사전 등록 연락처로 비상 상황 자동 전송</span></li><li><strong>모바일 앱 연동</strong><span>집안 상태 모니터링·설정 — 언제 어디서나 나만의 보안관</span></li></ul></div>
 </div>
 </div><div class="content-block reveal"><h2>동작 순서</h2>
-<figure class="ir-figure ir-figure--full neu-card"><img src="../assets/images/diagrams/homekeeper-system.png?v=6" alt="마이안심이 동작 순서" loading="lazy"><figcaption>① 문열림 감지 → ② AI 비명인식 → ③ 110dB 경보 → ④ 보호자 앱·문자 알림</figcaption></figure></div>
+<figure class="ir-figure ir-figure--full neu-card"><img src="../assets/images/diagrams/homekeeper-system.png?v=7" alt="마이안심이 동작 순서" loading="lazy"><figcaption>① 문열림 감지 → ② AI 비명인식 → ③ 110dB 경보 → ④ 보호자 앱·문자 알림</figcaption></figure></div>
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
 <tr><th>제품명</th><td>마이안심이</td></tr>
 <tr><th>인식 방식</th><td>On-Device AI 비명 인식 (음원 패턴만 분석)</td></tr>
