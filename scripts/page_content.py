@@ -190,31 +190,27 @@ HOME_KEEPER_BODY = """
 <div class="prod-hero__info"><span class="model">마이안심이 · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
 <p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구를 위한 재택 방범 디바이스. 현관문·창문 감지와 On-Device AI 비명 인식으로 110dB 사이렌과 보호자 알림을 즉시 보냅니다.</p>
 <div class="prod-hero__actions">
-<a href="#manual" class="btn btn--pink">사용 설명서 보기</a>
+<a href="my-ansimi-manual/index.html" class="btn btn--pink">사용 설명서 보기</a>
 <a href="../support/inquiry.html" class="btn btn--outline">도입 문의</a>
 </div></div></div>
 
 <div class="content-block reveal" id="manual">
 <h2>사용 설명서</h2>
-<p class="section-sub">그림으로 보는 설치·앱 연결·방범 모드 안내 (v1.8) — 페이지에서 바로 확인하세요</p>
+<p class="section-sub">그림으로 보는 설치·앱 연결·방범 모드 안내 (v1.8)</p>
 <div class="manual-links">
-<a class="manual-card neu-card" href="my-ansimi-manual/index.html" target="_blank" rel="noopener">
-<strong>새 창에서 크게 보기</strong>
-<span>웹 사용설명서 전체 화면</span>
+<a class="manual-card neu-card" href="my-ansimi-manual/index.html">
+<strong>웹 사용설명서</strong>
+<span>본체·설치·모드·비명인식·문제해결까지 한눈에</span>
 </a>
-<a class="manual-card neu-card" href="my-ansimi-manual/간단매뉴얼.html" target="_blank" rel="noopener">
+<a class="manual-card neu-card" href="my-ansimi-manual/간단매뉴얼.html">
 <strong>간단 매뉴얼</strong>
 <span>인쇄용 요약본 · 설치 5단계</span>
 </a>
-<a class="manual-card neu-card" href="my-ansimi-manual/pdf/마이안심이_사용설명서.pdf" target="_blank" rel="noopener">
+<a class="manual-card neu-card" href="my-ansimi-manual/pdf/마이안심이_사용설명서.pdf">
 <strong>PDF 다운로드</strong>
 <span>전체 사용설명서 (A4)</span>
 </a>
 </div>
-<div class="manual-embed neu-card">
-<iframe src="my-ansimi-manual/index.html" title="마이안심이 사용 설명서" loading="lazy"></iframe>
-</div>
-<p class="manual-embed__hint"><a href="my-ansimi-manual/index.html" target="_blank" rel="noopener">매뉴얼이 잘 안 보이면 여기를 눌러 새 창으로 여세요 →</a></p>
 </div>
 """ + _vs(
   "범죄 노출 vs 마이안심이 솔루션",
