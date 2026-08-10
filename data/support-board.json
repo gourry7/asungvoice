@@ -1,6 +1,27 @@
 {
   "resources": [
     {
+      "id": "res-28",
+      "title": "마이안심이 웹 사용설명서 (그림으로 보는 매뉴얼)",
+      "date": "2026-08-10",
+      "url": "products/my-ansimi-manual/index.html",
+      "note": "웹 매뉴얼"
+    },
+    {
+      "id": "res-26",
+      "title": "마이안심이 사용설명서 (PDF)",
+      "date": "2026-08-10",
+      "file": "data/downloads/resources/res-26-myansimi.pdf",
+      "note": "다운로드"
+    },
+    {
+      "id": "res-27",
+      "title": "마이안심이 간단매뉴얼 (PDF)",
+      "date": "2026-08-10",
+      "file": "data/downloads/resources/res-27-myansimi-quick.pdf",
+      "note": "다운로드"
+    },
+    {
       "id": "res-25",
       "title": "승강기용 비명감지기_WD-600MD 설치메뉴얼",
       "date": "2026-04-28",

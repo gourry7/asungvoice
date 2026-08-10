@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>마이안심이 — 설치 영상 가이드</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --rose: #8a6a4e; --gold: #b8945a; --bg: #2a2624; --soft: #f3eee6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Pretendard, sans-serif; background: var(--bg); color: #fff;
+      min-height: 100vh; display: grid; place-items: center; padding: 1.5rem;
+    }
+    .player {
+      width: min(920px, 100%);
+      background: #111; border-radius: 24px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+    }
+    .stage {
+      position: relative; aspect-ratio: 16/9; background: var(--soft); overflow: hidden;
+    }
+    .slide {
+      position: absolute; inset: 0; display: grid; grid-template-columns: 1.15fr .85fr;
+      opacity: 0; pointer-events: none; transform: scale(1.02);
+      transition: opacity .5s ease, transform .5s ease;
+      padding: 1.25rem; gap: 1rem; align-items: center;
+    }
+    .slide.active { opacity: 1; pointer-events: auto; transform: none; }
+    .slide .media {
+      height: 100%; border-radius: 16px; overflow: hidden;
+      background: linear-gradient(160deg, #f7f2ea, #ebe4da);
+      display: grid; place-items: center; padding: .75rem;
+    }
+    .slide img {
+      width: 100%; height: 100%; object-fit: contain; max-height: 100%;
+    }
+    .copy h2 {
+      margin: 0 0 .55rem; color: var(--rose); font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+      letter-spacing: -.02em;
+    }
+    .copy p { margin: 0; color: #5c5550; font-size: clamp(.88rem, 1.5vw, 1.02rem); line-height: 1.55; }
+    .badge {
+      display: inline-block; background: var(--gold); color: #fff; font-weight: 800;
+      border-radius: 999px; padding: .25rem .7rem; font-size: .72rem; margin-bottom: .65rem;
+    }
+    .controls {
+      display: flex; align-items: center; gap: .75rem; padding: .9rem 1.1rem; background: #181616;
+    }
+    button {
+      border: 0; background: var(--gold); color: #fff; font: inherit; font-weight: 700;
+      border-radius: 999px; padding: .55rem 1rem; cursor: pointer;
+    }
+    button.ghost { background: #333; }
+    .bar { flex: 1; height: 6px; background: #333; border-radius: 99px; overflow: hidden; }
+    .bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), #f0e2d0); }
+    .dots { display: flex; gap: .35rem; }
+    .dots span { width: 8px; height: 8px; border-radius: 50%; background: #444; }
+    .dots span.on { background: #f0e2d0; }
+    .hint { color: #aaa; font-size: .8rem; margin-left: auto; }
+    @media (max-width: 700px) {
+      .slide { grid-template-columns: 1fr; }
+      .copy { order: -1; }
+      .hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="player" role="region" aria-label="설치 영상 가이드">
+    <div class="stage" id="stage">
+      <div class="slide active" data-ms="4200">
+        <div class="media"><img src="../images/device.png" alt="마이안심이 본체" /></div>
+        <div class="copy">
+          <div class="badge">STEP 1 / 10</div>
+          <h2>제품을 확인해요</h2>
+          <p>둥근 본체 윗면에 가로줄 무늬가 있고, 위쪽에 원형 그릴, 아래쪽에 버튼부가 있습니다.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="4500">
+        <div class="media"><img src="../images/device-anatomy.png" alt="경보 부저 · 좌우 마이크 · STANDBY·SOS·CLEAR 버튼" /></div>
+        <div class="copy">
+          <div class="badge">STEP 2 / 10</div>
+          <h2>부저·마이크·버튼을 확인해요</h2>
+          <p>상단 원형 그릴은 경보 부저, 좌·우 작은 구멍 2곳은 마이크, 하단은 STANDBY·SOS·CLEAR 버튼입니다.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="4500">
+        <div class="media"><img src="../images/power-connect.png" alt="전원 연결 도식" /></div>
+        <div class="copy">
+          <div class="badge">STEP 3 / 10</div>
+          <h2>전원을 연결해요</h2>
+          <p>측면 USB-C 포트에 케이블을 꽂아 5V 어댑터로 연결하고, 부저 그릴과 마이크 구멍은 가리지 마세요.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="4200">
+        <div class="media"><img src="../images/connect-phone.png" alt="앱" /></div>
+        <div class="copy">
+          <div class="badge">STEP 4 / 10</div>
+          <h2>앱과 연결해요</h2>
+          <p>앱을 켜고 Bluetooth로 마이안심이를 찾아 연결합니다.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="4200">
+        <div class="media"><img src="../images/install-door-sensor.png" alt="센서" /></div>
+        <div class="copy">
+          <div class="badge">STEP 5 / 10</div>
+          <h2>센서를 붙여요</h2>
+          <p>문 닫힌 상태에서 센서·자석을 가깝게 붙이고, 문을 여닫아 앱 표시가 바뀌는지 확인합니다.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="4200">
+        <div class="media"><img src="../images/sensor-register.png" alt="상태 탭의 센서 등록 상태" /></div>
+        <div class="copy">
+          <div class="badge">STEP 6 / 10</div>
+          <h2>센서 등록을 확인해요</h2>
+          <p>센서는 공장에서 등록해 출하합니다. 상태 탭에서 <b>등록됨</b> 표시만 확인하세요.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="4800">
+        <div class="media"><img src="../images/app-home-modes.png" alt="앱 홈 화면" /></div>
+        <div class="copy">
+          <div class="badge">STEP 7 / 10</div>
+          <h2>방범을 켜요</h2>
+          <p>앱에서 현관문방범을 선택하면 준비 완료. 앱에서 통신 상태를 확인하세요.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="5200">
+        <div class="media"><img src="../images/mode-compare.png" alt="모드별 동작 비교" /></div>
+        <div class="copy">
+          <div class="badge">STEP 8 / 10</div>
+          <h2>모드마다 다르게 지켜요</h2>
+          <p>현관문방범은 현관문만 감시하고 비명이 들리면 사이렌과 구조 문자를 보냅니다. 재택방범은 창문까지 감시하며 푸시로 알려 주고, 외출방범은 열림 즉시 짧은 부저로 퇴치합니다.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="5200">
+        <div class="media"><img src="../images/scream-words.png" alt="비명인식 단어 5가지" /></div>
+        <div class="copy">
+          <div class="badge">STEP 9 / 10</div>
+          <h2>이 말을 크게 외쳐요</h2>
+          <p><b>강도야 · 사람살려 · 도와주세요 · 살려주세요 · 도둑이야</b> — 문이 열린 뒤 대기시간 안에 이 중 한 마디가 들리면 알람이 울립니다.</p>
+        </div>
+      </div>
+      <div class="slide" data-ms="4200">
+        <div class="media"><img src="../images/alarm-response.png" alt="알람 대응 3단계" /></div>
+        <div class="copy">
+          <div class="badge">STEP 10 / 10</div>
+          <h2>알람 대응을 익혀요</h2>
+          <p>안전을 확보하고 앱에서 알림을 확인한 뒤, 앱의 <b>부저 정지</b>로 사이렌을 끄세요. 침입자가 끌 수 없도록 앱으로만 끌 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button type="button" id="prev" class="ghost">이전</button>
+      <button type="button" id="play">일시정지</button>
+      <button type="button" id="next" class="ghost">다음</button>
+      <div class="bar"><i id="progress"></i></div>
+      <div class="dots" id="dots"></div>
+      <span class="hint">자동 재생 · 소리 없음</span>
+    </div>
+  </div>
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = document.getElementById('dots');
+    const progress = document.getElementById('progress');
+    let i = 0, playing = true, timer = null, started = 0, remain = 0;
+    slides.forEach((_, idx) => {
+      const s = document.createElement('span');
+      if (idx === 0) s.classList.add('on');
+      dots.appendChild(s);
+    });
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((el, idx) => el.classList.toggle('active', idx === i));
+      [...dots.children].forEach((d, idx) => d.classList.toggle('on', idx === i));
+      remain = +slides[i].dataset.ms;
+      progress.style.width = '0%';
+      if (playing) arm();
+    }
+    function arm() {
+      clearInterval(timer);
+      started = performance.now();
+      const total = remain;
+      timer = setInterval(() => {
+        const elapsed = performance.now() - started;
+        const p = Math.min(1, elapsed / total);
+        progress.style.width = (p * 100) + '%';
+        if (p >= 1) show(i + 1);
+      }, 50);
+    }
+    document.getElementById('play').onclick = () => {
+      playing = !playing;
+      document.getElementById('play').textContent = playing ? '일시정지' : '재생';
+      if (playing) {
+        remain = Math.max(800, remain - (performance.now() - started));
+        arm();
+      } else {
+        clearInterval(timer);
+        remain = Math.max(800, remain - (performance.now() - started));
+      }
+    };
+    document.getElementById('prev').onclick = () => { remain = +slides[i].dataset.ms; show(i - 1); };
+    document.getElementById('next').onclick = () => { remain = +slides[i].dataset.ms; show(i + 1); };
+    show(0);
+  </script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="마이안심이 간단 매뉴얼 (인쇄용)" />
+  <title>마이안심이 간단 매뉴얼 (인쇄용)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root { --rose:#8a6a4e; --gold:#b8945a; --ink:#2a2624; --soft:#6a625c; --line:#e5ddd2; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Pretendard, Apple SD Gothic Neo, Malgun Gothic, sans-serif;
+      color: var(--ink); background: #ebe4da; line-height: 1.45;
+    }
+    .sheet {
+      max-width: 920px; margin: 1rem auto; background: #fffcf7;
+      padding: 1.25rem 1.35rem 1.75rem; box-shadow: 0 8px 30px rgba(0,0,0,.08);
+    }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    header img.logo { height: 34px; }
+    header img.prod { height: 88px; border-radius: 12px; }
+    header h1 { margin: 0; font-size: 1.4rem; color: var(--rose); letter-spacing: -.02em; }
+    header p { margin: .2rem 0 0; color: var(--soft); font-size: .85rem; }
+    .hero-row {
+      display: grid; grid-template-columns: 1fr 1.1fr; gap: .85rem; margin-bottom: 1rem;
+    }
+    .hero-row img {
+      width: 100%; border-radius: 14px; border: 1px solid var(--line);
+      background: linear-gradient(160deg,#f7f2ea,#ebe4da); object-fit: contain;
+      aspect-ratio: 4/3;
+    }
+    .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .7rem; }
+    .card {
+      border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+      break-inside: avoid; background: #fff;
+    }
+    .card img {
+      width: 100%; aspect-ratio: 16/11; object-fit: contain; display: block;
+      background: linear-gradient(160deg,#f7f2ea,#ebe4da); padding: .35rem;
+    }
+    .card .b { padding: .65rem .7rem .8rem; }
+    .n {
+      display: inline-grid; place-items: center; width: 1.45rem; height: 1.45rem;
+      border-radius: 50%; background: var(--gold); color: #fff; font-weight: 800;
+      font-size: .75rem; margin-right: .3rem;
+    }
+    .card h2 { margin: 0 0 .25rem; font-size: .95rem; display: flex; align-items: center; }
+    .card p { margin: 0; color: var(--soft); font-size: .82rem; }
+    .btns {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; margin-top: 1rem;
+    }
+    .btns div {
+      border: 1px solid var(--line); border-radius: 10px; padding: .55rem .45rem;
+      text-align: center; font-size: .78rem; background: #fff;
+    }
+    .btns strong { display: block; font-size: .88rem; margin-bottom: .15rem; color: var(--rose); }
+    .btns .sos strong { color: #ba1a1a; }
+    .warn {
+      margin-top: 1rem; background: #ffdad6; color: #93000a; border-radius: 10px;
+      padding: .7rem .85rem; font-size: .85rem;
+    }
+    .shout {
+      margin-top: 1rem; border: 1px solid var(--line); border-radius: 10px;
+      background: #fff; padding: .6rem .8rem .7rem; break-inside: avoid;
+    }
+    .shout h2 { margin: 0 0 .45rem; font-size: .9rem; color: var(--rose); }
+    .words { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .words span {
+      background: #ffdad6; color: #93000a; border-radius: 999px;
+      padding: .3rem .7rem; font-size: .88rem; font-weight: 800;
+    }
+    .shout p { margin: .5rem 0 0; font-size: .78rem; color: var(--soft); }
+    .modelist { margin: .55rem 0 0; display: grid; gap: .25rem; font-size: .78rem; }
+    .modelist b { color: var(--rose); }
+    .spec {
+      margin-top: 1rem; border: 1px solid var(--line); border-radius: 10px;
+      background: #fff; padding: .6rem .8rem .7rem; break-inside: avoid;
+    }
+    .spec h2 { margin: 0 0 .4rem; font-size: .9rem; color: var(--rose); }
+    .spec dl {
+      margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: .3rem .8rem;
+      font-size: .78rem;
+    }
+    .spec dt { color: var(--soft); }
+    .spec dd { margin: 0 0 .25rem; font-weight: 700; }
+    .foot {
+      margin-top: 1rem; display: flex; justify-content: space-between;
+      color: var(--soft); font-size: .75rem; border-top: 1px solid var(--line); padding-top: .7rem;
+    }
+    .actions { margin: 0 0 1rem; display: flex; gap: .5rem; flex-wrap: wrap; }
+    .actions a, .actions button {
+      background: var(--gold); color: #fff; border: 0; border-radius: 999px;
+      padding: .5rem .9rem; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+    }
+    .actions a.sec { background: #fff; color: var(--rose); border: 1px solid var(--line); }
+    @media print {
+      body { background: #fff; }
+      .sheet { box-shadow: none; margin: 0; max-width: none; }
+      .actions { display: none !important; }
+    }
+    @media (max-width: 760px) {
+      .grid, .hero-row, .btns { grid-template-columns: 1fr 1fr; }
+      .spec dl { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <div class="actions">
+      <button type="button" onclick="window.print()">인쇄하기</button>
+      <a class="sec" href="index.html">웹 매뉴얼</a>
+      <a class="sec" href="videos/setup-guide.html">설치 영상</a>
+    </div>
+    <header>
+      <div>
+        <h1>마이안심이 간단 매뉴얼</h1>
+        <p>그림만 따라 하세요 · 제품 외관 일러스트 기준</p>
+      </div>
+      <img class="logo" src="images/logo.png" alt="마이안심이" />
+    </header>
+
+    <div class="hero-row">
+      <img src="images/device.png" alt="마이안심이 본체를 위에서 본 모습" />
+      <img src="images/device-anatomy.png" alt="경보 부저 · 좌우 마이크 · STANDBY·SOS·CLEAR 버튼 위치" />
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <img src="images/device.png" alt="본체 부위" />
+        <div class="b"><h2><span class="n">0</span>본체 부위</h2>
+          <p>상단 원형 그릴=경보 부저 · 좌우 작은 구멍=마이크 · 하단=STANDBY·SOS·CLEAR 버튼 · 측면 아래쪽=USB-C 충전 포트.</p></div>
+      </div>
+      <div class="card">
+        <img src="images/power-connect.png" alt="전원 연결 도식" />
+        <div class="b"><h2><span class="n">1</span>전원 연결</h2>
+          <p>측면 USB-C 포트에 케이블 → 5V 어댑터. 그릴·마이크 구멍은 가리지 않기.</p></div>
+      </div>
+      <div class="card">
+        <img src="images/connect-phone.png" alt="앱" />
+        <div class="b"><h2><span class="n">2</span>앱 연결</h2>
+          <p>Bluetooth로 마이안심이 연결.</p></div>
+      </div>
+      <div class="card">
+        <img src="images/install-door-sensor.png" alt="센서" />
+        <div class="b"><h2><span class="n">3</span>센서 부착</h2>
+          <p>문 닫힌 상태에서 센서·자석을 가깝게.</p></div>
+      </div>
+      <div class="card">
+        <img src="images/sensor-register.png" alt="상태 탭의 센서 등록 상태" />
+        <div class="b"><h2><span class="n">4</span>등록 확인 · Wi-Fi</h2>
+          <p>센서 등록은 출하 시 완료 · 상태 탭에서 <b>등록됨</b> 확인 · 설정에서 Wi-Fi.</p></div>
+      </div>
+      <div class="card">
+        <img src="images/app-home-modes.png" alt="방범" />
+        <div class="b"><h2><span class="n">5</span>방범 시작</h2>
+          <p>홈에서 <b>현관문방범</b> 선택.</p></div>
+      </div>
+      <div class="card">
+        <img src="images/alarm-response.png" alt="알람 대응" />
+        <div class="b"><h2><span class="n">!</span>알람 대응</h2>
+          <p>안전 확보 → 앱 확인 → 앱 <b>부저 정지</b>(앱으로만).</p></div>
+      </div>
+    </div>
+
+    <div class="btns">
+      <div><strong>현관문방범</strong>앱에서 선택</div>
+      <div class="sos"><strong>일시정지 5분</strong>앱에서 누르기</div>
+      <div><strong>112 · 119</strong>위급 시 직접 신고</div>
+    </div>
+
+    <div class="warn">
+      <strong>알람 시:</strong> ① 안전 확보 → ② 앱에서 알림·문 상태 확인 → ③ 앱에서 <b>부저 정지</b>(앱으로만 끌 수 있음) · 위급하면 112·119
+    </div>
+
+    <div class="shout">
+      <h2>이 말을 외치세요 · 방범 모드</h2>
+      <div class="words">
+        <span>강도야</span><span>사람살려</span><span>도와주세요</span><span>살려주세요</span><span>도둑이야</span>
+      </div>
+      <p>문이 열린 뒤 대기시간(앱 설정: 10~60초, 기본 60초) 안에 위 다섯 마디 중 하나가 들리면 알람이 울립니다.</p>
+      <div class="modelist">
+        <div><b>현관문방범</b> — 현관문만(창문 무시) · 문 열림 + 비명 → 사이렌 + 구조 문자 · 부저는 <b>앱으로만</b> 정지</div>
+        <div><b>재택방범</b> — 현관문 + 창문 · 감지기 동작 → 사이렌 없이 스마트폰 푸시</div>
+        <div><b>외출방범</b> — 문·창문 열림 즉시 → 짧은 부저(퇴치) + 푸시 알람</div>
+        <div>재택·외출을 스스로 파악 · 폰이 멀어지면 외출방범, 다시 연결되면 현관문방범 · 5분 일시정지는 5분 뒤 복귀</div>
+      </div>
+    </div>
+
+    <div class="spec">
+      <h2>제품 스펙</h2>
+      <dl>
+        <div><dt>전원</dt><dd>5V · 200mA</dd></div>
+        <div><dt>충전 단자</dt><dd>USB-C</dd></div>
+        <div><dt>통신</dt><dd>Bluetooth 5 · Wi-Fi 2.4GHz</dd></div>
+        <div><dt>알람</dt><dd>부저 110dB</dd></div>
+        <div><dt>스피커</dt><dd>모노 (안내용)</dd></div>
+        <div><dt>배터리</dt><dd>500mA (보조용)</dd></div>
+        <div><dt>크기</dt><dd>92 × 92 × 35mm</dd></div>
+      </dl>
+    </div>
+
+    <div class="foot">
+      <span>웹: index.html · 상세: 상세매뉴얼.md</span>
+      <span>마이안심이 v1.8 · 2026-08-10</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -290,6 +290,16 @@ address{font-style:normal}
 .prod-hero__info h2{font-family:var(--font-round);font-size:1.6rem;font-weight:800;color:var(--navy);margin-bottom:12px}
 .prod-hero__info .model{display:inline-block;background:var(--blue-light);color:var(--blue);padding:4px 12px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;margin-bottom:16px}
 .prod-hero__info p{color:var(--text-2);line-height:1.8;margin-bottom:16px}
+.prod-hero__actions{display:flex;flex-wrap:wrap;gap:10px}
+.prod-hero__actions .btn--outline{
+  border-color:rgba(28,37,64,.22);color:var(--navy);background:transparent;
+}
+.prod-hero__actions .btn--outline:hover{background:rgba(27,111,232,.06)}
+.manual-links{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+.manual-card{display:flex;flex-direction:column;gap:6px;padding:20px 18px;text-decoration:none;color:inherit;transition:transform .2s ease,box-shadow .2s ease}
+.manual-card:hover{transform:translateY(-2px)}
+.manual-card strong{font-family:var(--font-round);font-size:1rem;color:var(--navy)}
+.manual-card span{font-size:.84rem;color:var(--text-2);line-height:1.5}
 .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
 .feature-box{background:var(--white);border-radius:var(--r-md);padding:20px;box-shadow:var(--shadow-sm);text-align:center}
 .feature-box svg{width:32px;height:32px;stroke:var(--blue);fill:none;stroke-width:1.8;margin:0 auto 10px}
@@ -341,6 +351,7 @@ address{font-style:normal}
 @media(max-width:1024px){
   .tech-row,.area-grid,.stats-row{grid-template-columns:repeat(2,1fr)}
   .feature-grid{grid-template-columns:1fr 1fr}
+  .manual-links{grid-template-columns:1fr}
 }
 @media(max-width:768px){
   .nav,.header__right .btn--outline{display:none}
@@ -372,7 +383,8 @@ address{font-style:normal}
   .prod-hero__img--wide{padding:0}
   .prod-hero__img--wide img{max-height:none;width:auto;max-width:100%}
   .prod-hero__info h2{font-size:1.35rem}
-  .prod-hero__info .btn{width:100%;justify-content:center}
+  .prod-hero__info .btn,.prod-hero__actions .btn{width:100%;justify-content:center}
+  .prod-hero__actions{flex-direction:column}
   .feature-grid{grid-template-columns:1fr}
   .stats-row{grid-template-columns:repeat(2,1fr);gap:10px}
   .stat-box{padding:24px 12px}

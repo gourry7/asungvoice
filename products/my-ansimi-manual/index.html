@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="마이안심이 사용 설명서 — 설치·앱 연결·방범 모드·비명인식 안내" />
+  <title>마이안심이 — 그림으로 보는 사용 설명서</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      /* 제품 톤: 크림 · 웜 그레이 · 골드 포인트 */
+      --bg: #f3eee6;
+      --paper: #fffcf7;
+      --ink: #2a2624;
+      --soft: #6a625c;
+      --line: #e5ddd2;
+      --rose: #8a6a4e;
+      --rose-soft: #f0e2d0;
+      --teal: #6b5a48;
+      --teal-soft: #ebe3d6;
+      --gold: #b8945a;
+      --warn: #6c5d32;
+      --warn-soft: #f0dba5;
+      --danger: #ba1a1a;
+      --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      --shadow: 0 18px 50px rgba(42,38,36,.08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(900px 420px at 0% 0%, #f0e2d088, transparent 60%),
+        radial-gradient(800px 400px at 100% 10%, #e8dfd255, transparent 55%),
+        var(--bg);
+      line-height: 1.55;
+    }
+    a { color: var(--rose); }
+    .topnav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(244,241,237,.88);
+      border-bottom: 1px solid var(--line);
+      display: flex; gap: .5rem; align-items: center;
+      padding: .65rem 1rem; overflow-x: auto;
+    }
+    .topnav img { height: 28px; }
+    .topnav a {
+      flex: 0 0 auto; text-decoration: none; color: var(--soft);
+      font-size: .82rem; font-weight: 700; padding: .4rem .7rem;
+      border-radius: 999px;
+    }
+    .topnav a:hover, .topnav a.on { background: var(--rose-soft); color: var(--rose); }
+    .topnav .spacer { flex: 1; }
+    .search {
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: .45rem .9rem; font: inherit; min-width: 160px; background: #fff;
+    }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+
+    .hero {
+      display: grid; grid-template-columns: 1.15fr .85fr; gap: 1.25rem;
+      align-items: center; margin: 1rem 0 1.75rem;
+      background: var(--paper); border-radius: 28px; overflow: hidden;
+      border: 1px solid var(--line); box-shadow: var(--shadow);
+    }
+    .hero-copy { padding: 2rem 1.75rem 2rem 2rem; }
+    .eyebrow {
+      display: inline-block; background: var(--teal-soft); color: var(--teal);
+      font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; padding: .35rem .7rem; border-radius: 999px;
+      margin-bottom: .85rem;
+    }
+    .hero h1 {
+      margin: 0 0 .6rem; font-size: clamp(1.8rem, 4vw, 2.6rem);
+      letter-spacing: -.035em; line-height: 1.15; color: var(--rose);
+    }
+    .hero p { margin: 0 0 1.2rem; color: var(--soft); font-size: 1.05rem; max-width: 28rem; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--gold); color: #fff; text-decoration: none;
+      font-weight: 800; border-radius: 999px; padding: .75rem 1.15rem;
+      border: 0; cursor: pointer; font: inherit;
+    }
+    .btn.sec { background: #fff; color: var(--teal); border: 1px solid var(--line); }
+    .hero-visual {
+      position: relative; min-height: 320px;
+      background: linear-gradient(160deg, #f7f2ea, #ebe4da);
+      display: grid; place-items: center; padding: 1.25rem;
+    }
+    .hero-visual img {
+      width: 100%; height: auto; max-height: 340px; object-fit: contain; display: block;
+      filter: drop-shadow(0 18px 28px rgba(42,38,36,.18));
+    }
+    .product-shot {
+      background: linear-gradient(160deg, #f7f2ea, #ebe4da);
+      display: grid; place-items: center; padding: 1.5rem;
+    }
+    .product-shot img {
+      width: 100%; max-width: 420px; height: auto; object-fit: contain;
+      filter: drop-shadow(0 14px 24px rgba(42,38,36,.16));
+    }
+    .parts-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: .65rem; margin-top: .85rem;
+    }
+    .parts-grid.audio-parts { grid-template-columns: repeat(3, 1fr); }
+    .part {
+      background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+      padding: .85rem .75rem; text-align: center; box-shadow: var(--shadow);
+    }
+    .part .tag {
+      display: inline-block; background: var(--gold); color: #fff;
+      font-size: .72rem; font-weight: 800; letter-spacing: .04em;
+      padding: .25rem .55rem; border-radius: 999px; margin-bottom: .45rem;
+    }
+    .part.sos .tag { background: var(--danger); }
+    .part b { display: block; font-size: .92rem; margin-bottom: .2rem; }
+    .part span { font-size: .78rem; color: var(--soft); }
+
+    .flow {
+      width: 100%; border-radius: 20px; background: #fff;
+      border: 1px solid var(--line); margin-bottom: 1.5rem; display: block;
+    }
+
+    .section {
+      margin: 2rem 0; scroll-margin-top: 100px;
+    }
+    .section > h2 {
+      margin: 0 0 .35rem; font-size: 1.55rem; letter-spacing: -.02em;
+    }
+    .section > .lead {
+      margin: 0 0 1rem; color: var(--soft); font-size: 1rem;
+    }
+
+    /* Ring/Nest style big step cards */
+    .step {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: 24px; overflow: hidden; box-shadow: var(--shadow);
+      margin: 1rem 0 1.35rem;
+    }
+    .step:nth-child(even of .step) .step-media { order: 2; }
+    .step-media { background: #f0ebe6; min-height: 240px; }
+    .step-media img, .step-media iframe {
+      width: 100%; height: 100%; object-fit: contain; display: block; min-height: 260px; border: 0;
+    }
+    .step-body { padding: 1.5rem 1.4rem; display: flex; flex-direction: column; justify-content: center; }
+    .step-no {
+      width: 2.2rem; height: 2.2rem; border-radius: 50%;
+      background: var(--rose); color: #fff; font-weight: 800;
+      display: grid; place-items: center; margin-bottom: .8rem; font-size: 1rem;
+    }
+    .step-body h3 { margin: 0 0 .45rem; font-size: 1.35rem; letter-spacing: -.02em; }
+    .step-body p { margin: 0 0 .7rem; color: var(--soft); }
+    .step-body ul { margin: 0; padding-left: 1.1rem; color: var(--soft); }
+    .step-body li { margin: .25rem 0; }
+
+    .box-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem;
+    }
+    .box-item {
+      background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+      padding: .9rem .7rem; text-align: center; box-shadow: var(--shadow);
+    }
+    .box-item .ico {
+      width: 52px; height: 52px; margin: 0 auto .55rem; border-radius: 14px;
+      display: grid; place-items: center; font-size: 1.4rem;
+      background: var(--rose-soft);
+    }
+    .box-item b { display: block; font-size: .9rem; margin-bottom: .15rem; }
+    .box-item span { font-size: .75rem; color: var(--soft); }
+
+    .modes {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem;
+    }
+    .mode {
+      border-radius: 20px; padding: 1.15rem 1.1rem; border: 1px solid var(--line);
+      background: var(--paper); min-height: 120px;
+    }
+    .mode img { width: 48px; height: 48px; object-fit: contain; margin-bottom: .5rem; }
+    .mode strong { display: block; font-size: 1.05rem; margin-bottom: .25rem; }
+    .mode span { color: var(--soft); font-size: .9rem; }
+    .mode.m1 { background: linear-gradient(160deg, #fff, #ffeef2); }
+    .mode.m2 { background: linear-gradient(160deg, #fff, #eef6f5); }
+    .mode.m3 { background: linear-gradient(160deg, #fff, #f7f1e3); }
+    .mode.m4 { background: linear-gradient(160deg, #fff, #f2f0ee); }
+
+    .video-card {
+      background: #1b1c1a; border-radius: 24px; overflow: hidden;
+      box-shadow: var(--shadow); border: 1px solid #333;
+    }
+    .video-card iframe { width: 100%; aspect-ratio: 16/9; border: 0; display: block; background: #111; }
+    .video-card .cap {
+      color: #ddd; padding: .85rem 1.1rem; font-size: .9rem;
+      display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+
+    .pic-full {
+      width: 100%; border-radius: 20px; border: 1px solid var(--line);
+      display: block; margin: .75rem 0 1rem; box-shadow: var(--shadow);
+    }
+
+    .checklist {
+      background: var(--paper); border-radius: 20px; border: 1px solid var(--line);
+      padding: .4rem 1rem 1rem; box-shadow: var(--shadow);
+    }
+    .checklist label {
+      display: flex; gap: .7rem; align-items: flex-start;
+      padding: .75rem 0; border-bottom: 1px dashed var(--line); cursor: pointer;
+    }
+    .checklist label:last-child { border: 0; }
+    .checklist input { margin-top: .25rem; accent-color: var(--teal); transform: scale(1.15); }
+    .checklist .done { color: var(--soft); text-decoration: line-through; }
+
+    .trouble {
+      display: grid; gap: .65rem;
+    }
+    details.t {
+      background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+      padding: .2rem 1rem .85rem; box-shadow: var(--shadow);
+    }
+    details.t summary {
+      cursor: pointer; font-weight: 800; padding: .9rem 0; list-style: none;
+      display: flex; gap: .6rem; align-items: center;
+    }
+    details.t summary::-webkit-details-marker { display: none; }
+    details.t summary .q {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--warn-soft);
+      color: var(--warn); display: grid; place-items: center; font-size: .85rem; flex-shrink: 0;
+    }
+    details.t p { margin: 0; color: var(--soft); padding-left: 2.2rem; }
+
+    .callout {
+      border-radius: 16px; padding: 1rem 1.1rem; margin: 1rem 0; font-size: .95rem;
+    }
+    .callout.warn { background: var(--warn-soft); color: var(--warn); }
+    .callout.danger { background: #ffdad6; color: #93000a; }
+    .callout.ok { background: var(--teal-soft); color: var(--teal); }
+
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .mini-card {
+      background: var(--paper); border-radius: 18px; border: 1px solid var(--line);
+      overflow: hidden; box-shadow: var(--shadow);
+    }
+    .mini-card img {
+      width: 100%; aspect-ratio: 16/10; object-fit: contain; display: block;
+      background: linear-gradient(160deg, #f7f2ea, #ebe4da);
+    }
+    .mini-card .txt { padding: .9rem 1rem 1.05rem; }
+    .mini-card h3 { margin: 0 0 .3rem; font-size: 1rem; }
+    .mini-card p { margin: 0; color: var(--soft); font-size: .88rem; }
+
+    .section > h3.sub {
+      margin: 1.8rem 0 .25rem; font-size: 1.25rem; letter-spacing: -.02em;
+    }
+    .section > .sub-lead { margin: 0 0 .5rem; color: var(--soft); }
+
+    .words {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin: .9rem 0 .2rem;
+    }
+    .words span {
+      background: #ffdad6; color: #93000a; border-radius: 999px;
+      padding: .6rem 1.2rem; font-size: 1.15rem; font-weight: 800;
+    }
+
+    .spec {
+      background: var(--paper); border-radius: 20px; border: 1px solid var(--line);
+      padding: .4rem 1.1rem 1rem; box-shadow: var(--shadow); margin: 0;
+    }
+    .spec .row {
+      display: grid; grid-template-columns: 8.5rem 1fr; gap: .9rem;
+      padding: .8rem 0; border-bottom: 1px dashed var(--line);
+    }
+    .spec .row:last-child { border: 0; }
+    .spec dt { font-weight: 800; font-size: .92rem; }
+    .spec dd { margin: 0; color: var(--soft); font-size: .95rem; }
+    .spec dd em { font-style: normal; color: var(--soft); font-size: .85rem; }
+
+    footer {
+      margin-top: 2.5rem; text-align: center; color: var(--soft); font-size: .82rem;
+    }
+
+    .hide { display: none !important; }
+
+    @media (max-width: 820px) {
+      .hero, .step, .two, .modes { grid-template-columns: 1fr; }
+      .step:nth-child(even of .step) .step-media { order: 0; }
+      .box-grid { grid-template-columns: repeat(2, 1fr); }
+      .parts-grid, .parts-grid.audio-parts { grid-template-columns: 1fr 1fr; }
+      .spec .row { grid-template-columns: 1fr; gap: .15rem; }
+      .hero-copy { padding: 1.4rem; }
+    }
+    @media print {
+      .topnav, .search, .btn { display: none !important; }
+      .step, .section { break-inside: avoid; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topnav" id="topnav">
+    <img src="images/logo.png" alt="마이안심이" />
+    <a href="../home-keeper.html">← 제품소개</a>
+    <a href="#product">본체</a>
+    <a href="#video">영상</a>
+    <a href="#box">구성품</a>
+    <a href="#setup">설치</a>
+    <a href="#app">앱</a>
+    <a href="#modes">모드</a>
+    <a href="#scream">비명인식</a>
+    <a href="#alarm">알람</a>
+    <a href="#trouble">문제해결</a>
+    <a href="#spec">제품 스펙</a>
+    <span class="spacer"></span>
+    <input class="search" id="q" type="search" placeholder="검색…" aria-label="검색" />
+  </nav>
+
+  <div class="wrap" id="content">
+    <!-- HERO: 현재 기구물 실제 사진 -->
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">1인 여성 가구를 위한 스마트 안심</div>
+        <h1>마이안심이<br />10분 설치 설명서</h1>
+        <p>집에 있을 때나 외출할 때, 상황을 자동으로 인식해 24시간 지켜 줍니다. 기계가 익숙하지 않아도 쉽게 설치하고 쓸 수 있습니다.</p>
+        <div class="cta-row">
+          <a class="btn" href="#product">본체 알아보기</a>
+          <a class="btn sec" href="#video">▶ 설치 영상</a>
+          <a class="btn sec" href="간단매뉴얼.html">인쇄용 간단 매뉴얼</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="images/device.png" alt="마이안심이 본체를 위에서 본 모습 · 경보 부저와 좌우 마이크, STANDBY·SOS·CLEAR 버튼" />
+      </div>
+    </header>
+
+    <img class="flow" src="images/flow-setup.png" alt="1 전원 연결 2 앱 연결 3 센서 부착 4 방범 시작" />
+
+    <!-- PRODUCT ANATOMY -->
+    <section class="section" id="product" data-k="본체 경보 부저 듀얼 마이크 전원 소리 USB-C 충전 포트 케이블">
+      <h2>본체 알아보기</h2>
+      <p class="lead">소리가 나오고 들어오는 곳, 버튼, 그리고 측면 충전 포트 위치를 확인하세요.</p>
+      <img class="pic-full" src="images/device-parts.png" alt="본체 부위 안내 · 위에서 본 경보 부저와 좌우 마이크, STANDBY·SOS·CLEAR 버튼, 측면 아래쪽 USB-C 충전 포트" />
+      <div class="parts-grid audio-parts">
+        <div class="part"><span class="tag">STANDBY</span><b>5분 일시정지</b></div>
+        <div class="part sos"><span class="tag">SOS</span><b>비상 도움 요청</b><span>3초 이상 누르기</span></div>
+        <div class="part"><span class="tag">CLEAR</span><b>비상 해제</b></div>
+      </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="section" id="video" data-k="영상 비디오 가이드 자동재생">
+      <h2>설치 영상 가이드</h2>
+      <p class="lead">소리 없이 자동으로 넘어가는 짧은 가이드입니다. 재생·일시정지·다음을 눌러 보세요.</p>
+      <div class="video-card">
+        <iframe src="videos/setup-guide.html" title="마이안심이 설치 영상 가이드" loading="lazy"></iframe>
+        <div class="cap">
+          <span>실제 제품 사진 기반 · 로컬 제작 가이드</span>
+          <a href="videos/setup-guide.html" target="_blank" rel="noopener" style="color:#f0e2d0">새 창에서 크게 보기</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT'S IN THE BOX -->
+    <section class="section" id="box" data-k="구성품 박스 언박싱">
+      <h2>박스 안에 무엇이 있나요?</h2>
+      <p class="lead">개봉 후 아래 구성이 모두 있는지 확인하세요.</p>
+      <img class="pic-full" src="images/box-contents.png" alt="구성품 안내 · 본체와 센서 3개" />
+      <div class="box-grid" style="margin-top:1rem">
+        <div class="box-item"><div class="ico">①</div><b>본체</b><span>마이안심이 허브</span></div>
+        <div class="box-item"><div class="ico">②</div><b>현관문 센서</b><span>본체+자석</span></div>
+        <div class="box-item"><div class="ico">③</div><b>창문 센서 #1</b><span>본체+자석</span></div>
+        <div class="box-item"><div class="ico">④</div><b>창문 센서 #2</b><span>본체+자석</span></div>
+      </div>
+    </section>
+
+    <!-- SETUP STEPS -->
+    <section class="section" id="setup" data-k="설치 본체 센서 위치 전원 충전">
+      <h2>설치하기</h2>
+      <p class="lead">한 단계에 한 가지씩. 사진과 짧은 문장만 따라가면 됩니다.</p>
+
+      <article class="step">
+        <div class="step-media product-shot"><img src="images/device.png" alt="본체의 경보 부저·마이크·버튼부" /></div>
+        <div class="step-body">
+          <div class="step-no">1</div>
+          <h3>부저·마이크·버튼을 막지 않게 두세요</h3>
+          <p>집 안 소리가 잘 들리는 선반·테이블에 둡니다.</p>
+          <ul>
+            <li>상단 중앙 <b>경보 부저 원형 그릴</b>을 가리지 않기</li>
+            <li>좌·우 <b>마이크 구멍 2곳</b>을 가리지 않기</li>
+            <li>하단 <b>버튼부(STANDBY·SOS·CLEAR)</b>가 손에 닿는 방향으로 두기</li>
+            <li>마이크 구멍에 이물질을 넣지 않기</li>
+            <li>TV·스피커 바로 옆은 피하기</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-media"><img src="images/power-connect.png" alt="전원 어댑터를 콘센트에 연결" /></div>
+        <div class="step-body">
+          <div class="step-no">2</div>
+          <h3>전원을 연결하세요</h3>
+          <p>케이블을 본체 측면 USB-C 포트에 꽂고, 반대쪽을 5V 어댑터에 연결해 콘센트에 꽂습니다.</p>
+          <ul>
+            <li>5V 어댑터·케이블만 사용하기</li>
+            <li>전원은 항상 켜 둔 상태로 사용하기</li>
+            <li>연결되면 앱에서 통신 상태를 확인하기</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-media"><img src="images/connect-phone.png" alt="Bluetooth 연결" /></div>
+        <div class="step-body">
+          <div class="step-no">3</div>
+          <h3>앱을 설치하고 연결하세요</h3>
+          <p>앱스토어에서 <b>마이안심이</b> 앱을 설치한 뒤, Bluetooth로 본체와 연결합니다.</p>
+          <ul>
+            <li>본체 2m 이내로 가까이</li>
+            <li>앱에서 기기 선택 → 연결 (“집을 지키고 있습니다” 보이면 성공)</li>
+            <li>위급 시 보낼 <b>구조요청 문구</b>와 연락받을 <b>비상 연락처</b>를 미리 설정</li>
+            <li>설정에서 Wi-Fi도 연결해 두면 외출 중 알림을 받을 수 있습니다</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-media"><img src="images/install-door-sensor.png" alt="현관문 센서 부착" /></div>
+        <div class="step-body">
+          <div class="step-no">4</div>
+          <h3>현관문 센서를 붙이세요</h3>
+          <p>복잡한 공구 없이, 동봉된 <b>양면테이프</b>로 현관문·창문에 자석 감지기를 붙여 주세요.</p>
+          <ul>
+            <li>문을 <b>닫은 상태</b>에서 센서와 자석이 가깝게 마주보게 부착</li>
+            <li>문틀 ↔ 문짝에 각각 부착 (창문 센서도 같은 방식)</li>
+            <li>간격이 멀면 감지가 부정확해질 수 있음</li>
+            <li>앱이 연결된 뒤 붙이면, 문을 여닫을 때 앱 표시가 바뀌는지 바로 확인 가능</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- APP -->
+    <section class="section" id="app" data-k="앱 블루투스 연결 Wi-Fi 센서 등록 출하 공장">
+      <h2>앱에서 확인 · 설정</h2>
+      <p class="lead">연결한 다음 앱에서 이것만 확인하면 됩니다.</p>
+
+      <div class="callout ok">
+        <strong>센서 등록은 이미 끝나 있습니다</strong> — 함께 들어 있는 센서는 공장에서 등록해 출하합니다. 따로 등록할 필요 없이 <b>상태</b> 탭에서 <b>등록됨</b> 표시만 확인하세요.
+      </div>
+
+      <div class="two">
+        <div class="mini-card">
+          <img src="images/sensor-register.png" alt="상태 탭의 센서 등록 상태" />
+          <div class="txt">
+            <h3>센서 상태 확인</h3>
+            <p>하단 <b>상태</b> 탭 → 현관문/창문 카드가 <b>등록됨</b>인지 확인. 센서를 새로 추가하거나 교체할 때만 카드를 눌러 등록합니다.</p>
+          </div>
+        </div>
+        <div class="mini-card">
+          <img src="images/wifi-setup.png" alt="Wi-Fi 설정" />
+          <div class="txt">
+            <h3>5. Wi-Fi 연결 (권장)</h3>
+            <p>설정 → Wi-Fi 연결 → 집 공유기 선택 → 비밀번호 → 등록</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout ok">
+        <strong>꼭 미리 설정</strong> — 위급 시 보낼 <b>구조요청 문구</b>와 연락을 받을 <b>비상 연락처</b>를 설정에서 넣어 두세요. Wi-Fi도 연결해 두면 외출방범 알림을 받을 수 있습니다.
+      </div>
+    </section>
+
+    <!-- MODES -->
+    <section class="section" id="modes" data-k="모드 현관문 재택 외출 일시정지 동작 감시 사이렌 녹음 자동 전환 푸시 구조 문자">
+      <h2>방범 모드 — 상황별 스마트 방범</h2>
+      <p class="lead">재택·외출 상태를 스스로 파악해 가장 알맞은 방법으로 집을 지킵니다. 전원을 켜면 현관문방범으로 시작합니다.</p>
+      <img class="pic-full" src="images/app-home-modes.png" alt="앱 홈 모드 화면" style="max-height:420px;object-fit:contain;background:#fff" />
+      <div class="modes">
+        <div class="mode m1">
+          <strong>🚪 현관문방범</strong>
+          <span>기본 안심 모드. 현관문이 열리면 비명인식 대기.</span>
+        </div>
+        <div class="mode m2">
+          <strong>🏠 재택방범</strong>
+          <span>집에 혼자 있을 때. 창문 감지도 함께.</span>
+        </div>
+        <div class="mode m3">
+          <strong>🚶 외출방범</strong>
+          <span>집을 비웠을 때. 침입 즉시 알림·짧은 부저.</span>
+        </div>
+        <div class="mode m4">
+          <strong>⏱ 5분 일시정지</strong>
+          <span>택배·청소처럼 잠깐만 끌 때.</span>
+        </div>
+      </div>
+
+      <h3 class="sub">모드마다 이렇게 동작합니다</h3>
+      <p class="sub-lead">무엇을 감시하고, 어떤 때 울리고, 어떻게 알려 주는지가 다릅니다.</p>
+      <img class="pic-full" src="images/mode-compare.png" alt="모드별 동작 비교 · 현관문방범은 현관문만·비명 시 사이렌과 구조 문자, 재택방범은 창문까지·푸시 알람, 외출방범은 열림 즉시 짧은 부저와 푸시" />
+
+      <article class="step">
+        <div class="step-body" style="grid-column:1/-1">
+          <div class="step-no">🚪</div>
+          <h3>현관문방범 — 기본 안심 모드</h3>
+          <p>일상적인 창문 사용을 위해 <b>창문 감지기는 무시</b>합니다. 오직 <b>현관문</b>이 열렸을 때만 비명인식 대기모드로 바뀝니다.</p>
+          <ul>
+            <li>현관문이 열린 뒤 대기시간 안에 <b>비명 단어</b>가 들리면 본체에서 강력한 사이렌이 울립니다.</li>
+            <li>미리 지정해 둔 <b>비상 연락처</b>로 구조 문자가 즉시 송출됩니다.</li>
+            <li><b>안전 포인트</b> — 침입자가 사이렌을 임의로 끌 수 없도록, 부저는 <b>마이안심이 앱의 「부저 정지」로만</b> 끌 수 있습니다.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-body" style="grid-column:1/-1">
+          <div class="step-no">🏠</div>
+          <h3>재택방범 — 집에 혼자 있을 때</h3>
+          <p>현관문방범에 더해 <b>창문 감지기</b> 보안이 함께 켜집니다. 외부 침입이 걱정될 때 쓰세요.</p>
+          <ul>
+            <li>창문을 통해 누군가 들어오려 해 창문 감지기가 동작하면, <b>즉시 스마트폰으로 푸시 알람</b>을 보내 위험을 알려 줍니다.</li>
+            <li>사이렌은 울리지 않습니다. 집에 있는 사람에게 조용히 알려 주기 위함입니다.</li>
+            <li>알람이 오면 앱에서 어느 문·창문인지 확인하고, 위급하면 <b>112·119</b>에 신고하세요.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-body" style="grid-column:1/-1">
+          <div class="step-no">🚶</div>
+          <h3>외출방범 — 집을 비웠을 때</h3>
+          <p>빈집의 출입을 철저히 감시합니다. 침입이 감지되면 즉시 대응합니다.</p>
+          <ul>
+            <li>문·창문이 열리면 <b>곧바로</b> 스마트폰으로 경고 푸시 알람이 갑니다.</li>
+            <li>집 안 본체에서는 <b>짧고 강렬한 부저</b>를 울려 침입자가 놀라 도망가도록 합니다.</li>
+            <li>알림은 Wi-Fi와 서버를 거쳐 밖에 있는 스마트폰으로 전달됩니다.</li>
+            <li>집에 돌아와 앱이 다시 연결되면 <b>현관문방범</b>으로 돌아오고, 외출 중 기록을 앱에서 확인할 수 있습니다.</li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="callout ok">
+        <strong>모드가 저절로 바뀔 때</strong> — 시스템이 재택·외출을 스스로 파악합니다. 스마트폰이 본체와 멀어져 블루투스가 끊기면 <b>외출방범</b>으로, 집에 돌아와 다시 연결되면 <b>현관문방범</b>으로 바뀝니다. 설정에서 <b>위치 기반 외출 방범</b>을 켤 수도 있습니다.
+      </div>
+      <div class="callout warn">
+        <strong>5분 일시정지</strong> — 택배·청소처럼 잠깐 끌 때만 쓰세요. 앱의 <b>방범 일시정지(5분)</b> 또는 본체 <b>STANDBY</b>를 누르면 5분 뒤 현관문방범으로 자동 복귀합니다. 외출방범에서는 동작하지 않습니다.
+      </div>
+
+      <img class="pic-full" src="images/mode-icons.jpg" alt="모드 아이콘 참고" style="max-height:280px;object-fit:contain;background:#fff" />
+    </section>
+
+    <!-- SCREAM -->
+    <section class="section" id="scream" data-k="비명인식 단어 강도야 사람살려 도와주세요 살려주세요 도둑이야 대기시간 인식 세기 민감 둔감">
+      <h2>비명인식 — 이 말을 외치세요</h2>
+      <p class="lead">문이 열린 뒤 정해진 시간 안에 아래 다섯 마디 중 하나가 들리면 비상 상황으로 판단합니다.</p>
+      <div class="words">
+        <span>강도야</span>
+        <span>사람살려</span>
+        <span>도와주세요</span>
+        <span>살려주세요</span>
+        <span>도둑이야</span>
+      </div>
+      <img class="pic-full" src="images/scream-words.png" alt="비명인식 단어 다섯 가지와 문 열림 → 대기시간 → 알람 3단계, 인식 세기 민감·중간·둔감 안내" />
+      <div class="two">
+        <div class="mini-card">
+          <div class="txt">
+            <h3>비명인식 대기시간</h3>
+            <p>문이 열린 뒤 <b>얼마 동안 들을지</b> 정합니다. 앱 설정에서 10 · 20 · 30 · 60초 중에 고르고, 기본은 60초입니다. 길게 두면 늦게 외쳐도 잡히고, 짧게 두면 오경보가 줄어듭니다.</p>
+          </div>
+        </div>
+        <div class="mini-card">
+          <div class="txt">
+            <h3>인식 세기</h3>
+            <p>집이 얼마나 조용한지에 맞춥니다. <b>민감</b>은 조용한 집, <b>중간</b>은 보통 집, <b>둔감</b>은 TV·반려동물 소리가 많은 집에 씁니다.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout warn">
+        <strong>잘 인식되게 하려면</strong> — 크고 분명하게, 한 번에 한 마디씩 외치세요. 본체의 좌·우 마이크 구멍을 가리지 말고, TV·스피커 바로 옆은 피하세요. 사이렌이 울리면 앱의 <b>부저 정지</b>로만 끌 수 있습니다.
+      </div>
+    </section>
+
+    <!-- SYSTEM -->
+    <section class="section" id="system" data-k="구성 시스템 연결 서버 인터넷 외출 블루투스">
+      <h2>한눈에 보는 구성</h2>
+      <p class="lead">집 안에서는 스마트폰이 본체와 블루투스로 연결되고, 본체는 Wi-Fi 공유기를 통해 서버와 통신합니다. 외출방범처럼 본체와 떨어져 있을 때는 서버를 거쳐 알림을 받습니다.</p>
+      <img class="pic-full" src="images/system-overview.png" alt="시스템 구성도 · 스마트폰과 본체는 블루투스, 본체는 Wi-Fi 공유기를 거쳐 서버와 통신, 외출 시에는 서버가 앱으로 알림 전송" />
+    </section>
+
+    <!-- ALARM -->
+    <section class="section" id="alarm" data-k="알람 사이렌 비상 대응 일시정지 해제 부저 정지">
+      <h2>알람이 울리면</h2>
+      <p class="lead">먼저 안전을 확보하고, 앱에서 확인한 뒤 「부저 정지」로 사이렌을 끄세요.</p>
+      <article class="step">
+        <div class="step-media"><img src="images/alarm-response.png" alt="알람 대응 3단계 · 안전 확보 → 앱에서 확인 → 앱 부저 정지로 사이렌 정지" /></div>
+        <div class="step-body">
+          <div class="step-no">!</div>
+          <h3>안전 → 확인 → 사이렌 정지</h3>
+          <ul>
+            <li>① 본인 안전 먼저 (위험하면 대피·신고)</li>
+            <li>② 앱 알림과 문·창문 상태 확인</li>
+            <li>③ 앱에서 <b>부저 정지</b>를 눌러 사이렌 해제</li>
+            <li>④ 위급하면 <b>112·119</b>에 직접 신고</li>
+          </ul>
+        </div>
+      </article>
+      <div class="callout danger">
+        <strong>사이렌은 앱으로만 끕니다</strong> — 침입자가 임의로 끌 수 없도록, 부저는 <b>마이안심이 앱의 「부저 정지」</b>로만 정지합니다. 오경보가 잦으면 본체 <b>STANDBY</b> 또는 앱의 방범 일시정지(5분)를 쓰세요.
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section class="section" id="check" data-k="체크리스트 완료">
+      <h2>다 됐나요? 체크!</h2>
+      <p class="lead">체크는 이 브라우저에만 저장됩니다.</p>
+      <div class="checklist" id="checks">
+        <label><input type="checkbox" data-k="1" /> 본체 배치 · 전원 연결</label>
+        <label><input type="checkbox" data-k="2" /> 앱 설치 · 권한 허용</label>
+        <label><input type="checkbox" data-k="3" /> Bluetooth 연결</label>
+        <label><input type="checkbox" data-k="4" /> 현관문 센서 부착 (등록은 출하 시 완료)</label>
+        <label><input type="checkbox" data-k="7" /> 상태 탭에서 센서 <b>등록됨</b> 표시 확인</label>
+        <label><input type="checkbox" data-k="5" /> (선택) 창문 센서 · Wi-Fi · <b>비상 연락처 · 구조요청 문구</b></label>
+        <label><input type="checkbox" data-k="6" /> 앱에서 현관문방범 시작 · 일시정지 · <b>부저 정지</b> 위치 확인</label>
+      </div>
+    </section>
+
+    <!-- TROUBLE -->
+    <section class="section" id="trouble" data-k="문제 안됨 검색 실패 오경보">
+      <h2>잘 안 될 때 (Top 5)</h2>
+      <p class="lead">판매 제품 설명서처럼, 가장 흔한 문제만 먼저 모았습니다.</p>
+      <div class="trouble">
+        <details class="t" open>
+          <summary><span class="q">1</span> 기기가 검색되지 않아요</summary>
+          <p>본체 전원 · 폰 Bluetooth/위치 ON · 거리 2m · 앱 재실행 · Bluetooth 껐다 켜기</p>
+        </details>
+        <details class="t">
+          <summary><span class="q">2</span> 센서가 반응하지 않아요</summary>
+          <p>센서는 출하 시 등록되어 있습니다 · 자석 간격 · 배터리 · 센서 전원 · 상태 탭이 <b>등록됨</b>인지 확인 후 필요하면 해제하고 다시 등록</p>
+        </details>
+        <details class="t">
+          <summary><span class="q">3</span> Wi-Fi가 안 붙어요</summary>
+          <p>앱이 본체에 연결된 상태에서 등록 · 비밀번호 확인 · 2.4GHz 공유기 권장</p>
+        </details>
+        <details class="t">
+          <summary><span class="q">4</span> 알림이 안 와요</summary>
+          <p>앱 알림 권한 · 배터리 최적화 제외 · Wi-Fi · 비상연락처 알림 ON</p>
+        </details>
+        <details class="t">
+          <summary><span class="q">5</span> 오경보가 많아요</summary>
+          <p>인식 세기를 <b>둔감</b>으로 · 비명인식 대기시간을 <b>짧게</b> · 본체 위치 변경 · 필요 시 5분 일시정지</p>
+        </details>
+      </div>
+      <div class="callout warn" style="margin-top:1rem">
+        더 자세한 설명은 <a href="상세매뉴얼.md">상세 매뉴얼</a>을 보세요.
+      </div>
+    </section>
+
+    <!-- SPEC -->
+    <section class="section" id="spec" data-k="제품 스펙 사양 전원 5V 200mA USB-C 블루투스 5 Wi-Fi 2.4GHz 110dB 부저 크기 사이즈 92 35mm 배터리 500mA 스피커 모노">
+      <h2>제품 스펙</h2>
+      <p class="lead">본체 기준 사양입니다.</p>
+      <dl class="spec">
+        <div class="row"><dt>전원</dt><dd>5V · 200mA</dd></div>
+        <div class="row"><dt>충전 단자</dt><dd>USB-C (본체 측면)</dd></div>
+        <div class="row"><dt>통신</dt><dd>Bluetooth 5 · Wi-Fi 2.4GHz</dd></div>
+        <div class="row"><dt>알람</dt><dd>부저 110dB 출력</dd></div>
+        <div class="row"><dt>스피커</dt><dd>모노 <em>(안내용)</em></dd></div>
+        <div class="row"><dt>배터리</dt><dd>500mA <em>(보조용)</em></dd></div>
+        <div class="row"><dt>크기</dt><dd>92 × 92 × 35mm</dd></div>
+      </dl>
+    </section>
+
+    <footer>
+      마이안심이 그림 매뉴얼 v1.8 · 제품 외관 일러스트 기준<br />
+      문의: (고객센터 연락처) · 인쇄: Ctrl/Cmd + P
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const q = document.getElementById('q');
+      const sections = [...document.querySelectorAll('.section')];
+      q.addEventListener('input', () => {
+        const v = q.value.trim().toLowerCase();
+        sections.forEach((s) => {
+          const blob = (s.id + ' ' + (s.dataset.k || '') + ' ' + s.textContent).toLowerCase();
+          s.classList.toggle('hide', v && !blob.includes(v));
+        });
+      });
+
+      // checklist
+      document.querySelectorAll('#checks input').forEach((input) => {
+        const key = 'myansimi_v11_' + input.dataset.k;
+        input.checked = localStorage.getItem(key) === '1';
+        input.parentElement.classList.toggle('done', input.checked);
+        input.addEventListener('change', () => {
+          localStorage.setItem(key, input.checked ? '1' : '0');
+          input.parentElement.classList.toggle('done', input.checked);
+        });
+      });
+
+      // active nav
+      const links = [...document.querySelectorAll('.topnav a[href^="#"]')];
+      const io = new IntersectionObserver((ents) => {
+        ents.forEach((e) => {
+          if (!e.isIntersecting) return;
+          links.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+        });
+      }, { rootMargin: '-30% 0px -55% 0px' });
+      sections.forEach((s) => io.observe(s));
+    })();
+  </script>
+</body>
+</html>

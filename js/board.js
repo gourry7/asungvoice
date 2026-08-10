@@ -148,7 +148,7 @@
           ? `<a href="${esc(href)}"${isFile ? '' : ' target="_blank" rel="noopener"'}>${esc(r.title)}</a>`
           : esc(r.title);
         const date = r.date ? `<td>${esc(r.date)}</td>` : '<td></td>';
-        const note = isFile ? '다운로드' : (r.note || '링크');
+        const note = r.note || (isFile ? '다운로드' : '링크');
         return `<tr><td>${num}</td><td>${title}</td>${date}<td><span class="board-badge">${esc(note)}</span></td></tr>`;
       }).join('');
       el.innerHTML =
