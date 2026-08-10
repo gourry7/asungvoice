@@ -186,9 +186,9 @@ LIGHT_SWITCH_BODY = """
 
 HOME_KEEPER_BODY = """
 <div class="prod-hero reveal prod-hero--pink">
-<div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png?v=2" alt="마이안심이 본체"></div>
+<div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png?v=2" alt="마이안심이"></div>
 <div class="prod-hero__info"><span class="model">마이안심이 · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
-<p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구를 위한 재택 방범 디바이스. 현관문·창문 감지와 On-Device AI 비명 인식으로 110dB 사이렌과 보호자 알림을 즉시 보냅니다.</p>
+<p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구(280만)를 위한 재택 방범 디바이스. 비명 하나로 110dB 이상 강력 경보와 보호자 앱 알림을 즉시 전송합니다.</p>
 <div class="prod-hero__actions">
 <a href="my-ansimi-manual/index.html" class="btn btn--pink">사용 설명서 보기</a>
 <a href="../support/inquiry.html" class="btn btn--outline">도입 문의</a>
@@ -196,70 +196,42 @@ HOME_KEEPER_BODY = """
 
 <div class="content-block reveal" id="manual">
 <h2>사용 설명서</h2>
-<p class="section-sub">그림으로 보는 설치·앱 연결·방범 모드 안내 (v1.8)</p>
+<p class="section-sub">마이안심이 설치·사용 매뉴얼</p>
 <div class="manual-links">
 <a class="manual-card neu-card" href="my-ansimi-manual/index.html">
 <strong>웹 사용설명서</strong>
-<span>본체·설치·모드·비명인식·문제해결까지 한눈에</span>
+<span>그림으로 보는 설치·앱·모드 안내</span>
 </a>
 <a class="manual-card neu-card" href="my-ansimi-manual/간단매뉴얼.html">
 <strong>간단 매뉴얼</strong>
-<span>인쇄용 요약본 · 설치 5단계</span>
+<span>인쇄용 요약본</span>
 </a>
 <a class="manual-card neu-card" href="my-ansimi-manual/pdf/마이안심이_사용설명서.pdf">
 <strong>PDF 다운로드</strong>
-<span>전체 사용설명서 (A4)</span>
+<span>전체 사용설명서</span>
 </a>
 </div>
 </div>
-""" + _vs(
-  "범죄 노출 vs 마이안심이 솔루션",
-  "1인 여성가구 방범의 필요성",
-  "TARGET RISK · 280만 가구",
-  [
-    ("택배/배달 가장 침입", "택배·배달원 위장하여 현관문을 열게 한 뒤 침입하는 강력 범죄"),
-    ("현관 개방 시 취약점", "귀가 직후·배달 수령 시 문이 열린 찰나의 순간이 범죄 표적"),
-    ("귀가길 미행·침입", "늦은 밤 귀가 시 미행·침입 시도에 즉각적 구조 요청 어려움"),
-  ],
-  "마이안심이 SOLUTION",
-  [
-    ("110dB 사이렌", "비명 인식 즉시 강력 경고음 — 침입자가 임의로 끌 수 없음(앱으로만 정지)"),
-    ("구조 문자 · 앱 알림", "비상 연락처로 즉시 통보 · 외출 중에는 푸시 알람"),
-    ("상황별 방범 모드", "현관문방범 · 재택방범 · 외출방범 · 5분 일시정지"),
-  ],
-  "",
-) + _fig("homekeeper-system.png", "마이안심이 시스템 구성", "시스템 구성", "본체 · 현관문/창문 센서 · 스마트폰 앱 · 비상 연락처 연동", full=True, ver=6) + """
-<div class="content-block reveal"><h2>방범 모드</h2>
-<p class="section-sub">재택·외출 상태에 맞춰 가장 알맞은 방법으로 집을 지킵니다</p>
-<div class="feature-grid">
-<div class="feature-box neu-card"><h4>현관문방범</h4><p>기본 모드. 현관문만 감시 · 문 열림 후 비명 단어 인식 시 사이렌 + 구조 문자</p></div>
-<div class="feature-box neu-card"><h4>재택방범</h4><p>현관문 + 창문. 감지기 동작 시 사이렌 없이 스마트폰 푸시</p></div>
-<div class="feature-box neu-card"><h4>외출방범</h4><p>문·창문 열림 즉시 짧은 부저(퇴치) + 푸시. 폰이 멀어지면 자동 전환</p></div>
-<div class="feature-box neu-card"><h4>5분 일시정지</h4><p>택배·청소처럼 잠깐만 끌 때. 5분 뒤 현관문방범으로 복귀</p></div>
-</div>
-</div>
 
-<div class="content-block reveal"><h2>비명인식 단어</h2>
-<p class="section-sub">문이 열린 뒤 대기시간 안에 아래 다섯 마디 중 하나가 들리면 알람이 울립니다</p>
-<ul class="info-list">
-<li><strong>강도야 · 사람살려 · 도와주세요 · 살려주세요 · 도둑이야</strong></li>
-<li>크고 분명하게 한 마디씩 외치세요. 녹음·감청 없이 패턴만 인식합니다.</li>
-</ul>
+<div class="content-block reveal"><h2>범죄 노출 vs 마이안심이 솔루션</h2>
+<p class="section-sub">1인 여성가구 방범의 필요성</p>
+<div class="vs-block">
+<div class="vs-block__col vs-block__col--risk"><div class="vs-block__label">TARGET RISK · 280만 가구</div><ul><li><strong>택배/배달 가장 침입</strong><span>택배·배달원 위장하여 현관문을 열게 한 뒤 침입하는 강력 범죄</span></li><li><strong>현관 개방 시 취약점</strong><span>귀가 직후·배달 수령 시 문이 열린 찰나의 순간이 범죄 표적</span></li><li><strong>귀가길 미행·침입</strong><span>늦은 밤 귀가 시 미행·침입 시도에 즉각적 구조 요청 어려움</span></li></ul></div>
+<div class="vs-block__badge">VS</div>
+<div class="vs-block__col vs-block__col--solve"><div class="vs-block__label">마이안심이 SOLUTION</div><ul><li><strong>110dB 이상 강력 경보</strong><span>비명 인식 즉시 강력 경고음 송출 — 범죄자 퇴치</span></li><li><strong>지정 보호자 즉시 통보</strong><span>부모님·지인 등 사전 등록 연락처로 비상 상황 자동 전송</span></li><li><strong>모바일 앱 연동</strong><span>집안 상태 모니터링·설정 — 언제 어디서나 나만의 보안관</span></li></ul></div>
 </div>
-
+</div><div class="content-block reveal"><h2>동작 순서</h2>
+<figure class="ir-figure ir-figure--full neu-card"><img src="../assets/images/diagrams/homekeeper-system.png?v=6" alt="마이안심이 동작 순서" loading="lazy"><figcaption>① 문열림 감지 → ② AI 비명인식 → ③ 110dB 경보 → ④ 보호자 앱·문자 알림</figcaption></figure></div>
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
 <tr><th>제품명</th><td>마이안심이</td></tr>
 <tr><th>인식 방식</th><td>On-Device AI 비명 인식 (음원 패턴만 분석)</td></tr>
-<tr><th>알람</th><td>부저 110dB · SOS 비상호출 · 구조 문자</td></tr>
-<tr><th>스피커</th><td>모노 (안내용)</td></tr>
-<tr><th>센서</th><td>BLE 자석감지기 (현관문 1 · 창문 2)</td></tr>
-<tr><th>통신</th><td>Bluetooth 5 · Wi-Fi 2.4GHz</td></tr>
-<tr><th>전원</th><td>5V · 200mA · USB-C 충전</td></tr>
-<tr><th>배터리</th><td>500mA (보조용)</td></tr>
-<tr><th>크기</th><td>92 × 92 × 35mm</td></tr>
+<tr><th>알람</th><td>110dB 이상 사이렌 + SOS 비상호출</td></tr>
+<tr><th>센서</th><td>BLE 자석감지기 (CR2032, 약 1년)</td></tr>
+<tr><th>통신</th><td>WiFi (2.4GHz) · BLE</td></tr>
+<tr><th>전원</th><td>DC 5V (USB-C)</td></tr>
 <tr><th>특허</th><td>실용신안 제20-0498161호 (2024.07)</td></tr>
-<tr><th>설치</th><td>홈네트워크 불필요 · 독립 설치형</td></tr></table></div>"""
-
+<tr><th>설치</th><td>홈네트워크 불필요 · 독립 설치형</td></tr></table></div>
+"""
 MODULE_BODY = """
 <div class="prod-hero reveal">
 <div class="prod-hero__img"><img src="../assets/images/products/pcb-module.png" alt="비명인식 모듈"></div>
