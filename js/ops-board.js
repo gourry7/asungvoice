@@ -47,7 +47,7 @@
 
   function esc(s) {
     const d = document.createElement('div');
-    d.textContent = s ?? '';
+    d.textContent = s == null ? '' : s;
     return d.innerHTML;
   }
 
