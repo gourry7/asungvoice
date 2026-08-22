@@ -269,7 +269,7 @@ def build_support():
   admin_body = """
 <div id="admin-login" class="admin-panel neu-card">
 <h2>관리자 로그인</h2>
-<p class="admin-hint">자료실 · 설치사례 · 공지사항을 등록·수정합니다.<br>권한이 있는 관리자만 로그인할 수 있습니다.</p>
+<p class="admin-hint">자료실 · 설치사례 · 공지사항을 등록·수정합니다.<br>권한이 있는 관리자만 로그인할 수 있습니다.<br>대표·이사 일정 보드: <a href="../ops/">내부 일정 보드</a></p>
 <p id="login-error" class="admin-login-error" hidden></p>
 <form id="login-form">
 <label class="form__label">관리자 비밀번호</label>
@@ -413,7 +413,7 @@ def build_support():
     "게시판 관리",
     support_sidebar("resources.html").replace(
       '</nav></aside>',
-      '<a href="admin.html" class="is-active">게시판 관리</a></nav></aside>',
+      '<a href="admin.html" class="is-active">게시판 관리</a><a href="../ops/">내부 일정 보드</a></nav></aside>',
     ),
     admin_body,
     script_extra='<script src="../js/admin.js"></script>',

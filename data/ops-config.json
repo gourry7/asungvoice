@@ -1,0 +1,25 @@
+{
+  "sessionMinutes": 180,
+  "maxAttempts": 5,
+  "lockoutMinutes": 15,
+  "users": [
+    {
+      "id": "ceo",
+      "name": "이승현",
+      "role": "대표",
+      "passwordHash": "55ea29cdecb272596154aecf3f776842a65870edb9db9b32af57d1d5469e99b2"
+    },
+    {
+      "id": "dir1",
+      "name": "공찬희",
+      "role": "이사",
+      "passwordHash": "8c17860a6da0de69f0f23e3f36c2b2472eee6ffcf91a2609999df7d8f6741ed1"
+    },
+    {
+      "id": "dir2",
+      "name": "이사",
+      "role": "이사",
+      "passwordHash": "527bc2f68651426dbc7b75faabea42dbfda58c5c8132ed2783e9227a3b5c4776"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "updatedAt": "2026-08-22T14:00:00+09:00",
+  "updatedBy": "system",
+  "memo": "보정할 내용\n- 마이안심이 출시 목표월:\n- 시드(CJ ENM)·LIPS II 실제 입금 여부:\n- 일괄소등 2차 양산 목표:\n- 비상벨 1차 적용 대상 기종/현장:\n- 이번 달 영업 미팅:",
+  "tasks": [
+    {"id": "wd-ship", "name": "제품개발·납품", "project": "watchdog", "lane": "product", "status": "done", "start": "2026-08", "end": "2026-08", "owner": "제품/스필", "note": "개발 종료 후 납품 완료. 캐시카우 유지."},
+    {"id": "wd-model", "name": "비명모델 업데이트", "project": "watchdog", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-11", "owner": "R&D", "note": "납품 이후 인식 모델 고도화. 현장 오인식 반영."},
+    {"id": "wd-verify", "name": "업데이트 모델 현장 검증", "project": "watchdog", "lane": "product", "status": "planned", "start": "2026-10", "end": "2026-12", "owner": "R&D/영업", "note": "에스원·승강기 현장 적용 전 회귀 확인."},
+    {"id": "wd-maint", "name": "유지보수·리피트 공급", "project": "watchdog", "lane": "product", "status": "ongoing", "start": "2026-08", "end": "2027-06", "owner": "영업/스필", "note": "기축·신축 승강기/화장실 반복 공급."},
+    {"id": "an-model", "name": "비명인식 모델 개발", "project": "ansimi", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-11", "owner": "R&D", "note": "1인 가구·현관 환경 특화. 문열림 연동 트리거."},
+    {"id": "an-app", "name": "모바일 앱 개발", "project": "ansimi", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-11", "owner": "SW", "note": "재택/외출 모드, 보호자 푸시, 이벤트 로그."},
+    {"id": "an-server", "name": "서버·클라우드 개발", "project": "ansimi", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-11", "owner": "SW", "note": "기기-앱 중계, 비상 문자, 계정/기기 관리."},
+    {"id": "an-mold", "name": "금형 설계·시사출", "project": "ansimi", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-10", "owner": "기구/외주", "note": "IR Q3 시제품비 4,500만. 우드베이지 단일톤."},
+    {"id": "an-kc", "name": "KC 전자파·무선 인증", "project": "ansimi", "lane": "product", "status": "planned", "start": "2026-09", "end": "2026-11", "owner": "품질", "note": "IR Q3 인증비 1,500만. 금형 시사출 이후 착수."},
+    {"id": "an-design", "name": "패키지·매뉴얼·디자인", "project": "ansimi", "lane": "product", "status": "planned", "start": "2026-09", "end": "2026-11", "owner": "마케팅", "note": "IR Q3 디자인 2,000만. 에코 패키징."},
+    {"id": "an-proto", "name": "시제품 검증", "project": "ansimi", "lane": "product", "status": "planned", "start": "2026-10", "end": "2026-12", "owner": "R&D/품질", "note": "인식·앱·경보 120dB·자석감지기 BLE 통합 테스트."},
+    {"id": "an-mp", "name": "양산 준비", "project": "ansimi", "lane": "product", "status": "planned", "start": "2026-11", "end": "2027-01", "owner": "제조", "note": "투자금 HW 고도화(약 6,000만) 집행 구간."},
+    {"id": "an-launch", "name": "B2C 출시", "project": "ansimi", "lane": "product", "status": "planned", "start": "2026-12", "end": "2027-01", "owner": "경영/영업", "note": "IR는 26년 3분기 출시. 개발 병행 중이라 4분기 재설정."},
+    {"id": "sw-model", "name": "비명모델 개발", "project": "switch", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-11", "owner": "R&D", "note": "현관 접객 시에만 활성화하는 특허 로직과 맞춤."},
+    {"id": "sw-hw2", "name": "2차 하드웨어 개발", "project": "switch", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-12", "owner": "스필 HW", "note": "1차 MH 적용(진주아너스 등) 이후 2차 보드."},
+    {"id": "sw-mech", "name": "기구 최종 마무리", "project": "switch", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-10", "owner": "스필 기구", "note": "5인치 매입 스위치 기구 확정."},
+    {"id": "sw-fw", "name": "일괄소등 소프트웨어", "project": "switch", "lane": "product", "status": "doing", "start": "2026-08", "end": "2026-12", "owner": "SW/스필", "note": "일괄소등·가스차단·EL호출 + 비명 신호."},
+    {"id": "sw-hn", "name": "홈넷 월패드 연동 검증", "project": "switch", "lane": "product", "status": "planned", "start": "2026-11", "end": "2027-01", "owner": "SW", "note": "RS-485, 경비실 팝업, 세대 경보."},
+    {"id": "sw-mp2", "name": "2차 양산 준비", "project": "switch", "lane": "product", "status": "planned", "start": "2026-12", "end": "2027-02", "owner": "스필", "note": "분양 수주 후 매출은 약 2년 뒤 인식."},
+    {"id": "bl-review", "name": "기존 비상벨 1차 적용 검토", "project": "bell", "lane": "product", "status": "review", "start": "2026-08", "end": "2026-10", "owner": "R&D/영업", "note": "기존 제품에 모듈 탑재 가능 여부·인터페이스 확인."},
+    {"id": "bl-if", "name": "모듈 연동 설계", "project": "bell", "lane": "product", "status": "planned", "start": "2026-09", "end": "2026-11", "owner": "R&D", "note": "NO 접점, UART/GPIO. WD-Module-V2 기준."},
+    {"id": "bl-pilot", "name": "파일럿 샘플·현장 테스트", "project": "bell", "lane": "product", "status": "planned", "start": "2026-11", "end": "2027-01", "owner": "R&D/파트너", "note": "지하주차장 비상벨 1개 기종 우선."},
+    {"id": "bl-go", "name": "1차 적용 확정", "project": "bell", "lane": "product", "status": "planned", "start": "2027-01", "end": "2027-03", "owner": "영업", "note": "유니콤 등 파트너 기종 확정 후 수주 전환."},
+    {"id": "bl-supply", "name": "모듈 공급 개시", "project": "bell", "lane": "product", "status": "planned", "start": "2027-02", "end": "2027-04", "owner": "제조/영업", "note": "OEM/라이선스. 매출은 수주 후 후행."},
+    {"id": "sa-wd", "name": "워치독 리피트 영업", "project": "watchdog", "lane": "sales", "status": "ongoing", "start": "2026-08", "end": "2027-06", "owner": "영업", "note": "에스원, 미쓰비시, 후지테크, 셀텍월드. 단기 매출."},
+    {"id": "sa-an-dist", "name": "마이안심이 유통 입점", "project": "ansimi", "lane": "sales", "status": "planned", "start": "2026-11", "end": "2027-02", "owner": "영업", "note": "씨스콜·벨시스·디지털도어록 유통망."},
+    {"id": "sa-an-cj", "name": "CJ온스타일 론칭 준비", "project": "ansimi", "lane": "sales", "status": "planned", "start": "2026-12", "end": "2027-03", "owner": "마케팅", "note": "라이브커머스 영상·상세페이지. Q4 마케팅 2,000만."},
+    {"id": "sa-an-b2g", "name": "지자체 B2G 파이프라인", "project": "ansimi", "lane": "sales", "status": "planned", "start": "2027-01", "end": "2027-06", "owner": "영업", "note": "1인 여성가구 안심사업. 출시 이후 본격화."},
+    {"id": "sa-sw", "name": "일괄소등 분양 수주", "project": "switch", "lane": "sales", "status": "ongoing", "start": "2026-08", "end": "2027-06", "owner": "스필/영업", "note": "신축 아파트. 수주 후 약 2년 뒤 매출."},
+    {"id": "sa-bl", "name": "비상벨 파트너 연동 영업", "project": "bell", "lane": "sales", "status": "doing", "start": "2026-08", "end": "2027-03", "owner": "영업", "note": "유니콤, 아마노코리아. 1차 적용 검토와 병행."},
+    {"id": "in-spill", "name": "스필 선급금 1억 수취", "project": "corp", "lane": "invest", "status": "done", "start": "2026-03", "end": "2026-03", "owner": "경영", "note": "2026.03 공급계약. 고정비·부채 정리 완료."},
+    {"id": "in-seed", "name": "시드(CJ ENM) 3,000만", "project": "corp", "lane": "invest", "status": "review", "start": "2026-08", "end": "2026-12", "owner": "경영", "note": "IR 조달안. 실제 입금 여부는 메모에서 확정."},
+    {"id": "in-lips", "name": "LIPS II 9,000만", "project": "corp", "lane": "invest", "status": "review", "start": "2026-08", "end": "2026-12", "owner": "경영", "note": "시드 매칭 정부지원. 마이안심이 론칭 전용."},
+    {"id": "in-q3", "name": "Q3 금형·인증·디자인 집행", "project": "ansimi", "lane": "invest", "status": "doing", "start": "2026-08", "end": "2026-09", "owner": "경영", "note": "금형 4,500 + 인증 1,500 + 디자인 2,000 + 개발 1,200만."},
+    {"id": "in-q4", "name": "Q4 출시 마케팅 집행", "project": "ansimi", "lane": "invest", "status": "planned", "start": "2026-10", "end": "2026-12", "owner": "마케팅", "note": "영상·상세 1,500 + 마케팅 2,000 + 판관 4,500만."},
+    {"id": "in-scale", "name": "마이안심이 스케일업 투입", "project": "ansimi", "lane": "invest", "status": "planned", "start": "2026-10", "end": "2027-03", "owner": "경영", "note": "투자·지원 1.1억은 B2C 론칭에만 사용(IR)."}
+  ],
+  "activity": [
+    {
+      "at": "2026-08-22T14:00:00+09:00",
+      "by": "system",
+      "text": "4제품 일정·영업·투자 보드 초안을 올렸습니다. 셀을 눌러 수정한 뒤 「공유 저장」을 누르면 세 명이 같은 내용을 봅니다."
+    }
+  ]
+}
