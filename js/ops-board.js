@@ -41,6 +41,8 @@
   let dirty = false;
   let idleTimer = null;
   let selectedUserId = '';
+  let editorId = '';
+  let timelineFilter = '';
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
@@ -267,9 +269,80 @@
     if (page === 'timeline') return '타임라인';
     if (page === 'activity') return '활동 기록';
     if (page === 'settings') return '설정';
-    if (filterProject) return PROJECTS[filterProject] || '표';
-    if (filterLane) return LANES[filterLane] || '표';
-    return '전체 표';
+    if (filterProject) return PROJECTS[filterProject] || '일정';
+    if (filterLane) return LANES[filterLane] || '일정';
+    return '전체 일정';
+  }
+
+  function monthLabel(ym) {
+    if (!ym) return '';
+    const p = ym.split('-');
+    return (p[1] || ym).replace(/^0/, '') + '월';
+  }
+
+  function taskRange(t) {
+    if (!t.start && !t.end) return '';
+    if (t.start === t.end) return monthLabel(t.start);
+    return monthLabel(t.start) + ' – ' + monthLabel(t.end);
+  }
+
+  function renderQuickAdd() {
+    return `
+      <form id="quick-add" class="ops-add">
+        <div><label>할 일</label><input id="qa-name" placeholder="예: 금형 시사출" required></div>
+        <div><label>프로젝트</label><select id="qa-project">${options(PROJECTS, filterProject || 'watchdog')}</select></div>
+        <div><label>구분</label><select id="qa-lane">${options(LANES, filterLane || 'product')}</select></div>
+        <div><label>상태</label><select id="qa-status">${options(STATUSES, 'planned')}</select></div>
+        <div><label>시작</label><input type="month" id="qa-start" value="${NOW_MONTH}"></div>
+        <div><label>끝</label><input type="month" id="qa-end" value="${NOW_MONTH}"></div>
+        <button type="submit" class="ops-btn ops-btn--blue ops-btn--sm">일정 추가</button>
+      </form>
+    `;
+  }
+
+  function renderEditor() {
+    const t = (board.tasks || []).find(x => x.id === editorId);
+    if (!t) return '';
+    return `
+      <div class="ops-editor" data-id="${t.id}">
+        <div class="ops-editor__grid">
+          <div><label>할 일</label><input data-k="name" value="${esc(t.name)}"></div>
+          <div><label>프로젝트</label><select data-k="project">${options(PROJECTS, t.project)}</select></div>
+          <div><label>구분</label><select data-k="lane">${options(LANES, t.lane)}</select></div>
+          <div><label>상태</label><select data-k="status">${options(STATUSES, t.status)}</select></div>
+          <div><label>시작</label><input type="month" data-k="start" value="${esc(t.start || '')}"></div>
+          <div><label>끝</label><input type="month" data-k="end" value="${esc(t.end || '')}"></div>
+          <div><label>담당</label><input data-k="owner" value="${esc(t.owner || '')}"></div>
+          <textarea data-k="note" placeholder="메모">${esc(t.note || '')}</textarea>
+        </div>
+        <div class="ops-row" style="margin-top:12px">
+          <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm" data-close-editor>닫기</button>
+          <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm ops-del" data-del="${t.id}">삭제</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderChips(current) {
+    const items = [
+      ['', '전체'],
+      ['watchdog', '워치독'],
+      ['ansimi', '마이안심이'],
+      ['switch', '일괄소등'],
+      ['bell', '비상벨'],
+      ['sales', '영업'],
+      ['invest', '투자']
+    ];
+    return `<div class="ops-chips">${items.map(([id, label]) =>
+      `<button type="button" class="ops-chip${current === id ? ' is-on' : ''}" data-chip="${id}">${label}</button>`
+    ).join('')}</div>`;
+  }
+
+  function tasksForChip(chip) {
+    const all = board.tasks || [];
+    if (!chip) return all;
+    if (chip === 'sales' || chip === 'invest') return all.filter(t => t.lane === chip);
+    return all.filter(t => t.project === chip);
   }
 
   function renderHome() {
@@ -278,7 +351,8 @@
     const review = tasks.filter(t => t.status === 'review').length;
     const focus = tasks.filter(t => t.status === 'doing' || t.status === 'review');
     return `
-      <div class="ops-note">비명모델은 워치독 업데이트 · 마이안심이 · 일괄소등이 같은 기간에 겹칩니다. 셀을 눌러 고치고, 공유 저장을 누르면 두 분 화면에 같이 반영됩니다.</div>
+      ${renderQuickAdd()}
+      ${renderEditor()}
       <div class="ops-kpis">
         <div class="ops-kpi"><b>${doing}</b><span>진행 중</span></div>
         <div class="ops-kpi"><b>${review}</b><span>검토</span></div>
@@ -286,36 +360,50 @@
         <div class="ops-kpi"><b>${esc(displayName(board.updatedBy) || '—')}</b><span>마지막 공유 · ${esc(fmtWhen(board.updatedAt) || '아직 없음')}</span></div>
       </div>
       <h3 class="ops-h3">지금 손대는 일</h3>
-      ${renderTable(focus)}
+      ${renderCards(focus)}
       <h3 class="ops-h3">공유 메모</h3>
       <textarea class="ops-memo" id="memo">${esc(board.memo || '')}</textarea>
     `;
   }
 
-  function renderTable(list) {
-    const rows = list.map(t => `
-      <tr data-id="${t.id}">
-        <td><select data-k="project">${options(PROJECTS, t.project)}</select></td>
-        <td><select data-k="lane">${options(LANES, t.lane)}</select></td>
-        <td><input data-k="name" value="${esc(t.name)}"></td>
-        <td><select data-k="status">${options(STATUSES, t.status)}</select></td>
-        <td><input type="month" data-k="start" value="${esc(t.start || '')}"></td>
-        <td><input type="month" data-k="end" value="${esc(t.end || '')}"></td>
-        <td><input data-k="owner" value="${esc(t.owner || '')}"></td>
-        <td><input data-k="note" value="${esc(t.note || '')}"></td>
-        <td><button type="button" class="ops-del" data-del="${t.id}">삭제</button></td>
-      </tr>
-    `).join('');
+  function renderCards(list) {
+    if (!list.length) return '<p class="ops-hint">일정이 없습니다. 위에서 할 일과 기간을 넣고 「일정 추가」를 누르세요.</p>';
+    return `<div class="ops-cards">${list.map(t => `
+      <button type="button" class="ops-card" data-edit="${t.id}">
+        <div class="ops-card__top">
+          <strong>${esc(t.name)}</strong>
+          <span class="ops-pill ops-pill--${esc(t.status)}">${esc(STATUSES[t.status] || t.status)}</span>
+        </div>
+        <div class="ops-card__meta">${esc(PROJECTS[t.project] || '')} · ${esc(LANES[t.lane] || '')} · ${esc(taskRange(t))} · ${esc(t.owner || '')}</div>
+      </button>
+    `).join('')}</div>`;
+  }
+
+  function renderGanttBlock(title, colorClass, list) {
+    if (!list.length) {
+      return `<section class="ops-block"><div class="ops-block__head"><span class="${colorClass}"></span>${esc(title)} <span style="font-weight:500;color:var(--ops-muted);font-size:.8rem">일정 없음</span></div></section>`;
+    }
+    const nowIdx = monthIndex(NOW_MONTH);
+    const head = MONTHS.map(m =>
+      `<div class="ops-gantt__h${m === NOW_MONTH ? ' is-now' : ''}">${m === NOW_MONTH ? '오늘' : monthLabel(m)}</div>`
+    ).join('');
+    const body = list.map(t => {
+      const s = monthIndex(t.start);
+      const e = monthIndex(t.end);
+      const span = Math.max(1, e - s + 1);
+      return `
+        <button type="button" class="ops-gantt__name" data-edit="${t.id}" title="${esc(t.name)}">${esc(t.name)}</button>
+        <div class="ops-gantt__track">
+          <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / 11)"></div>
+          <button type="button" class="ops-gantt__bar" data-edit="${t.id}" style="grid-column:${s + 1} / span ${span};background:${barColor(t.status)}" title="${esc(t.name + ' · ' + (STATUSES[t.status] || ''))}"></button>
+        </div>
+      `;
+    }).join('');
     return `
-      <div class="ops-table-wrap">
-        <table class="ops-table">
-          <thead><tr>
-            <th>제품</th><th>구분</th><th>작업</th><th>상태</th>
-            <th>시작</th><th>끝</th><th>담당</th><th>비고</th><th></th>
-          </tr></thead>
-          <tbody>${rows || '<tr><td colspan="9">항목이 없습니다. + 행 추가로 넣으세요.</td></tr>'}</tbody>
-        </table>
-      </div>
+      <section class="ops-block">
+        <div class="ops-block__head"><span class="${colorClass}"></span>${esc(title)}</div>
+        <div class="ops-gantt"><div class="ops-gantt__grid"><div></div>${head}${body}</div></div>
+      </section>
     `;
   }
 
@@ -329,26 +417,39 @@
     }[status] || '#d3d1cb';
   }
 
+  function projectDot(key) {
+    return 'dot-' + (key === 'sales' || key === 'invest' ? 'corp' : (key || 'corp'));
+  }
+
   function renderTimeline() {
+    const chip = timelineFilter;
+    const grouped = chip
+      ? [[chip === 'sales' || chip === 'invest' ? LANES[chip] : PROJECTS[chip], projectDot(chip), tasksForChip(chip)]]
+      : [
+          ['워치독', 'dot-watchdog', tasksForChip('watchdog')],
+          ['마이안심이', 'dot-ansimi', tasksForChip('ansimi')],
+          ['일괄소등', 'dot-switch', tasksForChip('switch')],
+          ['비상벨', 'dot-bell', tasksForChip('bell')],
+          ['영업', 'dot-corp', tasksForChip('sales')],
+          ['투자', 'dot-corp', tasksForChip('invest')]
+        ];
+    return `
+      ${renderQuickAdd()}
+      ${renderEditor()}
+      ${renderChips(chip)}
+      ${grouped.map(([title, dot, list]) => renderGanttBlock(title, dot, list)).join('')}
+    `;
+  }
+
+  function renderProjectPage() {
     const list = filteredTasks();
-    const nowIdx = monthIndex(NOW_MONTH);
-    const head = MONTHS.map((m, i) =>
-      `<div class="ops-gantt__h${m === NOW_MONTH ? ' is-now' : ''}">${m === NOW_MONTH ? '오늘' : m.slice(2)}</div>`
-    ).join('');
-    const body = list.map(t => {
-      const s = monthIndex(t.start);
-      const e = monthIndex(t.end);
-      const span = Math.max(1, e - s + 1);
-      return `
-        <div class="ops-gantt__name" title="${esc(t.name)}">${esc(t.name)}</div>
-        <div class="ops-gantt__track">
-          <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / 11)"></div>
-          <div class="ops-gantt__bar" style="grid-column:${s + 1} / span ${span};background:${barColor(t.status)}"></div>
-        </div>
-      `;
-    }).join('');
-    return `<div class="ops-gantt"><div class="ops-gantt__grid"><div></div>${head}${body}</div></div>
-      <p class="ops-hint" style="margin-top:10px">막대 기간은 표에서 시작·끝을 바꾸면 같이 바뀝니다. 출처: 2026.08.22 현황 초안.</p>`;
+    return `
+      ${renderQuickAdd()}
+      ${renderEditor()}
+      ${renderGanttBlock(pageTitle(), projectDot(filterProject || 'corp'), list)}
+      <h3 class="ops-h3">목록</h3>
+      ${renderCards(list)}
+    `;
   }
 
   function renderActivity() {
@@ -404,7 +505,7 @@
     else if (page === 'timeline') html = renderTimeline();
     else if (page === 'activity') html = renderActivity();
     else if (page === 'settings') html = renderSettings();
-    else html = renderTable(filteredTasks());
+    else html = renderProjectPage();
     $('#view').innerHTML = html;
     bindView();
     $$('.ops-nav').forEach(btn => {
@@ -423,31 +524,74 @@
     t.updatedAt = nowIso();
     logActivity(`${t.name || '항목'} · ${key} 수정`);
     saveDraft();
-    if (key === 'status' || key === 'project' || key === 'lane') render();
+    if (key === 'status' || key === 'project' || key === 'lane' || key === 'start' || key === 'end') render();
   }
 
   function bindView() {
-    $$('#view tr[data-id]').forEach(tr => {
-      const id = tr.dataset.id;
-      tr.querySelectorAll('[data-k]').forEach(el => {
-        const ev = el.tagName === 'SELECT' || el.type === 'month' ? 'change' : 'change';
-        el.addEventListener(ev, () => patchTask(id, el.dataset.k, el.value));
-        if (el.tagName === 'INPUT' && el.type !== 'month') {
-          el.addEventListener('blur', () => patchTask(id, el.dataset.k, el.value));
-        }
+    $$('#view .ops-editor [data-k]').forEach(el => {
+      const id = editorId;
+      const ev = el.tagName === 'SELECT' || el.type === 'month' ? 'change' : 'change';
+      el.addEventListener(ev, () => patchTask(id, el.dataset.k, el.value));
+      if ((el.tagName === 'INPUT' && el.type !== 'month') || el.tagName === 'TEXTAREA') {
+        el.addEventListener('blur', () => patchTask(id, el.dataset.k, el.value));
+      }
+    });
+    $$('#view [data-edit]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        editorId = btn.getAttribute('data-edit');
+        render();
+        const box = $('.ops-editor');
+        if (box) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+    $$('#view [data-close-editor]').forEach(btn => {
+      btn.addEventListener('click', () => { editorId = ''; render(); });
+    });
+    $$('#view [data-chip]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        timelineFilter = btn.getAttribute('data-chip') || '';
+        render();
       });
     });
     $$('#view [data-del]').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.dataset.del;
         const t = board.tasks.find(x => x.id === id);
-        if (!t || !confirm('이 행을 삭제할까요?')) return;
+        if (!t || !confirm('이 일정을 삭제할까요?')) return;
         board.tasks = board.tasks.filter(x => x.id !== id);
-        logActivity(`${t.name} 삭제`);
+        if (editorId === id) editorId = '';
+        logActivity(t.name + ' 삭제');
         saveDraft();
         render();
       });
     });
+    const qa = $('#quick-add');
+    if (qa) {
+      qa.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = ($('#qa-name').value || '').trim();
+        if (!name) return;
+        const start = $('#qa-start').value || NOW_MONTH;
+        let end = $('#qa-end').value || start;
+        if (end < start) end = start;
+        const task = {
+          id: uid('row'),
+          name: name,
+          project: $('#qa-project').value,
+          lane: $('#qa-lane').value,
+          status: $('#qa-status').value,
+          start: start,
+          end: end,
+          owner: currentUser.name,
+          note: ''
+        };
+        board.tasks.unshift(task);
+        editorId = task.id;
+        logActivity(name + ' 추가');
+        saveDraft();
+        render();
+      });
+    }
     const memo = $('#memo');
     if (memo) {
       memo.addEventListener('blur', () => {
@@ -526,22 +670,17 @@
   }
 
   function addRow() {
-    const task = {
-      id: uid('row'),
-      name: '새 작업',
-      project: filterProject || 'watchdog',
-      lane: filterLane || 'product',
-      status: 'planned',
-      start: NOW_MONTH,
-      end: NOW_MONTH,
-      owner: currentUser.name,
-      note: ''
-    };
-    board.tasks.unshift(task);
-    logActivity('새 작업 추가');
-    saveDraft();
-    if (page === 'home') { page = 'table'; filterProject = ''; filterLane = ''; }
-    render();
+    if (page === 'settings' || page === 'activity') {
+      page = 'timeline';
+      filterProject = '';
+      filterLane = '';
+      render();
+    }
+    const name = $('#qa-name');
+    if (name) {
+      name.focus();
+      name.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
   async function persist() {
@@ -592,6 +731,7 @@
         page = btn.dataset.page;
         filterProject = btn.dataset.project || '';
         filterLane = btn.dataset.lane || '';
+        if (page === 'timeline') timelineFilter = '';
         render();
       });
     });
