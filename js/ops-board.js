@@ -236,19 +236,27 @@
   }
 
   function renderLoginUsers() {
-    $('#user-list').innerHTML = (config.users || []).map(u => `
-      <button type="button" class="ops-user${selectedUserId === u.id ? ' is-on' : ''}" data-id="${u.id}">
-        <span class="ops-user__av">${esc(u.name.slice(0, 1))}</span>
+    const list = $('#user-list');
+    if (!list) return;
+    const users = config.users || [];
+    if (!users.length) {
+      list.innerHTML = '<p class="ops-err">로그인 명단을 불러오지 못했습니다. 페이지를 새로고침해 주세요.</p>';
+      return;
+    }
+    if (!selectedUserId) selectedUserId = users[0].id;
+    list.innerHTML = users.map(u => `
+      <label class="ops-user${selectedUserId === u.id ? ' is-on' : ''}">
+        <input type="radio" name="who" value="${esc(u.id)}"${selectedUserId === u.id ? ' checked' : ''} required>
+        <span class="ops-user__av">${esc((u.name || '?').slice(0, 1))}</span>
         <span>
           <span class="ops-user__name">${esc(u.name)}</span><br>
-          <span class="ops-user__role">${esc(u.role)}</span>
+          <span class="ops-user__role">${esc(u.role || '')}</span>
         </span>
-      </button>
+      </label>
     `).join('');
-    $$('#user-list .ops-user').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedUserId = btn.dataset.id;
-        renderLoginUsers();
+    list.querySelectorAll('input[name="who"]').forEach(el => {
+      el.addEventListener('change', () => {
+        selectedUserId = el.value;
         $('#login-pass').focus();
       });
     });
@@ -600,58 +608,79 @@
     document.addEventListener('click', resetIdle);
   }
 
+  function showLoginError(msg) {
+    const el = $('#login-error');
+    if (el) el.textContent = msg;
+    else alert(msg);
+  }
+
   async function onLogin(e) {
     e.preventDefault();
-    $('#login-error').textContent = '';
-    if (isLockedOut()) {
-      $('#login-error').textContent = '잠시 후 다시 시도해 주세요.';
-      return;
+    const btn = $('#login-submit');
+    const picked = (document.querySelector('input[name="who"]:checked') || {}).value || selectedUserId;
+    selectedUserId = picked;
+    showLoginError('');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = '확인 중…';
     }
-    if (!selectedUserId) {
-      $('#login-error').textContent = '본인 이름을 먼저 선택해 주세요.';
-      return;
-    }
-    const user = userById(selectedUserId);
-    const hash = await sha256($('#login-pass').value);
-    if (!user || hash !== user.passwordHash) {
-      recordFailedLogin();
-      const left = config.maxAttempts - (getLockout().attempts || 0);
-      $('#login-error').textContent = left > 0
-        ? `비밀번호가 올바르지 않습니다. (${left}회 남음)`
-        : '로그인이 잠시 차단되었습니다.';
-      return;
-    }
-    setLockout({ attempts: 0 });
-    await createSession(user, hash);
-    $('#login-pass').value = '';
     try {
+      if (isLockedOut()) {
+        showLoginError('잠시 후 다시 시도해 주세요.');
+        return;
+      }
+      if (!selectedUserId) {
+        showLoginError('본인 이름을 먼저 선택해 주세요.');
+        return;
+      }
+      const user = userById(selectedUserId);
+      if (!user) {
+        showLoginError('로그인 명단이 아직 준비되지 않았습니다. 새로고침 후 다시 시도해 주세요.');
+        return;
+      }
+      const hash = await sha256($('#login-pass').value || '');
+      if (hash !== user.passwordHash) {
+        recordFailedLogin();
+        const left = config.maxAttempts - (getLockout().attempts || 0);
+        showLoginError(left > 0
+          ? '비밀번호가 올바르지 않습니다. (' + left + '회 남음)'
+          : '로그인이 잠시 차단되었습니다.');
+        return;
+      }
+      setLockout({ attempts: 0 });
+      await createSession(user, hash);
+      $('#login-pass').value = '';
       board = await loadJson(DATA_PATH);
       await showApp();
     } catch (err) {
       clearSession();
-      $('#login-error').textContent = err.message;
+      showLoginError(err && err.message ? err.message : '로그인 중 오류가 났습니다.');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '들어가기';
+      }
     }
   }
 
   async function init() {
-    bindChrome();
     try {
+      bindChrome();
       config = { ...config, ...(await loadJson(CONFIG_PATH)) };
-    } catch (err) {
-      $('#login-error').textContent = err.message;
-      return;
-    }
-    renderLoginUsers();
-    if (await validateSession()) {
-      try {
-        board = await loadJson(DATA_PATH);
-        await showApp();
-        return;
-      } catch {
-        clearSession();
+      renderLoginUsers();
+      if (await validateSession()) {
+        try {
+          board = await loadJson(DATA_PATH);
+          await showApp();
+          return;
+        } catch {
+          clearSession();
+        }
       }
+      showLogin();
+    } catch (err) {
+      showLoginError(err && err.message ? err.message : '페이지를 불러오지 못했습니다. 새로고침해 주세요.');
     }
-    showLogin();
   }
 
   init();

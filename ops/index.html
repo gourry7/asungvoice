@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>내부 일정 보드 | 아성보이스</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" rel="stylesheet">
-<link rel="stylesheet" href="../css/ops-board.css">
+<link rel="stylesheet" href="../css/ops-board.css?v=20260822c">
 <link rel="icon" href="../assets/images/logo.png?v=2" type="image/png">
 </head>
 <body class="ops">
@@ -18,13 +18,13 @@
       <span>아성<em>보이스</em></span>
     </div>
     <h1>내부 일정 보드</h1>
-    <p>주흥돈 · 공찬희 전용입니다. 본인을 고른 뒤 비밀번호를 입력하세요. 공개 홈페이지 메뉴에는 나오지 않습니다.</p>
-    <div id="user-list" class="ops-users"></div>
-    <p id="login-error" class="ops-err"></p>
+    <p>본인 이름을 선택한 다음 비밀번호를 넣고 들어가기를 누르세요.</p>
     <form id="login-form">
+      <div id="user-list" class="ops-users" role="radiogroup" aria-label="로그인할 사람"></div>
       <label for="login-pass">비밀번호</label>
-      <input id="login-pass" type="password" autocomplete="current-password" required minlength="4">
-      <button class="ops-btn ops-btn--blue" type="submit">들어가기</button>
+      <input id="login-pass" type="password" autocomplete="current-password" required>
+      <p id="login-error" class="ops-err"></p>
+      <button class="ops-btn ops-btn--blue" id="login-submit" type="submit">들어가기</button>
     </form>
     <p class="ops-login__foot">셀을 수정한 뒤에는 오른쪽 위 「공유 저장」을 눌러야 다른 분 화면에 반영됩니다.</p>
   </div>
@@ -68,6 +68,6 @@
   </div>
 </div>
 
-<script src="../js/ops-board.js"></script>
+<script src="../js/ops-board.js?v=20260822c"></script>
 </body>
 </html>
