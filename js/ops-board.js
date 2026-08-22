@@ -43,6 +43,7 @@
   let selectedUserId = '';
   let editorId = '';
   let timelineFilter = '';
+  let pendingShare = false;
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
@@ -160,17 +161,23 @@
     return !!(c.token && c.owner && c.repo);
   }
 
-  async function saveToGithub(path, jsonText, message) {
-    const cfg = getGithubCfg();
-    if (!cfg.token || !cfg.owner || !cfg.repo) {
-      throw new Error('설정에서 GitHub 저장소와 토큰을 먼저 연결해 주세요.');
-    }
-    const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
-    const headers = {
-      Authorization: 'Bearer ' + cfg.token,
+  function githubHeaders(token) {
+    return {
+      Authorization: 'Bearer ' + token,
       Accept: 'application/vnd.github+json',
       'Content-Type': 'application/json'
     };
+  }
+
+  async function saveToGithub(path, jsonText, message) {
+    const cfg = getGithubCfg();
+    if (!cfg.token || !cfg.owner || !cfg.repo) {
+      const err = new Error('설정에서 GitHub 저장소와 토큰을 먼저 연결해 주세요.');
+      err.code = 'no-github';
+      throw err;
+    }
+    const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
+    const headers = githubHeaders(cfg.token);
     let sha = null;
     const getRes = await fetch(api + '?ref=' + (cfg.branch || 'main'), { headers });
     if (getRes.ok) sha = (await getRes.json()).sha;
@@ -342,12 +349,35 @@
     return all.filter(t => t.project === chip);
   }
 
+  function renderGithubNote() {
+    if (githubReady()) return '';
+    return `
+      <div class="ops-note" id="gh-note">
+        이 브라우저에는 GitHub가 아직 연결되지 않았습니다. 토큰을 한 번 넣어야 두 분 화면에 「공유 저장」이 반영됩니다.
+        <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm" id="btn-goto-gh">설정에서 연결</button>
+      </div>`;
+  }
+
+  function openGithubSettings(msg) {
+    page = 'settings';
+    filterProject = '';
+    filterLane = '';
+    render();
+    setStatus(msg || '토큰을 입력한 뒤 「연결 저장」을 누르세요.', 'err');
+    const token = $('#gh-token');
+    if (token) {
+      token.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      token.focus();
+    }
+  }
+
   function renderHome() {
     const tasks = board.tasks || [];
     const doing = tasks.filter(t => t.status === 'doing').length;
     const review = tasks.filter(t => t.status === 'review').length;
     const focus = tasks.filter(t => t.status === 'doing' || t.status === 'review');
     return `
+      ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
       <div class="ops-kpis">
@@ -431,6 +461,7 @@
           ['투자', 'dot-corp', tasksForChip('invest')]
         ];
     return `
+      ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
       ${renderChips(chip)}
@@ -441,6 +472,7 @@
   function renderProjectPage() {
     const list = filteredTasks();
     return `
+      ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
       ${renderGanttBlock(pageTitle(), projectDot(filterProject || 'corp'), list)}
@@ -462,8 +494,25 @@
       `<option value="${u.id}"${u.id === currentUser.id ? ' selected' : ''}>${esc(u.name)} (${esc(u.role)})</option>`
     ).join('');
     return `
-      <p class="ops-hint">두 분이 같은 보드를 보려면 GitHub 연결 후 「공유 저장」이 필요합니다. 게시판 관리자에서 이미 연결했다면 이 브라우저에서 그대로 됩니다.</p>
       <div class="ops-form">
+        <h3 class="ops-h3">GitHub 연결</h3>
+        ${githubReady()
+          ? '<p class="ops-hint">이 브라우저에 연결됨. 「공유 저장」을 누르면 사이트에 반영됩니다. 게시판 관리자에서 이미 넣었다면 그대로 됩니다.</p>'
+          : `<div class="ops-note">
+              공유 저장은 GitHub 토큰이 있어야 합니다. 토큰은 이 브라우저에만 남고, 사이트 서버로는 보내지 않습니다.
+              <ol class="ops-steps">
+                <li><a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">클래식 토큰 발급</a>에서 Note는 <code>asungvoice-ops</code>, Expiration은 90일 이상, 권한은 <code>repo</code>를 선택하세요.</li>
+                <li>생성 직후 보이는 <code>ghp_</code>로 시작하는 값을 복사해 아래에 붙여넣으세요.</li>
+                <li>「연결 저장」을 누른 뒤, 타임라인에서 「공유 저장」을 누르세요.</li>
+              </ol>
+            </div>`}
+        <label>GitHub 사용자</label><input id="gh-owner" value="${esc(cfg.owner || 'gourry7')}">
+        <label>저장소</label><input id="gh-repo" value="${esc(cfg.repo || 'asungvoice')}">
+        <label>브랜치</label><input id="gh-branch" value="${esc(cfg.branch || 'main')}">
+        <label>Personal Access Token</label>
+        <input id="gh-token" type="password" autocomplete="off" placeholder="${cfg.token ? '저장됨 · 바꿀 때만 입력' : 'ghp_ 로 시작하는 토큰'}">
+        <div class="ops-row" style="margin-top:10px"><button class="ops-btn ops-btn--blue" id="btn-gh" type="button">연결 저장</button></div>
+
         <h3 class="ops-h3">내 이름</h3>
         <label>표시 이름</label>
         <input id="set-name" value="${esc(currentUser.name)}">
@@ -477,15 +526,6 @@
         <label>새 비밀번호 확인</label>
         <input id="pw-ok" type="password" autocomplete="new-password">
         <div class="ops-row" style="margin-top:10px"><button class="ops-btn ops-btn--ghost" id="btn-pw" type="button">비밀번호 변경</button></div>
-
-        <h3 class="ops-h3">GitHub 연결</h3>
-        <label>사용자</label><input id="gh-owner" value="${esc(cfg.owner || 'gourry7')}">
-        <label>저장소</label><input id="gh-repo" value="${esc(cfg.repo || 'asungvoice')}">
-        <label>브랜치</label><input id="gh-branch" value="${esc(cfg.branch || 'main')}">
-        <label>Personal Access Token</label>
-        <input id="gh-token" type="password" autocomplete="off" placeholder="${cfg.token ? '저장됨 · 바꿀 때만 입력' : 'ghp_...'}">
-        <div class="ops-row" style="margin-top:10px"><button class="ops-btn ops-btn--ghost" id="btn-gh" type="button">연결 저장</button></div>
-        <p class="ops-hint">${githubReady() ? 'GitHub 연결됨. 공유 저장을 쓰면 사이트에 반영됩니다.' : '아직 연결되지 않았습니다.'}</p>
       </div>
       <p class="ops-hint">이 보드는 검색·메뉴에 노출되지 않습니다. 주소는 두 분만 공유하세요. GitHub 저장소가 공개면 저장된 JSON도 공개될 수 있습니다.</p>
       <select id="dummy-user" hidden>${users}</select>
@@ -598,6 +638,8 @@
         saveDraft();
       });
     }
+    const btnGotoGh = $('#btn-goto-gh');
+    if (btnGotoGh) btnGotoGh.addEventListener('click', () => openGithubSettings());
     const btnName = $('#btn-name');
     if (btnName) btnName.addEventListener('click', saveMyName);
     const btnPw = $('#btn-pw');
@@ -652,18 +694,46 @@
     }
   }
 
-  function saveGithub() {
+  async function saveGithub() {
     const prev = getGithubCfg();
-    const token = $('#gh-token').value.trim() || prev.token;
-    setGithubCfg({
-      owner: $('#gh-owner').value.trim(),
-      repo: $('#gh-repo').value.trim(),
-      branch: $('#gh-branch').value.trim() || 'main',
-      token
-    });
-    if ($('#gh-token').value) $('#gh-token').value = '';
-    setStatus('GitHub 설정이 이 브라우저에 저장되었습니다.', 'ok');
-    render();
+    const owner = ($('#gh-owner').value || '').trim();
+    const repo = ($('#gh-repo').value || '').trim();
+    const branch = ($('#gh-branch').value || '').trim() || 'main';
+    const token = ($('#gh-token').value || '').trim() || prev.token;
+    if (!owner || !repo) return alert('GitHub 사용자와 저장소 이름을 넣어 주세요.');
+    if (!token) return alert('Personal Access Token을 입력해 주세요. ghp_ 로 시작하는 값입니다.');
+    const btn = $('#btn-gh');
+    if (btn) { btn.disabled = true; btn.textContent = '확인 중…'; }
+    setStatus('GitHub 연결 확인 중…', '');
+    try {
+      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {
+        headers: githubHeaders(token)
+      });
+      if (res.status === 401 || res.status === 403) {
+        throw new Error('토큰이 거부되었습니다. repo 권한으로 새로 발급해 붙여 넣어 주세요.');
+      }
+      if (res.status === 404) {
+        throw new Error('저장소를 찾을 수 없습니다. 사용자·저장소 이름과 토큰 권한을 확인해 주세요.');
+      }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || 'GitHub 연결 실패');
+      }
+      setGithubCfg({ ...prev, owner, repo, branch, token });
+      if ($('#gh-token').value) $('#gh-token').value = '';
+      setStatus('GitHub 연결됨. 이제 「공유 저장」을 누르면 사이트에 반영됩니다.', 'ok');
+      render();
+      if (pendingShare) {
+        pendingShare = false;
+        await persist();
+      }
+    } catch (err) {
+      setStatus(err.message || 'GitHub 연결 실패', 'err');
+      alert(err.message || 'GitHub 연결 실패');
+    } finally {
+      const again = $('#btn-gh');
+      if (again) { again.disabled = false; again.textContent = '연결 저장'; }
+    }
   }
 
   function addRow() {
@@ -687,6 +757,11 @@
       showLogin();
       return;
     }
+    if (!githubReady()) {
+      pendingShare = true;
+      openGithubSettings('토큰을 넣고 「연결 저장」을 누르면 이어서 공유됩니다.');
+      return;
+    }
     board.updatedAt = nowIso();
     board.updatedBy = currentUser.id;
     const json = JSON.stringify(board, null, 2);
@@ -695,14 +770,20 @@
       await saveToGithub(DATA_PATH, json, 'Update ops board (' + currentUser.name + ')');
       localStorage.removeItem(DRAFT_KEY);
       dirty = false;
+      pendingShare = false;
       setStatus('사이트에 공유되었습니다. 반영까지 1~2분 걸릴 수 있습니다.', 'ok');
     } catch (err) {
+      if (err && err.code === 'no-github') {
+        pendingShare = true;
+        openGithubSettings(err.message);
+        return;
+      }
       const blob = new Blob([json], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'ops-board.json';
       a.click();
-      setStatus('GitHub 저장 실패 — JSON을 받았습니다. ' + err.message, 'err');
+      setStatus('GitHub 저장 실패 — JSON을 받았습니다. ' + (err && err.message ? err.message : ''), 'err');
     }
   }
 
@@ -716,7 +797,8 @@
     $('#login').hidden = true;
     $('#app').hidden = false;
     restoreDraft();
-    if (dirty) setStatus('이 브라우저에 임시 수정이 있습니다. 공유 저장을 눌러 주세요.', '');
+    if (!githubReady()) setStatus('공유하려면 설정에서 GitHub 토큰을 연결해 주세요.', '');
+    else if (dirty) setStatus('이 브라우저에 임시 수정이 있습니다. 공유 저장을 눌러 주세요.', '');
     else setStatus(board.updatedBy ? `마지막 공유 ${displayName(board.updatedBy)} · ${fmtWhen(board.updatedAt)}` : '', '');
     render();
   }
