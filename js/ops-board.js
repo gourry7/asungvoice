@@ -35,7 +35,7 @@
   let config = { sessionMinutes: 180, maxAttempts: 5, lockoutMinutes: 15, users: [] };
   let board = { tasks: [], memo: '', activity: [], updatedAt: '', updatedBy: '' };
   let currentUser = null;
-  let page = 'home';
+  let page = 'timeline';
   let filterProject = '';
   let filterLane = '';
   let dirty = false;
