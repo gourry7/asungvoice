@@ -4,12 +4,6 @@
   "lockoutMinutes": 15,
   "users": [
     {
-      "id": "ceo",
-      "name": "이승현",
-      "role": "대표",
-      "passwordHash": "055086e2ad2e71b77d0f55c4b1a277ad1cb23d47447fd05a6965a0e41c4f2592"
-    },
-    {
       "id": "dir1",
       "name": "주흥돈",
       "role": "이사",

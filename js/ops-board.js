@@ -1,4 +1,4 @@
-/* 아성보이스 내부 일정 보드 — 대표/이사 3인 공동 편집 */
+/* 아성보이스 내부 일정 보드 — 주흥돈/공찬희 공동 편집 */
 (function () {
   'use strict';
 
@@ -188,7 +188,7 @@
   function saveDraft() {
     localStorage.setItem(DRAFT_KEY, JSON.stringify(board));
     dirty = true;
-    setStatus('이 브라우저에만 저장됨 · 공유 저장을 누르면 세 명에게 반영됩니다.', '');
+    setStatus('이 브라우저에만 저장됨 · 공유 저장을 누르면 두 분에게 반영됩니다.', '');
   }
 
   function restoreDraft() {
@@ -270,7 +270,7 @@
     const review = tasks.filter(t => t.status === 'review').length;
     const focus = tasks.filter(t => t.status === 'doing' || t.status === 'review');
     return `
-      <div class="ops-note">비명모델은 워치독 업데이트 · 마이안심이 · 일괄소등이 같은 기간에 겹칩니다. 셀을 눌러 고치고, 공유 저장을 누르면 대표·이사 화면에 같이 반영됩니다.</div>
+      <div class="ops-note">비명모델은 워치독 업데이트 · 마이안심이 · 일괄소등이 같은 기간에 겹칩니다. 셀을 눌러 고치고, 공유 저장을 누르면 두 분 화면에 같이 반영됩니다.</div>
       <div class="ops-kpis">
         <div class="ops-kpi"><b>${doing}</b><span>진행 중</span></div>
         <div class="ops-kpi"><b>${review}</b><span>검토</span></div>
@@ -356,7 +356,7 @@
       `<option value="${u.id}"${u.id === currentUser.id ? ' selected' : ''}>${esc(u.name)} (${esc(u.role)})</option>`
     ).join('');
     return `
-      <p class="ops-hint">세 명이 같은 보드를 보려면 GitHub 연결 후 「공유 저장」이 필요합니다. 게시판 관리자에서 이미 연결했다면 이 브라우저에서 그대로 됩니다.</p>
+      <p class="ops-hint">두 분이 같은 보드를 보려면 GitHub 연결 후 「공유 저장」이 필요합니다. 게시판 관리자에서 이미 연결했다면 이 브라우저에서 그대로 됩니다.</p>
       <div class="ops-form">
         <h3 class="ops-h3">내 이름</h3>
         <label>표시 이름</label>
@@ -381,7 +381,7 @@
         <div class="ops-row" style="margin-top:10px"><button class="ops-btn ops-btn--ghost" id="btn-gh" type="button">연결 저장</button></div>
         <p class="ops-hint">${githubReady() ? 'GitHub 연결됨. 공유 저장을 쓰면 사이트에 반영됩니다.' : '아직 연결되지 않았습니다.'}</p>
       </div>
-      <p class="ops-hint">이 보드는 검색·메뉴에 노출되지 않습니다. 주소는 세 분만 공유하세요. GitHub 저장소가 공개면 저장된 JSON도 공개될 수 있습니다.</p>
+      <p class="ops-hint">이 보드는 검색·메뉴에 노출되지 않습니다. 주소는 두 분만 공유하세요. GitHub 저장소가 공개면 저장된 JSON도 공개될 수 있습니다.</p>
       <select id="dummy-user" hidden>${users}</select>
     `;
   }
