@@ -51,10 +51,13 @@ a { color: inherit; text-decoration: none; }
 .ops-login h1 { font-size: 1.45rem; margin: 16px 0 6px; letter-spacing: -.02em; }
 .ops-login p { color: var(--ops-muted); font-size: .88rem; line-height: 1.55; margin-bottom: 22px; }
 .ops-users { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 16px; }
-.ops-user {
+.ops-login .ops-user {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 12px;
+  margin-bottom: 0;
+  font-weight: 400;
   text-align: left;
   padding: 12px 14px;
   border: 1px solid var(--ops-line);
@@ -64,16 +67,22 @@ a { color: inherit; text-decoration: none; }
 }
 .ops-user:hover { background: var(--ops-side); }
 .ops-user:has(input:checked), .ops-user.is-on { border-color: var(--ops-blue); background: #f0f6fd; }
-.ops-user input { accent-color: var(--ops-blue); width: 18px; height: 18px; }
+.ops-user input {
+  accent-color: var(--ops-blue);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin: 0;
+}
 .ops-user__av {
-  width: 36px; height: 36px; border-radius: 6px;
+  width: 36px; height: 36px; border-radius: 8px;
   display: grid; place-items: center;
   background: var(--ops-navy); color: #fff;
-  font-weight: 700; font-size: .85rem;
+  font-weight: 700; font-size: .9rem;
+  flex-shrink: 0;
 }
-.ops-user__name { font-weight: 650; }
-.ops-user__role { font-size: .78rem; color: var(--ops-muted); }
-.ops-login label { display: block; font-size: .8rem; font-weight: 650; margin-bottom: 6px; }
+.ops-user__name { font-weight: 650; font-size: .95rem; }
+.ops-login label[for="login-pass"] { display: block; font-size: .8rem; font-weight: 650; margin-bottom: 6px; }
 .ops-login input[type="password"] {
   width: 100%;
   padding: 10px 12px;

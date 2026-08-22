@@ -250,10 +250,7 @@
       <label class="ops-user${selectedUserId === u.id ? ' is-on' : ''}">
         <input type="radio" name="who" value="${esc(u.id)}"${selectedUserId === u.id ? ' checked' : ''} required>
         <span class="ops-user__av">${esc((u.name || '?').slice(0, 1))}</span>
-        <span>
-          <span class="ops-user__name">${esc(u.name)}</span><br>
-          <span class="ops-user__role">${esc(u.role || '')}</span>
-        </span>
+        <span class="ops-user__name">${esc(u.name)}</span>
       </label>
     `).join('');
     list.querySelectorAll('input[name="who"]').forEach(el => {
