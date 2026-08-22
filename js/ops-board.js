@@ -806,17 +806,8 @@
   async function init() {
     try {
       bindChrome();
+      clearSession();
       config = { ...config, ...(await loadJson(CONFIG_PATH)) };
-      renderLoginUsers();
-      if (await validateSession()) {
-        try {
-          board = await loadJson(DATA_PATH);
-          await showApp();
-          return;
-        } catch {
-          clearSession();
-        }
-      }
       showLogin();
     } catch (err) {
       showLoginError(err && err.message ? err.message : '페이지를 불러오지 못했습니다. 새로고침해 주세요.');
