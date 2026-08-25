@@ -161,8 +161,32 @@
   function clearSession() {
     localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(GITHUB_KEY);
     currentUser = null;
     if (idleTimer) clearTimeout(idleTimer);
+  }
+
+  function clearGithubCfg() {
+    localStorage.removeItem(GITHUB_KEY);
+    Object.keys(githubShaCache).forEach(k => { delete githubShaCache[k]; });
+  }
+
+  async function verifyGithubToken() {
+    const cfg = getGithubCfg();
+    if (!cfg.token || !cfg.owner || !cfg.repo) return 'missing';
+    try {
+      const res = await fetch('https://api.github.com/user', {
+        headers: githubHeaders(cfg.token, false),
+        cache: 'no-store'
+      });
+      if (res.status === 401 || res.status === 403) {
+        clearGithubCfg();
+        return 'auth';
+      }
+      return res.ok ? 'ok' : 'auth';
+    } catch {
+      return 'network';
+    }
   }
 
   function resetIdle() {
@@ -242,12 +266,12 @@
   }
 
   function githubHeaders(token, withJsonBody) {
+    // Keep headers to GitHub CORS allow-list only (Authorization, Content-Type,
+    // X-GitHub-Api-Version). Extra headers like Cache-Control caused Failed to fetch.
     const headers = {
       Authorization: 'Bearer ' + token,
-      Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28'
     };
-    // Content-Type only on PUT — extra headers on GET break GitHub CORS (Failed to fetch).
     if (withJsonBody) headers['Content-Type'] = 'application/json';
     return headers;
   }
@@ -293,7 +317,7 @@
       const commitMessage = message || 'Update ops board';
       let sha = githubShaCache[path] || null;
 
-      for (let attempt = 0; attempt < 5; attempt++) {
+      for (let attempt = 0; attempt < 3; attempt++) {
         try {
           if (!sha) sha = await fetchGithubFileSha(api, cfg.token);
           const body = { message: commitMessage, content, branch };
@@ -311,11 +335,17 @@
             else delete githubShaCache[path];
             return;
           }
+          if (putRes.status === 401 || putRes.status === 403) {
+            clearGithubCfg();
+            const err = new Error('저장 권한이 없습니다. 다시 로그인해 주세요.');
+            err.code = 'no-github';
+            throw err;
+          }
           const err = await putRes.json().catch(() => ({}));
           const conflict = putRes.status === 409
             || putRes.status === 422
             || /does not match/i.test(err.message || '');
-          if (conflict && attempt < 4) {
+          if (conflict && attempt < 2) {
             delete githubShaCache[path];
             sha = null;
             await sleep(200 + attempt * 200);
@@ -323,10 +353,11 @@
           }
           throw new Error(err.message || ('GitHub 저장 실패 (' + putRes.status + ')'));
         } catch (err) {
-          if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message || '') && attempt < 4) {
+          if (err && err.code === 'no-github') throw err;
+          if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message || '') && attempt < 2) {
             delete githubShaCache[path];
             sha = null;
-            await sleep(250 + attempt * 250);
+            await sleep(200 + attempt * 200);
             continue;
           }
           if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message || '')) {
@@ -1111,6 +1142,17 @@
         setStatus('저장 서버에 연결되지 않았습니다. 다시 로그인해 주세요.', 'err');
         return;
       }
+      const tokenState = await verifyGithubToken();
+      if (tokenState === 'auth' || tokenState === 'missing') {
+        clearSession();
+        showLogin();
+        showLoginError('저장 연결이 만료되었습니다. 다시 로그인해 주세요.');
+        return;
+      }
+      if (tokenState === 'network') {
+        setStatus('네트워크 오류로 저장을 확인할 수 없습니다. 잠시 후 다시 눌러 주세요.', 'err');
+        return;
+      }
       board.updatedAt = nowIso();
       board.updatedBy = currentUser.id;
       const json = JSON.stringify(board, null, 2);
@@ -1124,7 +1166,11 @@
         setStatus('저장 서버에 연결되지 않았습니다. 다시 로그인해 주세요.', 'err');
         return;
       }
-      setStatus('사이트 저장 실패 — ' + (err && err.message ? err.message : '다시 눌러 주세요.'), 'err');
+      let msg = err && err.message ? err.message : '다시 눌러 주세요.';
+      if (/Failed to fetch|NetworkError|Load failed|네트워크\/CORS/i.test(msg)) {
+        msg = '브라우저가 GitHub 저장을 막았습니다. 강력 새로고침 후 다시 로그인해 주세요.';
+      }
+      setStatus('사이트 저장 실패 — ' + msg, 'err');
     } finally {
       persistBusy = false;
       if (persistAgain) {
@@ -1241,15 +1287,23 @@
 
   async function init() {
     try {
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(r => r.unregister());
+        }).catch(() => {});
+      }
       bindChrome();
       config = { ...config, ...(await loadJson(CONFIG_PATH)) };
       try { runtime = await loadJson(RUNTIME_PATH); }
       catch { runtime = null; }
       if (await validateSession()) {
-        if (!githubReady()) {
+        const tokenState = githubReady() ? await verifyGithubToken() : 'missing';
+        if (tokenState !== 'ok') {
           clearSession();
           showLogin();
-          showLoginError('저장을 쓰려면 한 번 더 로그인해 주세요.');
+          showLoginError(tokenState === 'network'
+            ? '네트워크 오류입니다. 잠시 후 다시 로그인해 주세요.'
+            : '저장을 쓰려면 한 번 더 로그인해 주세요.');
           return;
         }
         board = await loadJson(DATA_PATH);
