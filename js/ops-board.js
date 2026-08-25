@@ -179,6 +179,7 @@
       pagesUrl: stored.pagesUrl || GITHUB_DEFAULTS.pagesUrl
     };
   }
+  function setGithubCfg(cfg) { localStorage.setItem(GITHUB_KEY, JSON.stringify(cfg)); }
   function githubReady() {
     const c = getGithubCfg();
     return !!(c.token && c.owner && c.repo);
@@ -221,16 +222,30 @@
     localStorage.setItem(DRAFT_KEY, JSON.stringify(board));
     dirty = true;
     if (githubReady()) {
-      setStatus('저장 중…', '');
+      setStatus('사이트에 저장 중…', '');
       scheduleShare();
     } else {
-      setStatus('이 컴퓨터에 저장되었습니다.', 'ok');
+      setStatus('아직 이 컴퓨터에만 있습니다. 아래 연결 후 모두가 같게 봅니다.', 'err');
     }
   }
 
   function scheduleShare() {
     if (shareTimer) clearTimeout(shareTimer);
     shareTimer = setTimeout(() => { persist(); }, 700);
+  }
+
+  function renderShareGate() {
+    if (githubReady()) return '';
+    return `
+      <div class="ops-share" id="share-gate">
+        <strong>다른 사람과 같게 보려면 한 번만 연결이 필요합니다.</strong>
+        <p>토큰은 제가 사이트 코드에 넣으면 누구나 볼 수 있어 위험합니다. <a href="../support/admin.html">게시판 관리자</a>에서 GitHub를 <b>한 번</b>만 연결해 주세요. 같은 브라우저면 일정 보드도 그다음부터 저장할 때마다 사이트에 자동으로 올라갑니다.</p>
+        <div class="ops-share__row">
+          <input id="share-token" type="password" autocomplete="off" placeholder="또는 여기에 토큰 붙여넣기 (ghp_…)">
+          <button type="button" class="ops-btn ops-btn--blue ops-btn--sm" id="btn-share-connect">연결하고 자동 저장 켜기</button>
+        </div>
+      </div>
+    `;
   }
 
   function restoreDraft() {
@@ -387,7 +402,7 @@
     ).join('');
     return `
       <div class="ops-colors">
-        <label>막대 색</label>
+        <label>타임라인 막대 색상 (아래에서 고르세요)</label>
         <div class="ops-swatches">
           <button type="button" class="ops-swatch ops-swatch--auto${!current ? ' is-on' : ''}" data-set-color="" title="상태에 맞춤">자동</button>
           ${swatches}
@@ -404,6 +419,8 @@
     if (!t) return '';
     return `
       <div class="ops-editor" data-id="${t.id}">
+        <div class="ops-editor__title">「${esc(t.name)}」 편집</div>
+        ${renderColorPicker(t)}
         <div class="ops-editor__grid">
           <div><label>할 일</label><input data-k="name" value="${esc(t.name)}"></div>
           <div><label>프로젝트</label><select data-k="project">${options(PROJECTS, t.project)}</select></div>
@@ -414,7 +431,6 @@
           <div><label>담당</label><input data-k="owner" value="${esc(t.owner || '')}"></div>
           <textarea data-k="note" placeholder="메모">${esc(t.note || '')}</textarea>
         </div>
-        ${renderColorPicker(t)}
         <div class="ops-row" style="margin-top:12px">
           <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm" data-close-editor>닫기</button>
           <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm ops-del" data-del="${t.id}">삭제</button>
@@ -451,6 +467,7 @@
     const review = tasks.filter(t => t.status === 'review').length;
     const focus = tasks.filter(t => t.status === 'doing' || t.status === 'review');
     return `
+      ${renderShareGate()}
       ${renderQuickAdd()}
       ${renderEditor()}
       <div class="ops-kpis">
@@ -533,9 +550,10 @@
           ['투자', 'dot-corp', tasksForChip('invest'), { lane: 'invest' }]
         ];
     return `
+      ${renderShareGate()}
       ${renderQuickAdd()}
       ${renderEditor()}
-      <p class="ops-hint">왼쪽 이름을 끌어 순서를 바꾸고, 막대를 끌어 기간을 조절하세요. 일정을 연 뒤 「막대 색」으로 색을 바꿀 수 있습니다.</p>
+      <p class="ops-hint">왼쪽 일정 이름을 클릭하면 위쪽에 편집 칸이 열리고, 맨 위에 색 칩이 있습니다. 막대를 끌면 기간이 바뀝니다.</p>
       ${renderChips(chip)}
       ${grouped.map(([title, dot, list, group]) => renderGanttBlock(title, dot, list, group)).join('')}
     `;
@@ -544,6 +562,7 @@
   function renderProjectPage() {
     const list = filteredTasks();
     return `
+      ${renderShareGate()}
       ${renderQuickAdd()}
       ${renderEditor()}
       ${renderGanttBlock(pageTitle(), projectDot(filterProject || 'corp'), list, { project: filterProject || '', lane: filterLane || '' })}
@@ -905,6 +924,48 @@
     if (btnName) btnName.addEventListener('click', saveMyName);
     const btnPw = $('#btn-pw');
     if (btnPw) btnPw.addEventListener('click', changePassword);
+    const btnShare = $('#btn-share-connect');
+    if (btnShare) btnShare.addEventListener('click', connectAndShare);
+  }
+
+  async function connectAndShare() {
+    const prev = getGithubCfg();
+    const token = (($('#share-token') || {}).value || '').trim() || prev.token;
+    if (!token) {
+      alert('GitHub 토큰을 입력해 주세요. ghp_ 로 시작합니다.');
+      const input = $('#share-token');
+      if (input) input.focus();
+      return;
+    }
+    const owner = prev.owner || GITHUB_DEFAULTS.owner;
+    const repo = prev.repo || GITHUB_DEFAULTS.repo;
+    const branch = prev.branch || GITHUB_DEFAULTS.branch;
+    const btn = $('#btn-share-connect');
+    if (btn) { btn.disabled = true; btn.textContent = '연결 중…'; }
+    setStatus('연결 확인 중…', '');
+    try {
+      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {
+        headers: githubHeaders(token)
+      });
+      if (res.status === 401 || res.status === 403) {
+        throw new Error('토큰이 거부되었습니다. repo 권한이 있는 토큰인지 확인해 주세요.');
+      }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || '연결 실패');
+      }
+      setGithubCfg({ ...prev, owner, repo, branch, token, pagesUrl: prev.pagesUrl || GITHUB_DEFAULTS.pagesUrl });
+      if ($('#share-token')) $('#share-token').value = '';
+      setStatus('연결됨. 사이트에 저장 중…', '');
+      render();
+      await persist();
+    } catch (err) {
+      setStatus(err.message || '연결 실패', 'err');
+      alert(err.message || '연결 실패');
+    } finally {
+      const again = $('#btn-share-connect');
+      if (again) { again.disabled = false; again.textContent = '연결하고 자동 저장 켜기'; }
+    }
   }
 
   async function saveMyName() {
@@ -978,23 +1039,26 @@
         return;
       }
       if (!githubReady()) {
-        setStatus('이 컴퓨터에 저장되었습니다.', 'ok');
+        setStatus('아직 이 컴퓨터에만 있습니다. 위 연결 칸에 토큰을 넣어 주세요.', 'err');
+        const gate = $('#share-gate') || $('#share-token');
+        if (gate) gate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if ($('#share-token')) $('#share-token').focus();
         return;
       }
       board.updatedAt = nowIso();
       board.updatedBy = currentUser.id;
       const json = JSON.stringify(board, null, 2);
-      setStatus('저장 중…', '');
+      setStatus('사이트에 저장 중…', '');
       await saveToGithub(DATA_PATH, json, 'Update ops board (' + currentUser.name + ')');
       localStorage.removeItem(DRAFT_KEY);
       dirty = false;
-      setStatus('저장되었습니다.', 'ok');
+      setStatus('사이트에 저장되었습니다. 다른 분도 새로고침하면 같습니다.', 'ok');
     } catch (err) {
       if (err && err.code === 'no-github') {
-        setStatus('이 컴퓨터에 저장되었습니다.', 'ok');
+        setStatus('아직 이 컴퓨터에만 있습니다. 위 연결 칸에 토큰을 넣어 주세요.', 'err');
         return;
       }
-      setStatus('저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요.', 'err');
+      setStatus('사이트 저장 실패 — ' + (err && err.message ? err.message : '다시 눌러 주세요.'), 'err');
     } finally {
       persistBusy = false;
     }
@@ -1012,7 +1076,7 @@
     restoreDraft();
     if (dirty) {
       if (githubReady()) scheduleShare();
-      else setStatus('이 컴퓨터에 저장되어 있습니다.', 'ok');
+      else setStatus('이 컴퓨터에만 수정이 있습니다. 연결 후 사이트에 올려 주세요.', 'err');
     } else setStatus(board.updatedBy ? `마지막 저장 ${displayName(board.updatedBy)} · ${fmtWhen(board.updatedAt)}` : '', '');
     render();
   }
