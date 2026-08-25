@@ -38,6 +38,10 @@
     '2027-01', '2027-02', '2027-03', '2027-04', '2027-05', '2027-06'
   ];
   const NOW_MONTH = '2026-08';
+  const BAR_COLORS = [
+    '#2383e2', '#1b6fe8', '#3aaf7a', '#0f7b3c', '#d97706',
+    '#d47080', '#c0392b', '#7b61c8', '#5a5a55', '#d3d1cb'
+  ];
 
   let config = { sessionMinutes: 180, maxAttempts: 5, lockoutMinutes: 15, users: [] };
   let board = { tasks: [], memo: '', activity: [], updatedAt: '', updatedBy: '' };
@@ -271,12 +275,30 @@
     return Math.max(0, Math.min(MONTHS.length - 1, i));
   }
 
-  function barPositionStyle(startIdx, endIdx, status) {
+  function statusBarColor(status) {
+    return {
+      doing: '#2383e2',
+      review: '#d97706',
+      planned: '#d3d1cb',
+      ongoing: '#3aaf7a',
+      done: '#c5c4be'
+    }[status] || '#d3d1cb';
+  }
+
+  function taskBarColor(t) {
+    if (t && t.color) return t.color;
+    return statusBarColor(t && t.status);
+  }
+
+  function barPositionStyle(startIdx, endIdx, taskOrStatus) {
     const n = MONTHS.length;
     const s = clampMonthIndex(startIdx);
     const e = Math.max(s, clampMonthIndex(endIdx));
     const span = e - s + 1;
-    return 'left:calc(' + s + ' * 100% / ' + n + ' + 2px);width:calc(' + span + ' * 100% / ' + n + ' - 4px);background:' + barColor(status);
+    const color = typeof taskOrStatus === 'string'
+      ? statusBarColor(taskOrStatus)
+      : taskBarColor(taskOrStatus);
+    return 'left:calc(' + s + ' * 100% / ' + n + ' + 2px);width:calc(' + span + ' * 100% / ' + n + ' - 4px);background:' + color;
   }
 
   function monthFromPointer(track, clientX) {
@@ -358,6 +380,25 @@
     `;
   }
 
+  function renderColorPicker(t) {
+    const current = t.color || '';
+    const swatches = BAR_COLORS.map(c =>
+      `<button type="button" class="ops-swatch${current === c ? ' is-on' : ''}" data-set-color="${c}" style="background:${c}" title="${c}"></button>`
+    ).join('');
+    return `
+      <div class="ops-colors">
+        <label>막대 색</label>
+        <div class="ops-swatches">
+          <button type="button" class="ops-swatch ops-swatch--auto${!current ? ' is-on' : ''}" data-set-color="" title="상태에 맞춤">자동</button>
+          ${swatches}
+          <label class="ops-swatch ops-swatch--custom" title="직접 고르기">
+            <input type="color" data-k="color" value="${esc(current || taskBarColor(t))}">
+          </label>
+        </div>
+      </div>
+    `;
+  }
+
   function renderEditor() {
     const t = (board.tasks || []).find(x => x.id === editorId);
     if (!t) return '';
@@ -373,6 +414,7 @@
           <div><label>담당</label><input data-k="owner" value="${esc(t.owner || '')}"></div>
           <textarea data-k="note" placeholder="메모">${esc(t.note || '')}</textarea>
         </div>
+        ${renderColorPicker(t)}
         <div class="ops-row" style="margin-top:12px">
           <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm" data-close-editor>닫기</button>
           <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm ops-del" data-del="${t.id}">삭제</button>
@@ -456,7 +498,7 @@
           </button>
           <div class="ops-gantt__track">
             <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / ${MONTHS.length})"></div>
-            <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t.status)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 기간 조절')}">
+            <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 기간 조절')}">
               <span class="ops-gantt__handle ops-gantt__handle--start" data-handle="start"></span>
               <span class="ops-gantt__handle ops-gantt__handle--end" data-handle="end"></span>
             </div>
@@ -472,16 +514,6 @@
         <div class="ops-gantt"><div class="ops-gantt__grid"><div></div>${head}${body}</div></div>
       </section>
     `;
-  }
-
-  function barColor(status) {
-    return {
-      doing: '#2383e2',
-      review: '#d97706',
-      planned: '#d3d1cb',
-      ongoing: '#3aaf7a',
-      done: '#c5c4be'
-    }[status] || '#d3d1cb';
   }
 
   function projectDot(key) {
@@ -503,7 +535,7 @@
     return `
       ${renderQuickAdd()}
       ${renderEditor()}
-      <p class="ops-hint">왼쪽 이름(제품개발·납품, 비명모델 업데이트 등)을 끌어 순서를 바꾸고, 막대를 끌어 기간을 조절하세요. 클릭하면 상세가 열립니다.</p>
+      <p class="ops-hint">왼쪽 이름을 끌어 순서를 바꾸고, 막대를 끌어 기간을 조절하세요. 일정을 연 뒤 「막대 색」으로 색을 바꿀 수 있습니다.</p>
       ${renderChips(chip)}
       ${grouped.map(([title, dot, list, group]) => renderGanttBlock(title, dot, list, group)).join('')}
     `;
@@ -570,13 +602,16 @@
 
   function patchTask(id, key, value) {
     const t = board.tasks.find(x => x.id === id);
-    if (!t || t[key] === value) return;
-    t[key] = value;
+    if (!t) return;
+    const next = key === 'color' && !value ? '' : value;
+    if ((t[key] || '') === next) return;
+    if (key === 'color' && !next) delete t.color;
+    else t[key] = next;
     t.updatedBy = currentUser.id;
     t.updatedAt = nowIso();
-    logActivity(`${t.name || '항목'} · ${key} 수정`);
+    logActivity(`${t.name || '항목'} · ${key === 'color' ? '막대 색' : key} 수정`);
     saveDraft();
-    if (key === 'status' || key === 'project' || key === 'lane' || key === 'start' || key === 'end') render();
+    if (key === 'status' || key === 'project' || key === 'lane' || key === 'start' || key === 'end' || key === 'color') render();
   }
 
   function applyGanttRange(id, startIdx, endIdx, commit) {
@@ -586,7 +621,7 @@
     const s = clampMonthIndex(startIdx);
     const e = Math.max(s, clampMonthIndex(endIdx));
     if (bar) {
-      bar.style.cssText = barPositionStyle(s, e, t.status);
+      bar.style.cssText = barPositionStyle(s, e, t);
       bar.title = t.name + ' · ' + monthLabel(MONTHS[s]) + ' – ' + monthLabel(MONTHS[e]);
     }
     if (!commit) return;
@@ -777,11 +812,17 @@
   function bindView() {
     $$('#view .ops-editor [data-k]').forEach(el => {
       const id = editorId;
-      const ev = el.tagName === 'SELECT' || el.type === 'month' ? 'change' : 'change';
+      const ev = el.tagName === 'SELECT' || el.type === 'month' || el.type === 'color' ? 'change' : 'change';
       el.addEventListener(ev, () => patchTask(id, el.dataset.k, el.value));
-      if ((el.tagName === 'INPUT' && el.type !== 'month') || el.tagName === 'TEXTAREA') {
+      if ((el.tagName === 'INPUT' && el.type !== 'month' && el.type !== 'color') || el.tagName === 'TEXTAREA') {
         el.addEventListener('blur', () => patchTask(id, el.dataset.k, el.value));
       }
+    });
+    $$('#view [data-set-color]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const color = btn.getAttribute('data-set-color') || '';
+        patchTask(editorId, 'color', color);
+      });
     });
     $$('#view [data-edit]').forEach(btn => {
       btn.addEventListener('click', () => {
