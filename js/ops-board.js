@@ -35,11 +35,9 @@
     planned: '예정',
     ongoing: '상시'
   };
-  const MONTHS = [
-    '2026-08', '2026-09', '2026-10', '2026-11', '2026-12',
-    '2027-01', '2027-02', '2027-03', '2027-04', '2027-05', '2027-06'
-  ];
-  const NOW_MONTH = '2026-08';
+  const RANGE_START = '2026-08-01';
+  const RANGE_END = '2027-06-30';
+  const DAYS = buildDayRange(RANGE_START, RANGE_END);
   const BAR_COLORS = [
     '#2383e2', '#1b6fe8', '#3aaf7a', '#0f7b3c', '#d97706',
     '#d47080', '#c0392b', '#7b61c8', '#5a5a55', '#d3d1cb'
@@ -64,9 +62,61 @@
   let persistAgain = false;
   const githubShaCache = Object.create(null);
   let githubWriteChain = Promise.resolve();
+  let loadedTaskIds = new Set();
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
+
+  function pad2(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function ymdFromParts(y, m, d) {
+    return y + '-' + pad2(m) + '-' + pad2(d);
+  }
+
+  function buildDayRange(start, end) {
+    const out = [];
+    const [sy, sm, sd] = start.split('-').map(Number);
+    const [ey, em, ed] = end.split('-').map(Number);
+    const cur = new Date(sy, sm - 1, sd);
+    const last = new Date(ey, em - 1, ed);
+    while (cur <= last) {
+      out.push(ymdFromParts(cur.getFullYear(), cur.getMonth() + 1, cur.getDate()));
+      cur.setDate(cur.getDate() + 1);
+    }
+    return out;
+  }
+
+  function todayYmd() {
+    const d = new Date();
+    const off = 9 * 60;
+    const kst = new Date(d.getTime() + (off - d.getTimezoneOffset()) * 60000);
+    return kst.toISOString().slice(0, 10);
+  }
+
+  function lastDayOfMonth(ym) {
+    const [y, m] = String(ym).split('-').map(Number);
+    const dt = new Date(y, m, 0);
+    return ymdFromParts(dt.getFullYear(), dt.getMonth() + 1, dt.getDate());
+  }
+
+  function normalizeDate(value, role) {
+    const v = String(value || '').trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+    if (/^\d{4}-\d{2}$/.test(v)) return role === 'end' ? lastDayOfMonth(v) : v + '-01';
+    return role === 'end' ? RANGE_END : RANGE_START;
+  }
+
+  function normalizeBoardDates(data) {
+    if (!data || !Array.isArray(data.tasks)) return data;
+    data.tasks.forEach(t => {
+      t.start = normalizeDate(t.start, 'start');
+      t.end = normalizeDate(t.end, 'end');
+      if (t.end < t.start) t.end = t.start;
+    });
+    return data;
+  }
 
   function esc(s) {
     const d = document.createElement('div');
@@ -125,19 +175,53 @@
   }
 
   async function loadJson(path) {
-    // Pages CDN caches JSON ~10 minutes, so after a successful GitHub save a
-    // refresh can still show the old board. Prefer the Contents API when unlocked.
+    // Pages CDN caches JSON ~10 minutes. After a GitHub save, refreshing from
+    // Pages can look like the new schedule vanished. Prefer Contents API.
     if (githubReady()) {
-      try {
-        return await loadJsonFromGithub(path);
-      } catch {
-        /* token/network issues — fall back to Pages copy */
+      let lastErr = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          return await loadJsonFromGithub(path);
+        } catch (err) {
+          lastErr = err;
+          await sleep(150 + attempt * 200);
+        }
+      }
+      // Never fall back to Pages for the live board — that is the stale-cache bug.
+      if (path === DATA_PATH) {
+        throw lastErr || new Error('일정을 GitHub에서 불러오지 못했습니다.');
       }
     }
     const url = new URL(path, scriptBase).href + '?t=' + Date.now();
     const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(path + ' 를 불러올 수 없습니다.');
     return res.json();
+  }
+
+  function rememberLoadedBoard(data) {
+    normalizeBoardDates(data);
+    loadedTaskIds = new Set((data && data.tasks || []).map(t => t.id).filter(Boolean));
+  }
+
+  function mergeRemoteTasks(remote) {
+    if (!remote || !Array.isArray(remote.tasks)) return;
+    const localTasks = board.tasks || [];
+    const seen = new Set();
+    const merged = [];
+    for (const t of localTasks) {
+      if (!t || !t.id || seen.has(t.id)) continue;
+      merged.push(t);
+      seen.add(t.id);
+    }
+    for (const t of remote.tasks) {
+      if (!t || !t.id || seen.has(t.id)) continue;
+      // Keep tasks others added since we loaded; skip ones we deleted locally.
+      if (!loadedTaskIds.has(t.id)) {
+        merged.push(t);
+        seen.add(t.id);
+      }
+    }
+    board.tasks = merged;
   }
 
   function userById(id) {
@@ -432,10 +516,18 @@
     if (!raw) return;
     try {
       const draft = JSON.parse(raw);
-      if (draft && Array.isArray(draft.tasks)) {
-        board = { ...board, ...draft };
-        dirty = true;
+      if (!draft || !Array.isArray(draft.tasks)) return;
+      const draftAt = Date.parse(draft.updatedAt || '') || 0;
+      const boardAt = Date.parse(board.updatedAt || '') || 0;
+      const boardIds = new Set((board.tasks || []).map(t => t.id));
+      const draftHasNew = draft.tasks.some(t => t && t.id && !boardIds.has(t.id));
+      // Drop drafts already reflected on the server so they cannot hide fresh loads.
+      if (draftAt <= boardAt && !draftHasNew) {
+        localStorage.removeItem(DRAFT_KEY);
+        return;
       }
+      board = { ...board, ...draft };
+      dirty = true;
     } catch { /* ignore */ }
   }
 
@@ -460,13 +552,16 @@
     });
   }
 
-  function monthIndex(ym) {
-    const i = MONTHS.indexOf(ym);
-    return i < 0 ? 0 : i;
+  function dayIndex(ymd) {
+    const key = normalizeDate(ymd, 'start');
+    const i = DAYS.indexOf(key);
+    if (i >= 0) return i;
+    if (key < DAYS[0]) return 0;
+    return DAYS.length - 1;
   }
 
-  function clampMonthIndex(i) {
-    return Math.max(0, Math.min(MONTHS.length - 1, i));
+  function clampDayIndex(i) {
+    return Math.max(0, Math.min(DAYS.length - 1, i));
   }
 
   function statusBarColor(status) {
@@ -485,21 +580,21 @@
   }
 
   function barPositionStyle(startIdx, endIdx, taskOrStatus) {
-    const n = MONTHS.length;
-    const s = clampMonthIndex(startIdx);
-    const e = Math.max(s, clampMonthIndex(endIdx));
+    const n = DAYS.length;
+    const s = clampDayIndex(startIdx);
+    const e = Math.max(s, clampDayIndex(endIdx));
     const span = e - s + 1;
     const color = typeof taskOrStatus === 'string'
       ? statusBarColor(taskOrStatus)
       : taskBarColor(taskOrStatus);
-    return 'left:calc(' + s + ' * 100% / ' + n + ' + 2px);width:calc(' + span + ' * 100% / ' + n + ' - 4px);background:' + color;
+    return 'left:calc(' + s + ' * 100% / ' + n + ' + 1px);width:calc(' + span + ' * 100% / ' + n + ' - 2px);background:' + color;
   }
 
-  function monthFromPointer(track, clientX) {
+  function dayFromPointer(track, clientX) {
     const r = track.getBoundingClientRect();
     if (!r.width) return 0;
     const x = Math.min(Math.max(clientX - r.left, 0), r.width - 0.001);
-    return clampMonthIndex(Math.floor(x / r.width * MONTHS.length));
+    return clampDayIndex(Math.floor(x / r.width * DAYS.length));
   }
 
   function renderKeepScroll() {
@@ -550,25 +645,33 @@
 
   function monthLabel(ym) {
     if (!ym) return '';
-    const p = ym.split('-');
-    return (p[1] || ym).replace(/^0/, '') + '월';
+    const p = String(ym).split('-');
+    return Number(p[1] || 0) + '월';
+  }
+
+  function dayLabel(ymd) {
+    if (!ymd) return '';
+    const p = String(ymd).split('-');
+    if (p.length < 3) return monthLabel(ymd);
+    return Number(p[1]) + '/' + Number(p[2]);
   }
 
   function taskRange(t) {
     if (!t.start && !t.end) return '';
-    if (t.start === t.end) return monthLabel(t.start);
-    return monthLabel(t.start) + ' – ' + monthLabel(t.end);
+    if (t.start === t.end) return dayLabel(t.start);
+    return dayLabel(t.start) + ' – ' + dayLabel(t.end);
   }
 
   function renderQuickAdd() {
+    const today = todayYmd();
     return `
       <form id="quick-add" class="ops-add">
         <div><label>할 일</label><input id="qa-name" placeholder="예: 금형 시사출" required></div>
         <div><label>프로젝트</label><select id="qa-project">${options(PROJECTS, filterProject || 'watchdog')}</select></div>
         <div><label>구분</label><select id="qa-lane">${options(LANES, filterLane || 'product')}</select></div>
         <div><label>상태</label><select id="qa-status">${options(STATUSES, 'planned')}</select></div>
-        <div><label>시작</label><input type="month" id="qa-start" value="${NOW_MONTH}"></div>
-        <div><label>끝</label><input type="month" id="qa-end" value="${NOW_MONTH}"></div>
+        <div><label>시작</label><input type="date" id="qa-start" min="${RANGE_START}" max="${RANGE_END}" value="${today}"></div>
+        <div><label>끝</label><input type="date" id="qa-end" min="${RANGE_START}" max="${RANGE_END}" value="${today}"></div>
         <button type="submit" class="ops-btn ops-btn--blue ops-btn--sm">일정 추가</button>
       </form>
     `;
@@ -605,8 +708,8 @@
           <div><label>프로젝트</label><select data-k="project">${options(PROJECTS, t.project)}</select></div>
           <div><label>구분</label><select data-k="lane">${options(LANES, t.lane)}</select></div>
           <div><label>상태</label><select data-k="status">${options(STATUSES, t.status)}</select></div>
-          <div><label>시작</label><input type="month" data-k="start" value="${esc(t.start || '')}"></div>
-          <div><label>끝</label><input type="month" data-k="end" value="${esc(t.end || '')}"></div>
+          <div><label>시작</label><input type="date" data-k="start" min="${RANGE_START}" max="${RANGE_END}" value="${esc(normalizeDate(t.start, 'start'))}"></div>
+          <div><label>끝</label><input type="date" data-k="end" min="${RANGE_START}" max="${RANGE_END}" value="${esc(normalizeDate(t.end, 'end'))}"></div>
           <div><label>담당</label><input data-k="owner" value="${esc(t.owner || '')}"></div>
           <textarea data-k="note" placeholder="메모">${esc(t.note || '')}</textarea>
         </div>
@@ -674,17 +777,31 @@
     `).join('')}</div>`;
   }
 
+  function renderGanttMonthHead() {
+    const today = todayYmd();
+    const bands = [];
+    for (let i = 0; i < DAYS.length; i++) {
+      const ym = DAYS[i].slice(0, 7);
+      const last = bands[bands.length - 1];
+      if (last && last.ym === ym) last.count += 1;
+      else bands.push({ ym, count: 1, hasToday: false });
+      if (DAYS[i] === today) bands[bands.length - 1].hasToday = true;
+    }
+    return bands.map(b =>
+      `<div class="ops-gantt__h${b.hasToday ? ' is-now' : ''}" style="flex:${b.count}">${b.hasToday ? monthLabel(b.ym) + '·오늘' : monthLabel(b.ym)}</div>`
+    ).join('');
+  }
+
   function renderGanttBlock(title, colorClass, list, group) {
     if (!list.length) {
       return `<section class="ops-block"><div class="ops-block__head"><span class="${colorClass}"></span>${esc(title)} <span style="font-weight:500;color:var(--ops-muted);font-size:.8rem">일정 없음</span></div></section>`;
     }
-    const nowIdx = monthIndex(NOW_MONTH);
-    const head = MONTHS.map(m =>
-      `<div class="ops-gantt__h${m === NOW_MONTH ? ' is-now' : ''}">${m === NOW_MONTH ? '오늘' : monthLabel(m)}</div>`
-    ).join('');
+    const today = todayYmd();
+    const nowIdx = dayIndex(today);
+    const head = renderGanttMonthHead();
     const body = list.map(t => {
-      const s = monthIndex(t.start);
-      const e = monthIndex(t.end);
+      const s = dayIndex(t.start);
+      const e = dayIndex(t.end);
       return `
         <div class="ops-gantt__row" data-row="${t.id}">
           <button type="button" class="ops-gantt__name" data-row="${t.id}" title="${esc(t.name + ' · 끌어 순서 변경')}">
@@ -692,8 +809,8 @@
             <span class="ops-gantt__label">${esc(t.name)}</span>
           </button>
           <div class="ops-gantt__track">
-            <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / ${MONTHS.length})"></div>
-            <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 기간 조절')}">
+            <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / ${DAYS.length} + 100% / ${DAYS.length} / 2)"></div>
+            <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 일 단위로 조절')}">
               <span class="ops-gantt__handle ops-gantt__handle--start" data-handle="start"></span>
               <span class="ops-gantt__handle ops-gantt__handle--end" data-handle="end"></span>
             </div>
@@ -706,7 +823,15 @@
     return `
       <section class="ops-block" data-group-project="${esc(project)}" data-group-lane="${esc(lane)}">
         <div class="ops-block__head"><span class="${colorClass}"></span>${esc(title)}</div>
-        <div class="ops-gantt"><div class="ops-gantt__grid"><div></div>${head}${body}</div></div>
+        <div class="ops-gantt">
+          <div class="ops-gantt__grid" style="--gantt-days:${DAYS.length}">
+            <div class="ops-gantt__head">
+              <div></div>
+              <div class="ops-gantt__months">${head}</div>
+            </div>
+            ${body}
+          </div>
+        </div>
       </section>
     `;
   }
@@ -730,7 +855,7 @@
     return `
       ${renderQuickAdd()}
       ${renderEditor()}
-      <p class="ops-hint">왼쪽 일정 이름을 클릭하면 위쪽에 편집 칸이 열리고, 맨 위에 색 칩이 있습니다. 막대를 끌면 기간이 바뀝니다.</p>
+      <p class="ops-hint">왼쪽 일정 이름을 클릭하면 위쪽에 편집 칸이 열리고, 맨 위에 색 칩이 있습니다. 막대를 끌면 일 단위로 기간이 바뀝니다.</p>
       ${renderChips(chip)}
       ${grouped.map(([title, dot, list, group]) => renderGanttBlock(title, dot, list, group)).join('')}
     `;
@@ -798,7 +923,12 @@
   function patchTask(id, key, value) {
     const t = board.tasks.find(x => x.id === id);
     if (!t) return;
-    const next = key === 'color' && !value ? '' : value;
+    let next = key === 'color' && !value ? '' : value;
+    if (key === 'start' || key === 'end') {
+      next = normalizeDate(next, key);
+      if (key === 'start' && t.end && next > t.end) t.end = next;
+      if (key === 'end' && t.start && next < t.start) next = t.start;
+    }
     if ((t[key] || '') === next) return;
     if (key === 'color' && !next) delete t.color;
     else t[key] = next;
@@ -813,15 +943,15 @@
     const t = board.tasks.find(x => x.id === id);
     const bar = document.querySelector('[data-bar="' + id + '"]');
     if (!t) return;
-    const s = clampMonthIndex(startIdx);
-    const e = Math.max(s, clampMonthIndex(endIdx));
+    const s = clampDayIndex(startIdx);
+    const e = Math.max(s, clampDayIndex(endIdx));
     if (bar) {
       bar.style.cssText = barPositionStyle(s, e, t);
-      bar.title = t.name + ' · ' + monthLabel(MONTHS[s]) + ' – ' + monthLabel(MONTHS[e]);
+      bar.title = t.name + ' · ' + dayLabel(DAYS[s]) + ' – ' + dayLabel(DAYS[e]);
     }
     if (!commit) return;
-    const start = MONTHS[s];
-    const end = MONTHS[e];
+    const start = DAYS[s];
+    const end = DAYS[e];
     if (t.start === start && t.end === end) return;
     t.start = start;
     t.end = end;
@@ -846,11 +976,11 @@
     ganttDrag = {
       id: id,
       mode: handle ? handle.getAttribute('data-handle') : 'move',
-      startIdx: monthIndex(t.start),
-      endIdx: monthIndex(t.end),
-      origin: monthFromPointer(track, e.clientX),
-      curS: monthIndex(t.start),
-      curE: monthIndex(t.end),
+      startIdx: dayIndex(t.start),
+      endIdx: dayIndex(t.end),
+      origin: dayFromPointer(track, e.clientX),
+      curS: dayIndex(t.start),
+      curE: dayIndex(t.end),
       moved: false
     };
   }
@@ -859,13 +989,13 @@
     if (!ganttDrag) return;
     const bar = e.currentTarget;
     const track = bar.parentElement;
-    const m = monthFromPointer(track, e.clientX);
+    const m = dayFromPointer(track, e.clientX);
     let s = ganttDrag.startIdx;
     let en = ganttDrag.endIdx;
     if (ganttDrag.mode === 'move') {
       const span = en - s;
-      s = clampMonthIndex(ganttDrag.startIdx + (m - ganttDrag.origin));
-      s = Math.min(s, MONTHS.length - 1 - span);
+      s = clampDayIndex(ganttDrag.startIdx + (m - ganttDrag.origin));
+      s = Math.min(s, DAYS.length - 1 - span);
       en = s + span;
     } else if (ganttDrag.mode === 'start') {
       s = Math.min(m, en);
@@ -1007,9 +1137,20 @@
   function bindView() {
     $$('#view .ops-editor [data-k]').forEach(el => {
       const id = editorId;
-      const ev = el.tagName === 'SELECT' || el.type === 'month' || el.type === 'color' ? 'change' : 'change';
-      el.addEventListener(ev, () => patchTask(id, el.dataset.k, el.value));
-      if ((el.tagName === 'INPUT' && el.type !== 'month' && el.type !== 'color') || el.tagName === 'TEXTAREA') {
+      const ev = el.tagName === 'SELECT' || el.type === 'date' || el.type === 'month' || el.type === 'color' ? 'change' : 'change';
+      el.addEventListener(ev, () => {
+        let val = el.value;
+        if (el.dataset.k === 'start' || el.dataset.k === 'end') {
+          val = normalizeDate(val, el.dataset.k);
+          const t = board.tasks.find(x => x.id === id);
+          if (t) {
+            if (el.dataset.k === 'start' && t.end && val > t.end) patchTask(id, 'end', val);
+            if (el.dataset.k === 'end' && t.start && val < t.start) val = t.start;
+          }
+        }
+        patchTask(id, el.dataset.k, val);
+      });
+      if ((el.tagName === 'INPUT' && el.type !== 'date' && el.type !== 'month' && el.type !== 'color') || el.tagName === 'TEXTAREA') {
         el.addEventListener('blur', () => patchTask(id, el.dataset.k, el.value));
       }
     });
@@ -1066,8 +1207,8 @@
         e.preventDefault();
         const name = ($('#qa-name').value || '').trim();
         if (!name) return;
-        const start = $('#qa-start').value || NOW_MONTH;
-        let end = $('#qa-end').value || start;
+        const start = normalizeDate($('#qa-start').value || todayYmd(), 'start');
+        let end = normalizeDate($('#qa-end').value || start, 'end');
         if (end < start) end = start;
         const task = {
           id: uid('row'),
@@ -1191,14 +1332,27 @@
         setStatus('네트워크 오류로 저장을 확인할 수 없습니다. 잠시 후 다시 눌러 주세요.', 'err');
         return;
       }
+      setStatus('사이트에 저장 중…', '');
+      // Pull latest first so a stale tab cannot wipe someone else's newer rows.
+      try {
+        const remote = await loadJsonFromGithub(DATA_PATH);
+        mergeRemoteTasks(remote);
+      } catch { /* save still proceeds with local board */ }
       board.updatedAt = nowIso();
       board.updatedBy = currentUser.id;
       const json = JSON.stringify(board, null, 2);
-      setStatus('사이트에 저장 중…', '');
       await saveToGithub(DATA_PATH, json, 'Update ops board (' + currentUser.name + ')');
+      // Confirm Contents API sees the write — do not trust a blind OK.
+      const verified = await loadJsonFromGithub(DATA_PATH);
+      if (!verified || verified.updatedAt !== board.updatedAt) {
+        throw new Error('저장 후 확인에 실패했습니다. 다시 저장해 주세요.');
+      }
+      board = verified;
+      rememberLoadedBoard(board);
       localStorage.removeItem(DRAFT_KEY);
       dirty = false;
       setStatus('사이트에 저장되었습니다. 다른 분도 새로고침하면 같습니다.', 'ok');
+      render();
     } catch (err) {
       if (err && err.code === 'no-github') {
         setStatus('저장 서버에 연결되지 않았습니다. 다시 로그인해 주세요.', 'err');
@@ -1228,6 +1382,7 @@
     $('#login').hidden = true;
     $('#app').hidden = false;
     restoreDraft();
+    normalizeBoardDates(board);
     if (dirty) {
       if (githubReady()) scheduleShare();
       else setStatus('저장 연결이 없습니다. 다시 로그인해 주세요.', 'err');
@@ -1308,6 +1463,7 @@
       await unlockGithubWithPassword(pass);
       $('#login-pass').value = '';
       board = await loadJson(DATA_PATH);
+      rememberLoadedBoard(board);
       await showApp();
       if (!githubReady()) {
         setStatus('저장 연결에 실패했습니다. 비밀번호 변경 후에는 관리자에게 문의하세요.', 'err');
@@ -1345,6 +1501,7 @@
           return;
         }
         board = await loadJson(DATA_PATH);
+        rememberLoadedBoard(board);
         await showApp();
       } else {
         showLogin();
