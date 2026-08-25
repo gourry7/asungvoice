@@ -193,6 +193,16 @@
     };
   }
 
+  function utf8ToBase64(text) {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    }
+    return btoa(binary);
+  }
+
   async function saveToGithub(path, jsonText, message) {
     const cfg = getGithubCfg();
     if (!cfg.token || !cfg.owner || !cfg.repo) {
@@ -205,16 +215,20 @@
     let sha = null;
     const getRes = await fetch(api + '?ref=' + (cfg.branch || 'main'), { headers });
     if (getRes.ok) sha = (await getRes.json()).sha;
+    else if (getRes.status !== 404) {
+      const err = await getRes.json().catch(() => ({}));
+      throw new Error(err.message || ('파일 조회 실패 (' + getRes.status + ')'));
+    }
     const body = {
       message: message || 'Update ops board',
-      content: btoa(unescape(encodeURIComponent(jsonText))),
+      content: utf8ToBase64(jsonText),
       branch: cfg.branch || 'main'
     };
     if (sha) body.sha = sha;
     const putRes = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });
     if (!putRes.ok) {
       const err = await putRes.json().catch(() => ({}));
-      throw new Error(err.message || 'GitHub 저장 실패');
+      throw new Error(err.message || ('GitHub 저장 실패 (' + putRes.status + ')'));
     }
   }
 
