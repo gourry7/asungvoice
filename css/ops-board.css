@@ -264,18 +264,48 @@ a { color: inherit; text-decoration: none; }
 .ops-gantt__name:hover { color: var(--ops-blue); }
 .ops-gantt__track {
   grid-column: 2 / -1;
-  display: grid;
-  grid-template-columns: repeat(11, minmax(48px, 1fr));
   height: 22px;
   position: relative;
 }
 .ops-gantt__bar {
-  height: 14px; border-radius: 4px; align-self: center; margin: 0 2px; cursor: pointer;
+  position: absolute;
+  top: 4px;
+  height: 14px;
+  border-radius: 4px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
 }
 .ops-gantt__bar:hover { filter: brightness(.92); }
+.ops-gantt__bar.is-drag { cursor: grabbing; z-index: 3; filter: brightness(.88); }
+.ops-gantt__handle {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 10px;
+  cursor: ew-resize;
+  z-index: 1;
+}
+.ops-gantt__handle--start { left: -1px; }
+.ops-gantt__handle--end { right: -1px; }
+.ops-gantt__handle:hover { background: rgba(255,255,255,.35); }
+.ops-gantt__bar::before,
+.ops-gantt__bar::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  width: 2px;
+  background: rgba(255,255,255,.55);
+  border-radius: 1px;
+  pointer-events: none;
+}
+.ops-gantt__bar::before { left: 4px; }
+.ops-gantt__bar::after { right: 4px; }
 .ops-gantt__now {
   position: absolute; top: 0; bottom: 0; width: 1px;
   background: var(--ops-blue); opacity: .45;
+  pointer-events: none;
 }
 .ops-cards { display: grid; gap: 8px; }
 .ops-card {

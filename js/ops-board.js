@@ -5,6 +5,12 @@
   const SESSION_KEY = 'asung_ops_session';
   const LOCKOUT_KEY = 'asung_ops_lockout';
   const GITHUB_KEY = 'asung_admin_github';
+  const GITHUB_DEFAULTS = {
+    owner: 'gourry7',
+    repo: 'asungvoice',
+    branch: 'main',
+    pagesUrl: 'https://gourry7.github.io/asungvoice'
+  };
   const DRAFT_KEY = 'asung_ops_draft';
   const DATA_PATH = 'data/ops-board.json';
   const CONFIG_PATH = 'data/ops-config.json';
@@ -44,6 +50,7 @@
   let editorId = '';
   let timelineFilter = '';
   let pendingShare = false;
+  let ganttDrag = null;
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
@@ -152,8 +159,17 @@
   }
 
   function getGithubCfg() {
-    try { return JSON.parse(localStorage.getItem(GITHUB_KEY) || '{}'); }
-    catch { return {}; }
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(GITHUB_KEY) || '{}'); }
+    catch { stored = {}; }
+    return {
+      ...GITHUB_DEFAULTS,
+      ...stored,
+      owner: stored.owner || GITHUB_DEFAULTS.owner,
+      repo: stored.repo || GITHUB_DEFAULTS.repo,
+      branch: stored.branch || GITHUB_DEFAULTS.branch,
+      pagesUrl: stored.pagesUrl || GITHUB_DEFAULTS.pagesUrl
+    };
   }
   function setGithubCfg(cfg) { localStorage.setItem(GITHUB_KEY, JSON.stringify(cfg)); }
   function githubReady() {
@@ -236,6 +252,31 @@
   function monthIndex(ym) {
     const i = MONTHS.indexOf(ym);
     return i < 0 ? 0 : i;
+  }
+
+  function clampMonthIndex(i) {
+    return Math.max(0, Math.min(MONTHS.length - 1, i));
+  }
+
+  function barPositionStyle(startIdx, endIdx, status) {
+    const n = MONTHS.length;
+    const s = clampMonthIndex(startIdx);
+    const e = Math.max(s, clampMonthIndex(endIdx));
+    const span = e - s + 1;
+    return 'left:calc(' + s + ' * 100% / ' + n + ' + 2px);width:calc(' + span + ' * 100% / ' + n + ' - 4px);background:' + barColor(status);
+  }
+
+  function monthFromPointer(track, clientX) {
+    const r = track.getBoundingClientRect();
+    if (!r.width) return 0;
+    const x = Math.min(Math.max(clientX - r.left, 0), r.width - 0.001);
+    return clampMonthIndex(Math.floor(x / r.width * MONTHS.length));
+  }
+
+  function renderKeepScroll() {
+    const y = window.scrollY;
+    render();
+    window.scrollTo(0, y);
   }
 
   function options(map, selected) {
@@ -353,8 +394,9 @@
     if (githubReady()) return '';
     return `
       <div class="ops-note" id="gh-note">
-        이 브라우저에는 GitHub가 아직 연결되지 않았습니다. 토큰을 한 번 넣어야 두 분 화면에 「공유 저장」이 반영됩니다.
-        <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm" id="btn-goto-gh">설정에서 연결</button>
+        GitHub는 게시판 관리자에서 이미 연결한 저장소·토큰을 그대로 씁니다. 새 토큰을 만들지 마세요.
+        이 브라우저에 아직 없다면 <a href="../support/admin.html">게시판 관리자</a>에서 기존 연결을 한 번 열어 두면 됩니다.
+        <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm" id="btn-goto-gh">설정 보기</button>
       </div>`;
   }
 
@@ -363,7 +405,7 @@
     filterProject = '';
     filterLane = '';
     render();
-    setStatus(msg || '토큰을 입력한 뒤 「연결 저장」을 누르세요.', 'err');
+    setStatus(msg || '게시판 관리자와 같은 기존 토큰을 넣고 「연결 저장」을 누르세요.', 'err');
     const token = $('#gh-token');
     if (token) {
       token.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -417,12 +459,14 @@
     const body = list.map(t => {
       const s = monthIndex(t.start);
       const e = monthIndex(t.end);
-      const span = Math.max(1, e - s + 1);
       return `
         <button type="button" class="ops-gantt__name" data-edit="${t.id}" title="${esc(t.name)}">${esc(t.name)}</button>
         <div class="ops-gantt__track">
-          <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / 11)"></div>
-          <button type="button" class="ops-gantt__bar" data-edit="${t.id}" style="grid-column:${s + 1} / span ${span};background:${barColor(t.status)}" title="${esc(t.name + ' · ' + (STATUSES[t.status] || ''))}"></button>
+          <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / ${MONTHS.length})"></div>
+          <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t.status)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 조절')}">
+            <span class="ops-gantt__handle ops-gantt__handle--start" data-handle="start"></span>
+            <span class="ops-gantt__handle ops-gantt__handle--end" data-handle="end"></span>
+          </div>
         </div>
       `;
     }).join('');
@@ -464,6 +508,7 @@
       ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
+      <p class="ops-hint">막대를 끌어 옮기고, 양쪽 끝을 잡아 시작·끝 달을 조절하세요. 클릭하면 상세가 열립니다.</p>
       ${renderChips(chip)}
       ${grouped.map(([title, dot, list]) => renderGanttBlock(title, dot, list)).join('')}
     `;
@@ -497,20 +542,16 @@
       <div class="ops-form">
         <h3 class="ops-h3">GitHub 연결</h3>
         ${githubReady()
-          ? '<p class="ops-hint">이 브라우저에 연결됨. 「공유 저장」을 누르면 사이트에 반영됩니다. 게시판 관리자에서 이미 넣었다면 그대로 됩니다.</p>'
+          ? '<p class="ops-hint">게시판 관리자와 같은 GitHub 연결을 쓰고 있습니다. gourry7/asungvoice · 「공유 저장」하면 사이트에 반영됩니다.</p>'
           : `<div class="ops-note">
-              공유 저장은 GitHub 토큰이 있어야 합니다. 토큰은 이 브라우저에만 남고, 사이트 서버로는 보내지 않습니다.
-              <ol class="ops-steps">
-                <li><a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">클래식 토큰 발급</a>에서 Note는 <code>asungvoice-ops</code>, Expiration은 90일 이상, 권한은 <code>repo</code>를 선택하세요.</li>
-                <li>생성 직후 보이는 <code>ghp_</code>로 시작하는 값을 복사해 아래에 붙여넣으세요.</li>
-                <li>「연결 저장」을 누른 뒤, 타임라인에서 「공유 저장」을 누르세요.</li>
-              </ol>
+              새 토큰을 만들지 마세요. <a href="../support/admin.html">게시판 관리자</a>에서 이미 넣은 저장소·토큰을 이 보드가 그대로 씁니다.
+              이 브라우저에만 없다면 아래에 기존 토큰을 한 번 붙여넣으면 됩니다.
             </div>`}
         <label>GitHub 사용자</label><input id="gh-owner" value="${esc(cfg.owner || 'gourry7')}">
         <label>저장소</label><input id="gh-repo" value="${esc(cfg.repo || 'asungvoice')}">
         <label>브랜치</label><input id="gh-branch" value="${esc(cfg.branch || 'main')}">
-        <label>Personal Access Token</label>
-        <input id="gh-token" type="password" autocomplete="off" placeholder="${cfg.token ? '저장됨 · 바꿀 때만 입력' : 'ghp_ 로 시작하는 토큰'}">
+        <label>기존 Personal Access Token</label>
+        <input id="gh-token" type="password" autocomplete="off" placeholder="${cfg.token ? '저장됨 · 바꿀 때만 입력' : '게시판 관리자에 넣은 기존 토큰'}">
         <div class="ops-row" style="margin-top:10px"><button class="ops-btn ops-btn--blue" id="btn-gh" type="button">연결 저장</button></div>
 
         <h3 class="ops-h3">내 이름</h3>
@@ -564,6 +605,91 @@
     if (key === 'status' || key === 'project' || key === 'lane' || key === 'start' || key === 'end') render();
   }
 
+  function applyGanttRange(id, startIdx, endIdx, commit) {
+    const t = board.tasks.find(x => x.id === id);
+    const bar = document.querySelector('[data-bar="' + id + '"]');
+    if (!t) return;
+    const s = clampMonthIndex(startIdx);
+    const e = Math.max(s, clampMonthIndex(endIdx));
+    if (bar) {
+      bar.style.cssText = barPositionStyle(s, e, t.status);
+      bar.title = t.name + ' · ' + monthLabel(MONTHS[s]) + ' – ' + monthLabel(MONTHS[e]);
+    }
+    if (!commit) return;
+    const start = MONTHS[s];
+    const end = MONTHS[e];
+    if (t.start === start && t.end === end) return;
+    t.start = start;
+    t.end = end;
+    t.updatedBy = currentUser.id;
+    t.updatedAt = nowIso();
+    logActivity(t.name + ' · 기간 ' + taskRange(t));
+    saveDraft();
+    renderKeepScroll();
+  }
+
+  function onGanttPointerDown(e) {
+    if (e.button !== 0) return;
+    const bar = e.currentTarget;
+    const id = bar.getAttribute('data-bar');
+    const t = board.tasks.find(x => x.id === id);
+    if (!t) return;
+    const track = bar.parentElement;
+    const handle = e.target.closest('[data-handle]');
+    e.preventDefault();
+    bar.setPointerCapture(e.pointerId);
+    bar.classList.add('is-drag');
+    ganttDrag = {
+      id: id,
+      mode: handle ? handle.getAttribute('data-handle') : 'move',
+      startIdx: monthIndex(t.start),
+      endIdx: monthIndex(t.end),
+      origin: monthFromPointer(track, e.clientX),
+      curS: monthIndex(t.start),
+      curE: monthIndex(t.end),
+      moved: false
+    };
+  }
+
+  function onGanttPointerMove(e) {
+    if (!ganttDrag) return;
+    const bar = e.currentTarget;
+    const track = bar.parentElement;
+    const m = monthFromPointer(track, e.clientX);
+    let s = ganttDrag.startIdx;
+    let en = ganttDrag.endIdx;
+    if (ganttDrag.mode === 'move') {
+      const span = en - s;
+      s = clampMonthIndex(ganttDrag.startIdx + (m - ganttDrag.origin));
+      s = Math.min(s, MONTHS.length - 1 - span);
+      en = s + span;
+    } else if (ganttDrag.mode === 'start') {
+      s = Math.min(m, en);
+    } else {
+      en = Math.max(m, s);
+    }
+    if (s !== ganttDrag.curS || en !== ganttDrag.curE) ganttDrag.moved = true;
+    ganttDrag.curS = s;
+    ganttDrag.curE = en;
+    applyGanttRange(ganttDrag.id, s, en, false);
+  }
+
+  function onGanttPointerUp(e) {
+    if (!ganttDrag) return;
+    const d = ganttDrag;
+    ganttDrag = null;
+    e.currentTarget.classList.remove('is-drag');
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    if (!d.moved) {
+      editorId = d.id;
+      renderKeepScroll();
+      const box = $('.ops-editor');
+      if (box) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+    applyGanttRange(d.id, d.curS, d.curE, true);
+  }
+
   function bindView() {
     $$('#view .ops-editor [data-k]').forEach(el => {
       const id = editorId;
@@ -580,6 +706,12 @@
         const box = $('.ops-editor');
         if (box) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
+    });
+    $$('#view [data-bar]').forEach(bar => {
+      bar.addEventListener('pointerdown', onGanttPointerDown);
+      bar.addEventListener('pointermove', onGanttPointerMove);
+      bar.addEventListener('pointerup', onGanttPointerUp);
+      bar.addEventListener('pointercancel', onGanttPointerUp);
     });
     $$('#view [data-close-editor]').forEach(btn => {
       btn.addEventListener('click', () => { editorId = ''; render(); });
@@ -701,7 +833,7 @@
     const branch = ($('#gh-branch').value || '').trim() || 'main';
     const token = ($('#gh-token').value || '').trim() || prev.token;
     if (!owner || !repo) return alert('GitHub 사용자와 저장소 이름을 넣어 주세요.');
-    if (!token) return alert('Personal Access Token을 입력해 주세요. ghp_ 로 시작하는 값입니다.');
+    if (!token) return alert('게시판 관리자에 넣은 기존 토큰을 붙여 넣어 주세요. 새로 발급하지 않아도 됩니다.');
     const btn = $('#btn-gh');
     if (btn) { btn.disabled = true; btn.textContent = '확인 중…'; }
     setStatus('GitHub 연결 확인 중…', '');
@@ -759,7 +891,7 @@
     }
     if (!githubReady()) {
       pendingShare = true;
-      openGithubSettings('토큰을 넣고 「연결 저장」을 누르면 이어서 공유됩니다.');
+      openGithubSettings('게시판 관리자에서 쓴 기존 GitHub 연결을 이 브라우저에 한 번 넣어 주세요.');
       return;
     }
     board.updatedAt = nowIso();
@@ -797,7 +929,7 @@
     $('#login').hidden = true;
     $('#app').hidden = false;
     restoreDraft();
-    if (!githubReady()) setStatus('공유하려면 설정에서 GitHub 토큰을 연결해 주세요.', '');
+    if (!githubReady()) setStatus('게시판 관리자의 GitHub 연결이 이 브라우저에 없습니다. 설정에서 기존 토큰을 쓰면 됩니다.', '');
     else if (dirty) setStatus('이 브라우저에 임시 수정이 있습니다. 공유 저장을 눌러 주세요.', '');
     else setStatus(board.updatedBy ? `마지막 공유 ${displayName(board.updatedBy)} · ${fmtWhen(board.updatedAt)}` : '', '');
     render();
