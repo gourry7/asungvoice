@@ -15,6 +15,7 @@
   const DATA_PATH = 'data/ops-board.json';
   const CONFIG_PATH = 'data/ops-config.json';
   const SESSION_SALT = 'asung-voice-ops-v1';
+  const SESSION_DAYS = 30;
   const scriptBase = document.currentScript.src.replace(/\/js\/ops-board\.js.*$/, '/');
 
   const PROJECTS = {
@@ -122,15 +123,16 @@
 
   async function createSession(user, hash) {
     const token = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(24))));
-    const expires = Date.now() + config.sessionMinutes * 60 * 1000;
+    const expires = Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000;
     const sig = await sha256(token + expires + user.id + hash + SESSION_SALT);
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ token, expires, sig, hash, userId: user.id }));
+    const sess = JSON.stringify({ token, expires, sig, hash, userId: user.id });
+    localStorage.setItem(SESSION_KEY, sess);
+    sessionStorage.removeItem(SESSION_KEY);
     currentUser = user;
-    resetIdle();
   }
 
   async function validateSession() {
-    const raw = sessionStorage.getItem(SESSION_KEY);
+    const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
     if (!raw) return false;
     let sess;
     try { sess = JSON.parse(raw); } catch { return false; }
@@ -141,22 +143,22 @@
     const user = userById(sess.userId);
     if (!user || user.passwordHash !== sess.hash) return false;
     currentUser = user;
+    await createSession(user, sess.hash);
     return true;
   }
 
   function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
     currentUser = null;
     if (idleTimer) clearTimeout(idleTimer);
   }
 
   function resetIdle() {
-    if (idleTimer) clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-      alert('보안을 위해 세션이 만료되었습니다. 다시 로그인해 주세요.');
-      clearSession();
-      showLogin();
-    }, config.sessionMinutes * 60 * 1000);
+    if (idleTimer) {
+      clearTimeout(idleTimer);
+      idleTimer = null;
+    }
   }
 
   function getGithubCfg() {
@@ -391,16 +393,6 @@
     return all.filter(t => t.project === chip);
   }
 
-  function renderGithubNote() {
-    if (githubReady()) return '';
-    return `
-      <div class="ops-note" id="gh-note">
-        GitHub는 게시판 관리자에서 이미 연결한 저장소·토큰을 그대로 씁니다. 새 토큰을 만들지 마세요.
-        이 브라우저에 아직 없다면 <a href="../support/admin.html">게시판 관리자</a>에서 기존 연결을 한 번 열어 두면 됩니다.
-        <button type="button" class="ops-btn ops-btn--ghost ops-btn--sm" id="btn-goto-gh">설정 보기</button>
-      </div>`;
-  }
-
   function openGithubSettings(msg) {
     page = 'settings';
     filterProject = '';
@@ -420,7 +412,6 @@
     const review = tasks.filter(t => t.status === 'review').length;
     const focus = tasks.filter(t => t.status === 'doing' || t.status === 'review');
     return `
-      ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
       <div class="ops-kpis">
@@ -513,7 +504,6 @@
           ['투자', 'dot-corp', tasksForChip('invest'), { lane: 'invest' }]
         ];
     return `
-      ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
       <p class="ops-hint">왼쪽 이름(제품개발·납품, 비명모델 업데이트 등)을 끌어 순서를 바꾸고, 막대를 끌어 기간을 조절하세요. 클릭하면 상세가 열립니다.</p>
@@ -525,7 +515,6 @@
   function renderProjectPage() {
     const list = filteredTasks();
     return `
-      ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
       ${renderGanttBlock(pageTitle(), projectDot(filterProject || 'corp'), list, { project: filterProject || '', lane: filterLane || '' })}
@@ -894,8 +883,6 @@
         saveDraft();
       });
     }
-    const btnGotoGh = $('#btn-goto-gh');
-    if (btnGotoGh) btnGotoGh.addEventListener('click', () => openGithubSettings());
     const btnName = $('#btn-name');
     if (btnName) btnName.addEventListener('click', saveMyName);
     const btnPw = $('#btn-pw');
@@ -1053,8 +1040,7 @@
     $('#login').hidden = true;
     $('#app').hidden = false;
     restoreDraft();
-    if (!githubReady()) setStatus('게시판 관리자의 GitHub 연결이 이 브라우저에 없습니다. 설정에서 기존 토큰을 쓰면 됩니다.', '');
-    else if (dirty) setStatus('이 브라우저에 임시 수정이 있습니다. 공유 저장을 눌러 주세요.', '');
+    if (dirty) setStatus('이 브라우저에 임시 수정이 있습니다. 공유 저장을 눌러 주세요.', '');
     else setStatus(board.updatedBy ? `마지막 공유 ${displayName(board.updatedBy)} · ${fmtWhen(board.updatedAt)}` : '', '');
     render();
   }
@@ -1141,9 +1127,13 @@
   async function init() {
     try {
       bindChrome();
-      clearSession();
       config = { ...config, ...(await loadJson(CONFIG_PATH)) };
-      showLogin();
+      if (await validateSession()) {
+        board = await loadJson(DATA_PATH);
+        await showApp();
+      } else {
+        showLogin();
+      }
     } catch (err) {
       showLoginError(err && err.message ? err.message : '페이지를 불러오지 못했습니다. 새로고침해 주세요.');
     }
