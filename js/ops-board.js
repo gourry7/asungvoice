@@ -58,6 +58,7 @@
   let rowDrag = null;
   let shareTimer = null;
   let persistBusy = false;
+  let persistAgain = false;
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
@@ -203,6 +204,15 @@
     return btoa(binary);
   }
 
+  async function fetchGithubFileSha(api, headers, branch) {
+    const url = api + '?ref=' + encodeURIComponent(branch || 'main') + '&_=' + Date.now();
+    const getRes = await fetch(url, { headers, cache: 'no-store' });
+    if (getRes.ok) return (await getRes.json()).sha || null;
+    if (getRes.status === 404) return null;
+    const err = await getRes.json().catch(() => ({}));
+    throw new Error(err.message || ('파일 조회 실패 (' + getRes.status + ')'));
+  }
+
   async function saveToGithub(path, jsonText, message) {
     const cfg = getGithubCfg();
     if (!cfg.token || !cfg.owner || !cfg.repo) {
@@ -212,22 +222,25 @@
     }
     const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
     const headers = githubHeaders(cfg.token);
-    let sha = null;
-    const getRes = await fetch(api + '?ref=' + (cfg.branch || 'main'), { headers });
-    if (getRes.ok) sha = (await getRes.json()).sha;
-    else if (getRes.status !== 404) {
-      const err = await getRes.json().catch(() => ({}));
-      throw new Error(err.message || ('파일 조회 실패 (' + getRes.status + ')'));
-    }
-    const body = {
-      message: message || 'Update ops board',
-      content: utf8ToBase64(jsonText),
-      branch: cfg.branch || 'main'
-    };
-    if (sha) body.sha = sha;
-    const putRes = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });
-    if (!putRes.ok) {
+    const branch = cfg.branch || 'main';
+    const content = utf8ToBase64(jsonText);
+    const commitMessage = message || 'Update ops board';
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const sha = await fetchGithubFileSha(api, headers, branch);
+      const body = { message: commitMessage, content, branch };
+      if (sha) body.sha = sha;
+      const putRes = await fetch(api, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(body),
+        cache: 'no-store'
+      });
+      if (putRes.ok) return;
       const err = await putRes.json().catch(() => ({}));
+      const conflict = putRes.status === 409
+        || /does not match/i.test(err.message || '');
+      if (conflict && attempt < 2) continue;
       throw new Error(err.message || ('GitHub 저장 실패 (' + putRes.status + ')'));
     }
   }
@@ -1043,8 +1056,12 @@
   }
 
   async function persist() {
-    if (persistBusy) return;
+    if (persistBusy) {
+      persistAgain = true;
+      return;
+    }
     persistBusy = true;
+    persistAgain = false;
     try {
       if (!(await validateSession())) {
         alert('세션이 만료되었습니다.');
@@ -1075,6 +1092,10 @@
       setStatus('사이트 저장 실패 — ' + (err && err.message ? err.message : '다시 눌러 주세요.'), 'err');
     } finally {
       persistBusy = false;
+      if (persistAgain) {
+        persistAgain = false;
+        scheduleShare();
+      }
     }
   }
 
