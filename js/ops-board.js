@@ -53,6 +53,8 @@
   let pendingShare = false;
   let ganttDrag = null;
   let rowDrag = null;
+  let shareTimer = null;
+  let persistBusy = false;
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
@@ -216,7 +218,17 @@
   function saveDraft() {
     localStorage.setItem(DRAFT_KEY, JSON.stringify(board));
     dirty = true;
-    setStatus('이 브라우저에만 저장됨 · 공유 저장을 누르면 두 분에게 반영됩니다.', '');
+    if (githubReady()) {
+      setStatus('저장 중…', '');
+      scheduleShare();
+    } else {
+      setStatus('이 컴퓨터에 저장되었습니다.', 'ok');
+    }
+  }
+
+  function scheduleShare() {
+    if (shareTimer) clearTimeout(shareTimer);
+    shareTimer = setTimeout(() => { persist(); }, 700);
   }
 
   function restoreDraft() {
@@ -931,7 +943,7 @@
       logActivity('비밀번호 변경');
       saveDraft();
       $('#pw-cur').value = $('#pw-new').value = $('#pw-ok').value = '';
-      setStatus('비밀번호가 변경되었습니다. 공유 저장도 눌러 주세요.', 'ok');
+      setStatus('비밀번호가 변경되었습니다.', 'ok');
     } catch (err) {
       alert(err.message);
     }
@@ -964,9 +976,9 @@
       }
       setGithubCfg({ ...prev, owner, repo, branch, token });
       if ($('#gh-token').value) $('#gh-token').value = '';
-      setStatus('GitHub 연결됨. 이제 「공유 저장」을 누르면 사이트에 반영됩니다.', 'ok');
+      setStatus('연결되었습니다. 일정을 바꾸면 바로 저장됩니다.', 'ok');
       render();
-      if (pendingShare) {
+      if (dirty || pendingShare) {
         pendingShare = false;
         await persist();
       }
@@ -994,39 +1006,36 @@
   }
 
   async function persist() {
-    if (!(await validateSession())) {
-      alert('세션이 만료되었습니다.');
-      clearSession();
-      showLogin();
-      return;
-    }
-    if (!githubReady()) {
-      pendingShare = true;
-      openGithubSettings('게시판 관리자에서 쓴 기존 GitHub 연결을 이 브라우저에 한 번 넣어 주세요.');
-      return;
-    }
-    board.updatedAt = nowIso();
-    board.updatedBy = currentUser.id;
-    const json = JSON.stringify(board, null, 2);
-    setStatus('저장 중…', '');
+    if (persistBusy) return;
+    persistBusy = true;
     try {
+      if (!(await validateSession())) {
+        alert('세션이 만료되었습니다.');
+        clearSession();
+        showLogin();
+        return;
+      }
+      if (!githubReady()) {
+        setStatus('이 컴퓨터에 저장되었습니다.', 'ok');
+        return;
+      }
+      board.updatedAt = nowIso();
+      board.updatedBy = currentUser.id;
+      const json = JSON.stringify(board, null, 2);
+      setStatus('저장 중…', '');
       await saveToGithub(DATA_PATH, json, 'Update ops board (' + currentUser.name + ')');
       localStorage.removeItem(DRAFT_KEY);
       dirty = false;
       pendingShare = false;
-      setStatus('사이트에 공유되었습니다. 반영까지 1~2분 걸릴 수 있습니다.', 'ok');
+      setStatus('저장되었습니다.', 'ok');
     } catch (err) {
       if (err && err.code === 'no-github') {
-        pendingShare = true;
-        openGithubSettings(err.message);
+        setStatus('이 컴퓨터에 저장되었습니다.', 'ok');
         return;
       }
-      const blob = new Blob([json], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'ops-board.json';
-      a.click();
-      setStatus('GitHub 저장 실패 — JSON을 받았습니다. ' + (err && err.message ? err.message : ''), 'err');
+      setStatus('저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요.', 'err');
+    } finally {
+      persistBusy = false;
     }
   }
 
@@ -1040,8 +1049,10 @@
     $('#login').hidden = true;
     $('#app').hidden = false;
     restoreDraft();
-    if (dirty) setStatus('이 브라우저에 임시 수정이 있습니다. 공유 저장을 눌러 주세요.', '');
-    else setStatus(board.updatedBy ? `마지막 공유 ${displayName(board.updatedBy)} · ${fmtWhen(board.updatedAt)}` : '', '');
+    if (dirty) {
+      if (githubReady()) scheduleShare();
+      else setStatus('이 컴퓨터에 저장되어 있습니다.', 'ok');
+    } else setStatus(board.updatedBy ? `마지막 저장 ${displayName(board.updatedBy)} · ${fmtWhen(board.updatedAt)}` : '', '');
     render();
   }
 
