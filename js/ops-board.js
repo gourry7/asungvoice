@@ -59,6 +59,8 @@
   let shareTimer = null;
   let persistBusy = false;
   let persistAgain = false;
+  const githubShaCache = Object.create(null);
+  let githubWriteChain = Promise.resolve();
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
@@ -204,9 +206,20 @@
     return btoa(binary);
   }
 
-  async function fetchGithubFileSha(api, headers, branch) {
-    const url = api + '?ref=' + encodeURIComponent(branch || 'main') + '&_=' + Date.now();
-    const getRes = await fetch(url, { headers, cache: 'no-store' });
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function fetchGithubFileSha(api, headers) {
+    const url = api + '?_=' + Date.now() + Math.random().toString(36).slice(2);
+    const getRes = await fetch(url, {
+      headers: {
+        ...headers,
+        'Cache-Control': 'no-cache, no-store',
+        Pragma: 'no-cache'
+      },
+      cache: 'no-store'
+    });
     if (getRes.ok) return (await getRes.json()).sha || null;
     if (getRes.status === 404) return null;
     const err = await getRes.json().catch(() => ({}));
@@ -214,35 +227,54 @@
   }
 
   async function saveToGithub(path, jsonText, message) {
-    const cfg = getGithubCfg();
-    if (!cfg.token || !cfg.owner || !cfg.repo) {
-      const err = new Error('설정에서 GitHub 저장소와 토큰을 먼저 연결해 주세요.');
-      err.code = 'no-github';
-      throw err;
-    }
-    const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
-    const headers = githubHeaders(cfg.token);
-    const branch = cfg.branch || 'main';
-    const content = utf8ToBase64(jsonText);
-    const commitMessage = message || 'Update ops board';
+    const run = async () => {
+      const cfg = getGithubCfg();
+      if (!cfg.token || !cfg.owner || !cfg.repo) {
+        const err = new Error('설정에서 GitHub 저장소와 토큰을 먼저 연결해 주세요.');
+        err.code = 'no-github';
+        throw err;
+      }
+      const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
+      const headers = githubHeaders(cfg.token);
+      const branch = cfg.branch || 'main';
+      const content = utf8ToBase64(jsonText);
+      const commitMessage = message || 'Update ops board';
+      let sha = githubShaCache[path] || null;
 
-    for (let attempt = 0; attempt < 3; attempt++) {
-      const sha = await fetchGithubFileSha(api, headers, branch);
-      const body = { message: commitMessage, content, branch };
-      if (sha) body.sha = sha;
-      const putRes = await fetch(api, {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify(body),
-        cache: 'no-store'
-      });
-      if (putRes.ok) return;
-      const err = await putRes.json().catch(() => ({}));
-      const conflict = putRes.status === 409
-        || /does not match/i.test(err.message || '');
-      if (conflict && attempt < 2) continue;
-      throw new Error(err.message || ('GitHub 저장 실패 (' + putRes.status + ')'));
-    }
+      for (let attempt = 0; attempt < 5; attempt++) {
+        if (!sha) sha = await fetchGithubFileSha(api, headers);
+        const body = { message: commitMessage, content, branch };
+        if (sha) body.sha = sha;
+        const putRes = await fetch(api, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(body),
+          cache: 'no-store'
+        });
+        if (putRes.ok) {
+          const data = await putRes.json().catch(() => ({}));
+          const nextSha = data && data.content && data.content.sha;
+          if (nextSha) githubShaCache[path] = nextSha;
+          else delete githubShaCache[path];
+          return;
+        }
+        const err = await putRes.json().catch(() => ({}));
+        const conflict = putRes.status === 409
+          || putRes.status === 422
+          || /does not match/i.test(err.message || '');
+        if (conflict && attempt < 4) {
+          delete githubShaCache[path];
+          sha = null;
+          await sleep(200 + attempt * 200);
+          continue;
+        }
+        throw new Error(err.message || ('GitHub 저장 실패 (' + putRes.status + ')'));
+      }
+    };
+
+    const queued = githubWriteChain.then(run, run);
+    githubWriteChain = queued.catch(() => {});
+    return queued;
   }
 
   function saveDraft() {
@@ -1094,7 +1126,7 @@
       persistBusy = false;
       if (persistAgain) {
         persistAgain = false;
-        scheduleShare();
+        setTimeout(() => { persist(); }, 300);
       }
     }
   }
