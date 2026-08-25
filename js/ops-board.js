@@ -241,12 +241,15 @@
     }
   }
 
-  function githubHeaders(token) {
-    return {
+  function githubHeaders(token, withJsonBody) {
+    const headers = {
       Authorization: 'Bearer ' + token,
       Accept: 'application/vnd.github+json',
-      'Content-Type': 'application/json'
+      'X-GitHub-Api-Version': '2022-11-28'
     };
+    // Content-Type only on PUT — extra headers on GET break GitHub CORS (Failed to fetch).
+    if (withJsonBody) headers['Content-Type'] = 'application/json';
+    return headers;
   }
 
   function utf8ToBase64(text) {
@@ -263,14 +266,10 @@
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  async function fetchGithubFileSha(api, headers) {
+  async function fetchGithubFileSha(api, token) {
     const url = api + '?_=' + Date.now() + Math.random().toString(36).slice(2);
     const getRes = await fetch(url, {
-      headers: {
-        ...headers,
-        'Cache-Control': 'no-cache, no-store',
-        Pragma: 'no-cache'
-      },
+      headers: githubHeaders(token, false),
       cache: 'no-store'
     });
     if (getRes.ok) return (await getRes.json()).sha || null;
@@ -288,40 +287,53 @@
         throw err;
       }
       const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
-      const headers = githubHeaders(cfg.token);
+      const headers = githubHeaders(cfg.token, true);
       const branch = cfg.branch || 'main';
       const content = utf8ToBase64(jsonText);
       const commitMessage = message || 'Update ops board';
       let sha = githubShaCache[path] || null;
 
       for (let attempt = 0; attempt < 5; attempt++) {
-        if (!sha) sha = await fetchGithubFileSha(api, headers);
-        const body = { message: commitMessage, content, branch };
-        if (sha) body.sha = sha;
-        const putRes = await fetch(api, {
-          method: 'PUT',
-          headers,
-          body: JSON.stringify(body),
-          cache: 'no-store'
-        });
-        if (putRes.ok) {
-          const data = await putRes.json().catch(() => ({}));
-          const nextSha = data && data.content && data.content.sha;
-          if (nextSha) githubShaCache[path] = nextSha;
-          else delete githubShaCache[path];
-          return;
+        try {
+          if (!sha) sha = await fetchGithubFileSha(api, cfg.token);
+          const body = { message: commitMessage, content, branch };
+          if (sha) body.sha = sha;
+          const putRes = await fetch(api, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(body),
+            cache: 'no-store'
+          });
+          if (putRes.ok) {
+            const data = await putRes.json().catch(() => ({}));
+            const nextSha = data && data.content && data.content.sha;
+            if (nextSha) githubShaCache[path] = nextSha;
+            else delete githubShaCache[path];
+            return;
+          }
+          const err = await putRes.json().catch(() => ({}));
+          const conflict = putRes.status === 409
+            || putRes.status === 422
+            || /does not match/i.test(err.message || '');
+          if (conflict && attempt < 4) {
+            delete githubShaCache[path];
+            sha = null;
+            await sleep(200 + attempt * 200);
+            continue;
+          }
+          throw new Error(err.message || ('GitHub 저장 실패 (' + putRes.status + ')'));
+        } catch (err) {
+          if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message || '') && attempt < 4) {
+            delete githubShaCache[path];
+            sha = null;
+            await sleep(250 + attempt * 250);
+            continue;
+          }
+          if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message || '')) {
+            throw new Error('네트워크/CORS로 저장이 막혔습니다. 새로고침 후 다시 로그인해 보세요.');
+          }
+          throw err;
         }
-        const err = await putRes.json().catch(() => ({}));
-        const conflict = putRes.status === 409
-          || putRes.status === 422
-          || /does not match/i.test(err.message || '');
-        if (conflict && attempt < 4) {
-          delete githubShaCache[path];
-          sha = null;
-          await sleep(200 + attempt * 200);
-          continue;
-        }
-        throw new Error(err.message || ('GitHub 저장 실패 (' + putRes.status + ')'));
       }
     };
 
