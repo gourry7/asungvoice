@@ -50,7 +50,6 @@
   let selectedUserId = '';
   let editorId = '';
   let timelineFilter = '';
-  let pendingShare = false;
   let ganttDrag = null;
   let rowDrag = null;
   let shareTimer = null;
@@ -176,7 +175,6 @@
       pagesUrl: stored.pagesUrl || GITHUB_DEFAULTS.pagesUrl
     };
   }
-  function setGithubCfg(cfg) { localStorage.setItem(GITHUB_KEY, JSON.stringify(cfg)); }
   function githubReady() {
     const c = getGithubCfg();
     return !!(c.token && c.owner && c.repo);
@@ -405,19 +403,6 @@
     return all.filter(t => t.project === chip);
   }
 
-  function openGithubSettings(msg) {
-    page = 'settings';
-    filterProject = '';
-    filterLane = '';
-    render();
-    setStatus(msg || '게시판 관리자와 같은 기존 토큰을 넣고 「연결 저장」을 누르세요.', 'err');
-    const token = $('#gh-token');
-    if (token) {
-      token.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      token.focus();
-    }
-  }
-
   function renderHome() {
     const tasks = board.tasks || [];
     const doing = tasks.filter(t => t.status === 'doing').length;
@@ -543,26 +528,8 @@
   }
 
   function renderSettings() {
-    const cfg = getGithubCfg();
-    const users = (config.users || []).map(u =>
-      `<option value="${u.id}"${u.id === currentUser.id ? ' selected' : ''}>${esc(u.name)} (${esc(u.role)})</option>`
-    ).join('');
     return `
       <div class="ops-form">
-        <h3 class="ops-h3">GitHub 연결</h3>
-        ${githubReady()
-          ? '<p class="ops-hint">게시판 관리자와 같은 GitHub 연결을 쓰고 있습니다. gourry7/asungvoice · 「공유 저장」하면 사이트에 반영됩니다.</p>'
-          : `<div class="ops-note">
-              새 토큰을 만들지 마세요. <a href="../support/admin.html">게시판 관리자</a>에서 이미 넣은 저장소·토큰을 이 보드가 그대로 씁니다.
-              이 브라우저에만 없다면 아래에 기존 토큰을 한 번 붙여넣으면 됩니다.
-            </div>`}
-        <label>GitHub 사용자</label><input id="gh-owner" value="${esc(cfg.owner || 'gourry7')}">
-        <label>저장소</label><input id="gh-repo" value="${esc(cfg.repo || 'asungvoice')}">
-        <label>브랜치</label><input id="gh-branch" value="${esc(cfg.branch || 'main')}">
-        <label>기존 Personal Access Token</label>
-        <input id="gh-token" type="password" autocomplete="off" placeholder="${cfg.token ? '저장됨 · 바꿀 때만 입력' : '게시판 관리자에 넣은 기존 토큰'}">
-        <div class="ops-row" style="margin-top:10px"><button class="ops-btn ops-btn--blue" id="btn-gh" type="button">연결 저장</button></div>
-
         <h3 class="ops-h3">내 이름</h3>
         <label>표시 이름</label>
         <input id="set-name" value="${esc(currentUser.name)}">
@@ -577,8 +544,6 @@
         <input id="pw-ok" type="password" autocomplete="new-password">
         <div class="ops-row" style="margin-top:10px"><button class="ops-btn ops-btn--ghost" id="btn-pw" type="button">비밀번호 변경</button></div>
       </div>
-      <p class="ops-hint">이 보드는 검색·메뉴에 노출되지 않습니다. 주소는 두 분만 공유하세요. GitHub 저장소가 공개면 저장된 JSON도 공개될 수 있습니다.</p>
-      <select id="dummy-user" hidden>${users}</select>
     `;
   }
 
@@ -899,8 +864,6 @@
     if (btnName) btnName.addEventListener('click', saveMyName);
     const btnPw = $('#btn-pw');
     if (btnPw) btnPw.addEventListener('click', changePassword);
-    const btnGh = $('#btn-gh');
-    if (btnGh) btnGh.addEventListener('click', saveGithub);
   }
 
   async function saveMyName() {
@@ -949,48 +912,6 @@
     }
   }
 
-  async function saveGithub() {
-    const prev = getGithubCfg();
-    const owner = ($('#gh-owner').value || '').trim();
-    const repo = ($('#gh-repo').value || '').trim();
-    const branch = ($('#gh-branch').value || '').trim() || 'main';
-    const token = ($('#gh-token').value || '').trim() || prev.token;
-    if (!owner || !repo) return alert('GitHub 사용자와 저장소 이름을 넣어 주세요.');
-    if (!token) return alert('게시판 관리자에 넣은 기존 토큰을 붙여 넣어 주세요. 새로 발급하지 않아도 됩니다.');
-    const btn = $('#btn-gh');
-    if (btn) { btn.disabled = true; btn.textContent = '확인 중…'; }
-    setStatus('GitHub 연결 확인 중…', '');
-    try {
-      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {
-        headers: githubHeaders(token)
-      });
-      if (res.status === 401 || res.status === 403) {
-        throw new Error('토큰이 거부되었습니다. repo 권한으로 새로 발급해 붙여 넣어 주세요.');
-      }
-      if (res.status === 404) {
-        throw new Error('저장소를 찾을 수 없습니다. 사용자·저장소 이름과 토큰 권한을 확인해 주세요.');
-      }
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || 'GitHub 연결 실패');
-      }
-      setGithubCfg({ ...prev, owner, repo, branch, token });
-      if ($('#gh-token').value) $('#gh-token').value = '';
-      setStatus('연결되었습니다. 일정을 바꾸면 바로 저장됩니다.', 'ok');
-      render();
-      if (dirty || pendingShare) {
-        pendingShare = false;
-        await persist();
-      }
-    } catch (err) {
-      setStatus(err.message || 'GitHub 연결 실패', 'err');
-      alert(err.message || 'GitHub 연결 실패');
-    } finally {
-      const again = $('#btn-gh');
-      if (again) { again.disabled = false; again.textContent = '연결 저장'; }
-    }
-  }
-
   function addRow() {
     if (page === 'settings' || page === 'activity') {
       page = 'timeline';
@@ -1026,7 +947,6 @@
       await saveToGithub(DATA_PATH, json, 'Update ops board (' + currentUser.name + ')');
       localStorage.removeItem(DRAFT_KEY);
       dirty = false;
-      pendingShare = false;
       setStatus('저장되었습니다.', 'ok');
     } catch (err) {
       if (err && err.code === 'no-github') {
