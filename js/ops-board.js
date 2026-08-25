@@ -95,7 +95,45 @@
     return iso.replace('T', ' ').slice(0, 16);
   }
 
+  function base64ToUtf8(b64) {
+    const binary = atob(String(b64 || '').replace(/\s/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  async function loadJsonFromGithub(path) {
+    const cfg = getGithubCfg();
+    if (!cfg.token || !cfg.owner || !cfg.repo) {
+      throw new Error('no-github');
+    }
+    const branch = cfg.branch || 'main';
+    const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`
+      + '?ref=' + encodeURIComponent(branch)
+      + '&_=' + Date.now();
+    const res = await fetch(api, {
+      headers: githubHeaders(cfg.token, false),
+      cache: 'no-store'
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || ('파일 조회 실패 (' + res.status + ')'));
+    }
+    const data = await res.json();
+    if (data && data.sha) githubShaCache[path] = data.sha;
+    return JSON.parse(base64ToUtf8(data.content || ''));
+  }
+
   async function loadJson(path) {
+    // Pages CDN caches JSON ~10 minutes, so after a successful GitHub save a
+    // refresh can still show the old board. Prefer the Contents API when unlocked.
+    if (githubReady()) {
+      try {
+        return await loadJsonFromGithub(path);
+      } catch {
+        /* token/network issues — fall back to Pages copy */
+      }
+    }
     const url = new URL(path, scriptBase).href + '?t=' + Date.now();
     const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(path + ' 를 불러올 수 없습니다.');
