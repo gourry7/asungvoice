@@ -256,17 +256,48 @@ a { color: inherit; text-decoration: none; }
 }
 .ops-gantt__h { font-size: .72rem; color: var(--ops-muted); text-align: center; }
 .ops-gantt__h.is-now { color: var(--ops-blue); font-weight: 700; }
+.ops-gantt__row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: center;
+  min-height: 22px;
+}
+.ops-gantt__row.is-dragging { opacity: .35; }
+.ops-gantt__row.is-drop-before { box-shadow: inset 0 2px 0 var(--ops-blue); }
+.ops-gantt__row.is-drop-after { box-shadow: inset 0 -2px 0 var(--ops-blue); }
 .ops-gantt__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: .8rem; padding-right: 8px;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  overflow: hidden;
   background: none; text-align: left; color: var(--ops-text);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
 }
 .ops-gantt__name:hover { color: var(--ops-blue); }
+.ops-gantt__label {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ops-gantt__grip {
+  width: 8px;
+  height: 12px;
+  flex-shrink: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    #c5c4be 0 2px,
+    transparent 2px 4px
+  );
+  opacity: .7;
+}
 .ops-gantt__track {
-  grid-column: 2 / -1;
   height: 22px;
   position: relative;
 }
+body.is-row-drag { cursor: grabbing; user-select: none; }
+body.is-row-drag .ops-gantt__name { cursor: grabbing; }
 .ops-gantt__bar {
   position: absolute;
   top: 4px;

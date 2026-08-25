@@ -51,6 +51,7 @@
   let timelineFilter = '';
   let pendingShare = false;
   let ganttDrag = null;
+  let rowDrag = null;
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => [...document.querySelectorAll(sel)];
@@ -448,7 +449,7 @@
     `).join('')}</div>`;
   }
 
-  function renderGanttBlock(title, colorClass, list) {
+  function renderGanttBlock(title, colorClass, list, group) {
     if (!list.length) {
       return `<section class="ops-block"><div class="ops-block__head"><span class="${colorClass}"></span>${esc(title)} <span style="font-weight:500;color:var(--ops-muted);font-size:.8rem">일정 없음</span></div></section>`;
     }
@@ -460,18 +461,25 @@
       const s = monthIndex(t.start);
       const e = monthIndex(t.end);
       return `
-        <button type="button" class="ops-gantt__name" data-edit="${t.id}" title="${esc(t.name)}">${esc(t.name)}</button>
-        <div class="ops-gantt__track">
-          <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / ${MONTHS.length})"></div>
-          <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t.status)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 조절')}">
-            <span class="ops-gantt__handle ops-gantt__handle--start" data-handle="start"></span>
-            <span class="ops-gantt__handle ops-gantt__handle--end" data-handle="end"></span>
+        <div class="ops-gantt__row" data-row="${t.id}">
+          <button type="button" class="ops-gantt__name" data-row="${t.id}" title="${esc(t.name + ' · 끌어 순서 변경')}">
+            <span class="ops-gantt__grip" aria-hidden="true"></span>
+            <span class="ops-gantt__label">${esc(t.name)}</span>
+          </button>
+          <div class="ops-gantt__track">
+            <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / ${MONTHS.length})"></div>
+            <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t.status)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 기간 조절')}">
+              <span class="ops-gantt__handle ops-gantt__handle--start" data-handle="start"></span>
+              <span class="ops-gantt__handle ops-gantt__handle--end" data-handle="end"></span>
+            </div>
           </div>
         </div>
       `;
     }).join('');
+    const project = (group && group.project) || '';
+    const lane = (group && group.lane) || '';
     return `
-      <section class="ops-block">
+      <section class="ops-block" data-group-project="${esc(project)}" data-group-lane="${esc(lane)}">
         <div class="ops-block__head"><span class="${colorClass}"></span>${esc(title)}</div>
         <div class="ops-gantt"><div class="ops-gantt__grid"><div></div>${head}${body}</div></div>
       </section>
@@ -495,22 +503,22 @@
   function renderTimeline() {
     const chip = timelineFilter;
     const grouped = chip
-      ? [[chip === 'sales' || chip === 'invest' ? LANES[chip] : PROJECTS[chip], projectDot(chip), tasksForChip(chip)]]
+      ? [[chip === 'sales' || chip === 'invest' ? LANES[chip] : PROJECTS[chip], projectDot(chip), tasksForChip(chip), chip === 'sales' || chip === 'invest' ? { lane: chip } : { project: chip }]]
       : [
-          ['워치독', 'dot-watchdog', tasksForChip('watchdog')],
-          ['마이안심이', 'dot-ansimi', tasksForChip('ansimi')],
-          ['일괄소등', 'dot-switch', tasksForChip('switch')],
-          ['비상벨', 'dot-bell', tasksForChip('bell')],
-          ['영업', 'dot-corp', tasksForChip('sales')],
-          ['투자', 'dot-corp', tasksForChip('invest')]
+          ['워치독', 'dot-watchdog', tasksForChip('watchdog'), { project: 'watchdog' }],
+          ['마이안심이', 'dot-ansimi', tasksForChip('ansimi'), { project: 'ansimi' }],
+          ['일괄소등', 'dot-switch', tasksForChip('switch'), { project: 'switch' }],
+          ['비상벨', 'dot-bell', tasksForChip('bell'), { project: 'bell' }],
+          ['영업', 'dot-corp', tasksForChip('sales'), { lane: 'sales' }],
+          ['투자', 'dot-corp', tasksForChip('invest'), { lane: 'invest' }]
         ];
     return `
       ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
-      <p class="ops-hint">막대를 끌어 옮기고, 양쪽 끝을 잡아 시작·끝 달을 조절하세요. 클릭하면 상세가 열립니다.</p>
+      <p class="ops-hint">왼쪽 이름(제품개발·납품, 비명모델 업데이트 등)을 끌어 순서를 바꾸고, 막대를 끌어 기간을 조절하세요. 클릭하면 상세가 열립니다.</p>
       ${renderChips(chip)}
-      ${grouped.map(([title, dot, list]) => renderGanttBlock(title, dot, list)).join('')}
+      ${grouped.map(([title, dot, list, group]) => renderGanttBlock(title, dot, list, group)).join('')}
     `;
   }
 
@@ -520,7 +528,7 @@
       ${renderGithubNote()}
       ${renderQuickAdd()}
       ${renderEditor()}
-      ${renderGanttBlock(pageTitle(), projectDot(filterProject || 'corp'), list)}
+      ${renderGanttBlock(pageTitle(), projectDot(filterProject || 'corp'), list, { project: filterProject || '', lane: filterLane || '' })}
       <h3 class="ops-h3">목록</h3>
       ${renderCards(list)}
     `;
@@ -690,6 +698,116 @@
     applyGanttRange(d.id, d.curS, d.curE, true);
   }
 
+  function clearRowDropMarks() {
+    $$('#view .ops-gantt__row').forEach(el => {
+      el.classList.remove('is-drop-before', 'is-drop-after', 'is-dragging');
+    });
+  }
+
+  function rowAtPoint(clientY, exceptId) {
+    const rows = $$('#view .ops-gantt__row[data-row]');
+    let best = null;
+    let bestDist = Infinity;
+    rows.forEach(row => {
+      if (row.getAttribute('data-row') === exceptId) return;
+      const r = row.getBoundingClientRect();
+      const mid = (r.top + r.bottom) / 2;
+      const dist = clientY >= r.top && clientY <= r.bottom ? 0 : Math.abs(clientY - mid);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = row;
+      }
+    });
+    return best;
+  }
+
+  function moveTaskRow(dragId, targetId, place, project, lane) {
+    const t = board.tasks.find(x => x.id === dragId);
+    if (!t || dragId === targetId) return;
+    if (project && t.project !== project) t.project = project;
+    if (lane && t.lane !== lane) t.lane = lane;
+    const from = board.tasks.findIndex(x => x.id === dragId);
+    if (from < 0) return;
+    const [item] = board.tasks.splice(from, 1);
+    let insert = board.tasks.findIndex(x => x.id === targetId);
+    if (insert < 0) {
+      board.tasks.splice(from, 0, item);
+      return;
+    }
+    if (place === 'after') insert += 1;
+    board.tasks.splice(insert, 0, item);
+    t.updatedBy = currentUser.id;
+    t.updatedAt = nowIso();
+    logActivity(t.name + ' · 순서 변경');
+    saveDraft();
+    renderKeepScroll();
+  }
+
+  function onRowPointerDown(e) {
+    if (e.button !== 0) return;
+    if (ganttDrag) return;
+    const name = e.currentTarget;
+    const id = name.getAttribute('data-row');
+    if (!id) return;
+    e.preventDefault();
+    name.setPointerCapture(e.pointerId);
+    rowDrag = {
+      id: id,
+      y: e.clientY,
+      moved: false,
+      place: 'before',
+      targetId: id,
+      project: '',
+      lane: ''
+    };
+  }
+
+  function onRowPointerMove(e) {
+    if (!rowDrag) return;
+    if (!rowDrag.moved && Math.abs(e.clientY - rowDrag.y) < 6) return;
+    rowDrag.moved = true;
+    document.body.classList.add('is-row-drag');
+    const src = document.querySelector('.ops-gantt__row[data-row="' + rowDrag.id + '"]');
+    clearRowDropMarks();
+    if (src) src.classList.add('is-dragging');
+    if (src) {
+      const sr = src.getBoundingClientRect();
+      if (e.clientY >= sr.top && e.clientY <= sr.bottom) {
+        rowDrag.targetId = rowDrag.id;
+        return;
+      }
+    }
+    const row = rowAtPoint(e.clientY, rowDrag.id);
+    if (!row) return;
+    const r = row.getBoundingClientRect();
+    const place = e.clientY < r.top + r.height / 2 ? 'before' : 'after';
+    row.classList.add(place === 'before' ? 'is-drop-before' : 'is-drop-after');
+    const block = row.closest('.ops-block');
+    rowDrag.targetId = row.getAttribute('data-row');
+    rowDrag.place = place;
+    rowDrag.project = (block && block.getAttribute('data-group-project')) || '';
+    rowDrag.lane = (block && block.getAttribute('data-group-lane')) || '';
+  }
+
+  function onRowPointerUp(e) {
+    if (!rowDrag) return;
+    const d = rowDrag;
+    rowDrag = null;
+    document.body.classList.remove('is-row-drag');
+    clearRowDropMarks();
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    if (!d.moved) {
+      editorId = d.id;
+      renderKeepScroll();
+      const box = $('.ops-editor');
+      if (box) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+    if (d.targetId && d.targetId !== d.id) {
+      moveTaskRow(d.id, d.targetId, d.place, d.project, d.lane);
+    }
+  }
+
   function bindView() {
     $$('#view .ops-editor [data-k]').forEach(el => {
       const id = editorId;
@@ -712,6 +830,12 @@
       bar.addEventListener('pointermove', onGanttPointerMove);
       bar.addEventListener('pointerup', onGanttPointerUp);
       bar.addEventListener('pointercancel', onGanttPointerUp);
+    });
+    $$('#view .ops-gantt__name[data-row]').forEach(name => {
+      name.addEventListener('pointerdown', onRowPointerDown);
+      name.addEventListener('pointermove', onRowPointerMove);
+      name.addEventListener('pointerup', onRowPointerUp);
+      name.addEventListener('pointercancel', onRowPointerUp);
     });
     $$('#view [data-close-editor]').forEach(btn => {
       btn.addEventListener('click', () => { editorId = ''; render(); });
