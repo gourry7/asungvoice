@@ -1,22 +1,8 @@
 {
-  "updatedAt": "2026-08-26T04:11:35.149+09:00",
+  "updatedAt": "2026-08-26T04:11:45.795+09:00",
   "updatedBy": "dir2",
   "memo": "보정할 내용\n- 마이안심이 출시 목표월:\n- 시드(CJ ENM)·LIPS II 실제 입금 여부:\n- 일괄소등 2차 양산 목표:\n- 비상벨 1차 적용 대상 기종/현장:\n- 이번 달 영업 미팅:",
   "tasks": [
-    {
-      "id": "row-mt8i963sweq",
-      "name": "3D 프린터 제작 및 도색",
-      "project": "ansimi",
-      "lane": "product",
-      "status": "planned",
-      "start": "2026-08",
-      "end": "2026-08",
-      "owner": "공찬희",
-      "note": "",
-      "color": "#d47080",
-      "updatedBy": "dir2",
-      "updatedAt": "2026-08-26T04:11:33.763+09:00"
-    },
     {
       "id": "wd-model",
       "name": "비명모델 업데이트",
@@ -274,6 +260,20 @@
       "note": "시드 매칭 정부지원. 마이안심이 론칭 전용."
     },
     {
+      "id": "row-mt8i963sweq",
+      "name": "3D 프린터 제작 및 도색",
+      "project": "ansimi",
+      "lane": "product",
+      "status": "planned",
+      "start": "2026-08",
+      "end": "2026-08",
+      "owner": "공찬희",
+      "note": "",
+      "color": "#d47080",
+      "updatedBy": "dir2",
+      "updatedAt": "2026-08-26T04:11:43.925+09:00"
+    },
+    {
       "id": "an-mold",
       "name": "금형 설계·시사출",
       "project": "ansimi",
@@ -388,6 +388,11 @@
     }
   ],
   "activity": [
+    {
+      "at": "2026-08-26T04:11:43.925+09:00",
+      "by": "dir2",
+      "text": "3D 프린터 제작 및 도색 · 순서 변경"
+    },
     {
       "at": "2026-08-26T04:11:33.763+09:00",
       "by": "dir2",
