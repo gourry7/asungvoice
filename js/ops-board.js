@@ -787,21 +787,44 @@
     return ((i + 0.5) / n * 100).toFixed(4) + '%';
   }
 
+  function ganttPct(dayIdx) {
+    const n = DAYS.length || 1;
+    return (dayIdx / n * 100).toFixed(4) + '%';
+  }
+
+  function buildGanttGuidesHtml() {
+    const parts = [];
+    let monthStart = 0;
+    for (let i = 1; i < DAYS.length; i++) {
+      const left = ganttPct(i);
+      if (DAYS[i].slice(0, 7) !== DAYS[i - 1].slice(0, 7)) {
+        parts.push('<i class="ops-gantt__guide ops-gantt__guide--month" style="left:' + left + '"></i>');
+        monthStart = i;
+      } else if ((i - monthStart) % 7 === 0) {
+        parts.push('<i class="ops-gantt__guide ops-gantt__guide--week" style="left:' + left + '"></i>');
+      }
+    }
+    return '<div class="ops-gantt__guides" aria-hidden="true">' + parts.join('') + '</div>';
+  }
+
+  const GANTT_GUIDES_HTML = buildGanttGuidesHtml();
+
   function renderGanttMonthHead(nowIdx) {
     const today = todayYmd();
+    const n = DAYS.length || 1;
     const bands = [];
     for (let i = 0; i < DAYS.length; i++) {
       const ym = DAYS[i].slice(0, 7);
       const last = bands[bands.length - 1];
       if (last && last.ym === ym) last.count += 1;
-      else bands.push({ ym, count: 1, hasToday: false });
+      else bands.push({ ym, count: 1, start: i, hasToday: false });
       if (DAYS[i] === today) bands[bands.length - 1].hasToday = true;
     }
     const labels = bands.map(b =>
-      `<div class="ops-gantt__h${b.hasToday ? ' is-now' : ''}" style="flex:${b.count} 1 0%">${monthLabel(b.ym)}</div>`
+      `<div class="ops-gantt__h${b.hasToday ? ' is-now' : ''}" style="left:${ganttPct(b.start)};width:${(b.count / n * 100).toFixed(4)}%">${monthLabel(b.ym)}</div>`
     ).join('');
     const mark = `<div class="ops-gantt__today" style="left:${ganttNowLeftPct(nowIdx)}" title="${esc(today)}">오늘</div>`;
-    return labels + mark;
+    return GANTT_GUIDES_HTML + labels + mark;
   }
 
   function renderGanttBlock(title, colorClass, list, group) {
@@ -822,6 +845,7 @@
             <span class="ops-gantt__label">${esc(t.name)}</span>
           </button>
           <div class="ops-gantt__track">
+            ${GANTT_GUIDES_HTML}
             <div class="ops-gantt__now" style="left:${nowLeft}"></div>
             <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 일 단위로 조절')}">
               <span class="ops-gantt__handle ops-gantt__handle--start" data-handle="start"></span>
