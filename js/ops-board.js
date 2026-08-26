@@ -781,7 +781,13 @@
     `).join('')}</div>`;
   }
 
-  function renderGanttMonthHead() {
+  function ganttNowLeftPct(nowIdx) {
+    const n = DAYS.length || 1;
+    const i = clampDayIndex(nowIdx);
+    return ((i + 0.5) / n * 100).toFixed(4) + '%';
+  }
+
+  function renderGanttMonthHead(nowIdx) {
     const today = todayYmd();
     const bands = [];
     for (let i = 0; i < DAYS.length; i++) {
@@ -791,9 +797,11 @@
       else bands.push({ ym, count: 1, hasToday: false });
       if (DAYS[i] === today) bands[bands.length - 1].hasToday = true;
     }
-    return bands.map(b =>
-      `<div class="ops-gantt__h${b.hasToday ? ' is-now' : ''}" style="flex:${b.count}">${b.hasToday ? monthLabel(b.ym) + '·오늘' : monthLabel(b.ym)}</div>`
+    const labels = bands.map(b =>
+      `<div class="ops-gantt__h${b.hasToday ? ' is-now' : ''}" style="flex:${b.count} 1 0%">${monthLabel(b.ym)}</div>`
     ).join('');
+    const mark = `<div class="ops-gantt__today" style="left:${ganttNowLeftPct(nowIdx)}" title="${esc(today)}">오늘</div>`;
+    return labels + mark;
   }
 
   function renderGanttBlock(title, colorClass, list, group) {
@@ -802,7 +810,8 @@
     }
     const today = todayYmd();
     const nowIdx = dayIndex(today);
-    const head = renderGanttMonthHead();
+    const nowLeft = ganttNowLeftPct(nowIdx);
+    const head = renderGanttMonthHead(nowIdx);
     const body = list.map(t => {
       const s = dayIndex(t.start);
       const e = dayIndex(t.end);
@@ -813,7 +822,7 @@
             <span class="ops-gantt__label">${esc(t.name)}</span>
           </button>
           <div class="ops-gantt__track">
-            <div class="ops-gantt__now" style="left:calc(${nowIdx} * 100% / ${DAYS.length} + 100% / ${DAYS.length} / 2)"></div>
+            <div class="ops-gantt__now" style="left:${nowLeft}"></div>
             <div class="ops-gantt__bar" data-bar="${t.id}" style="${barPositionStyle(s, e, t)}" title="${esc(t.name + ' · ' + taskRange(t) + ' · 끌어 일 단위로 조절')}">
               <span class="ops-gantt__handle ops-gantt__handle--start" data-handle="start"></span>
               <span class="ops-gantt__handle ops-gantt__handle--end" data-handle="end"></span>
