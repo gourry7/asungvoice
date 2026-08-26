@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-26T18:42:26.268+09:00",
+  "updatedAt": "2026-08-26T18:42:36.708+09:00",
   "updatedBy": "dir2",
   "memo": "보정할 내용\n- 마이안심이 출시 목표월:\n- 시드(CJ ENM)·LIPS II 실제 입금 여부:\n- 일괄소등 2차 양산 목표:\n- 비상벨 1차 적용 대상 기종/현장:\n- 이번 달 영업 미팅:",
   "tasks": [
@@ -168,10 +168,12 @@
       "project": "bell",
       "lane": "product",
       "status": "planned",
-      "start": "2026-09-01",
-      "end": "2026-11-30",
+      "start": "2026-08-01",
+      "end": "2026-10-30",
       "owner": "R&D",
-      "note": "NO 접점, UART/GPIO. WD-Module-V2 기준."
+      "note": "NO 접점, UART/GPIO. WD-Module-V2 기준.",
+      "updatedBy": "dir2",
+      "updatedAt": "2026-08-26T18:42:34.869+09:00"
     },
     {
       "id": "bl-pilot",
@@ -368,6 +370,11 @@
     }
   ],
   "activity": [
+    {
+      "at": "2026-08-26T18:42:34.869+09:00",
+      "by": "dir2",
+      "text": "모듈 연동 설계 · 기간 8/1 – 10/30"
+    },
     {
       "at": "2026-08-26T18:42:24.255+09:00",
       "by": "dir2",
