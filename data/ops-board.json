@@ -1,19 +1,8 @@
 {
-  "updatedAt": "2026-08-26T18:44:47.681+09:00",
+  "updatedAt": "2026-08-26T18:44:56.377+09:00",
   "updatedBy": "dir2",
   "memo": "보정할 내용\n- 마이안심이 출시 목표월:\n- 시드(CJ ENM)·LIPS II 실제 입금 여부:\n- 일괄소등 2차 양산 목표:\n- 비상벨 1차 적용 대상 기종/현장:\n- 이번 달 영업 미팅:",
   "tasks": [
-    {
-      "id": "row-mt9dg8blnsy",
-      "name": "현장 베타 테스트",
-      "project": "ansimi",
-      "lane": "product",
-      "status": "planned",
-      "start": "2026-12-07",
-      "end": "2027-01-31",
-      "owner": "공찬희",
-      "note": ""
-    },
     {
       "id": "wd-model",
       "name": "비명모델 업데이트",
@@ -342,6 +331,19 @@
       "updatedAt": "2026-08-26T00:04:58.031+09:00"
     },
     {
+      "id": "row-mt9dg8blnsy",
+      "name": "현장 베타 테스트",
+      "project": "ansimi",
+      "lane": "product",
+      "status": "planned",
+      "start": "2026-12-07",
+      "end": "2027-01-31",
+      "owner": "공찬희",
+      "note": "",
+      "updatedBy": "dir2",
+      "updatedAt": "2026-08-26T18:44:54.456+09:00"
+    },
+    {
       "id": "an-launch",
       "name": "B2C 출시",
       "project": "ansimi",
@@ -382,6 +384,11 @@
     }
   ],
   "activity": [
+    {
+      "at": "2026-08-26T18:44:54.456+09:00",
+      "by": "dir2",
+      "text": "현장 베타 테스트 · 순서 변경"
+    },
     {
       "at": "2026-08-26T18:44:45.729+09:00",
       "by": "dir2",
