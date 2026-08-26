@@ -556,8 +556,8 @@
     });
   }
 
-  function dayIndex(ymd) {
-    const key = normalizeDate(ymd, 'start');
+  function dayIndex(ymd, role) {
+    const key = normalizeDate(ymd, role === 'end' ? 'end' : 'start');
     const i = DAYS.indexOf(key);
     if (i >= 0) return i;
     if (key < DAYS[0]) return 0;
@@ -837,7 +837,7 @@
     const head = renderGanttMonthHead(nowIdx);
     const body = list.map(t => {
       const s = dayIndex(t.start);
-      const e = dayIndex(t.end);
+      const e = dayIndex(t.end, 'end');
       return `
         <div class="ops-gantt__row" data-row="${t.id}">
           <button type="button" class="ops-gantt__name" data-row="${t.id}" title="${esc(t.name + ' · 끌어 순서 변경')}">
@@ -1014,10 +1014,10 @@
       id: id,
       mode: handle ? handle.getAttribute('data-handle') : 'move',
       startIdx: dayIndex(t.start),
-      endIdx: dayIndex(t.end),
+      endIdx: dayIndex(t.end, 'end'),
       origin: dayFromPointer(track, e.clientX),
       curS: dayIndex(t.start),
-      curE: dayIndex(t.end),
+      curE: dayIndex(t.end, 'end'),
       moved: false
     };
   }
