@@ -87,11 +87,24 @@
     return out;
   }
 
+  function kstParts(d) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Seoul',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23'
+    }).formatToParts(d || new Date());
+    const g = type => (parts.find(p => p.type === type) || {}).value || '00';
+    return { y: g('year'), m: g('month'), day: g('day'), h: g('hour'), min: g('minute'), s: g('second') };
+  }
+
   function todayYmd() {
-    const d = new Date();
-    const off = 9 * 60;
-    const kst = new Date(d.getTime() + (off - d.getTimezoneOffset()) * 60000);
-    return kst.toISOString().slice(0, 10);
+    const p = kstParts();
+    return p.y + '-' + p.m + '-' + p.day;
   }
 
   function lastDayOfMonth(ym) {
@@ -133,10 +146,8 @@
   }
 
   function nowIso() {
-    const d = new Date();
-    const off = 9 * 60;
-    const kst = new Date(d.getTime() + (off - d.getTimezoneOffset()) * 60000);
-    return kst.toISOString().replace('Z', '+09:00');
+    const p = kstParts();
+    return p.y + '-' + p.m + '-' + p.day + 'T' + p.h + ':' + p.min + ':' + p.s + '+09:00';
   }
 
   function fmtWhen(iso) {
