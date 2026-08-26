@@ -57,7 +57,6 @@
   let timelineFilter = '';
   let ganttDrag = null;
   let rowDrag = null;
-  let shareTimer = null;
   let persistBusy = false;
   let persistAgain = false;
   const githubShaCache = Object.create(null);
@@ -499,16 +498,10 @@
     localStorage.setItem(DRAFT_KEY, JSON.stringify(board));
     dirty = true;
     if (githubReady()) {
-      setStatus('사이트에 저장 중…', '');
-      scheduleShare();
+      setStatus('저장되지 않은 변경이 있습니다. 「저장」을 누르세요.', '');
     } else {
       setStatus('저장 연결이 없습니다. 다시 로그인해 주세요.', 'err');
     }
-  }
-
-  function scheduleShare() {
-    if (shareTimer) clearTimeout(shareTimer);
-    shareTimer = setTimeout(() => { persist(); }, 700);
   }
 
   function restoreDraft() {
@@ -1384,7 +1377,7 @@
     restoreDraft();
     normalizeBoardDates(board);
     if (dirty) {
-      if (githubReady()) scheduleShare();
+      if (githubReady()) setStatus('저장되지 않은 변경이 있습니다. 「저장」을 누르세요.', '');
       else setStatus('저장 연결이 없습니다. 다시 로그인해 주세요.', 'err');
     } else setStatus(board.updatedBy ? `마지막 저장 ${displayName(board.updatedBy)} · ${fmtWhen(board.updatedAt)}` : '', '');
     render();
