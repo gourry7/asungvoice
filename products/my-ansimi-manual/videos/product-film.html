@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" class="embed">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>마이안심이 — 소개 Film</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root{ --rose:#c45d6c; }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;overflow:hidden;background:#0a0a0a;font-family:Pretendard,system-ui,sans-serif;color:#f2f0eb}
+    .film{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-height:0}
+    .top{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#0a0a0a;border-bottom:1px solid #1c1c1c}
+    .top .t{font-size:.7rem;font-weight:700;color:#888;white-space:nowrap}
+    .tabs{display:flex;gap:3px;flex:1;overflow-x:auto;scrollbar-width:none;justify-content:flex-end}
+    .tabs::-webkit-scrollbar{display:none}
+    .tabs button{border:0;background:transparent;color:#666;font:inherit;font-size:.68rem;font-weight:700;padding:.3rem .55rem;border-radius:6px;cursor:pointer;white-space:nowrap}
+    .tabs button.on{color:#fff;background:#1a1a1a}
+    .stage{position:relative;min-height:0;background:#000;overflow:hidden}
+    .shot{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .7s ease}
+    .shot.on{opacity:1;pointer-events:auto}
+    .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 5.8s linear}
+    .shot.on img{transform:scale(1)}
+    .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.78))}
+    .cap .n{font-size:.64rem;font-weight:800;color:var(--rose);margin-bottom:.25rem}
+    .cap h2{margin:0;font-size:clamp(.95rem,2.3vh,1.2rem);font-weight:800;letter-spacing:-.025em}
+    .cap p{margin:.25rem 0 0;font-size:clamp(.7rem,1.5vh,.84rem);color:#c9ccd4;line-height:1.4;max-width:46ch}
+    .bot{display:flex;align-items:center;gap:.5rem;padding:.48rem .7rem;background:#0a0a0a;border-top:1px solid #1c1c1c}
+    .bot button{border:0;background:#222;color:#fff;font:inherit;font-weight:700;font-size:.74rem;border-radius:7px;padding:.35rem .7rem;cursor:pointer}
+    .bot button.p{background:var(--rose)}
+    .bar{flex:1;height:3px;background:#222;border-radius:99px;overflow:hidden}
+    .bar>i{display:block;height:100%;width:0;background:var(--rose)}
+    .hint{color:#555;font-size:.64rem;white-space:nowrap}
+    html:not(.embed) body{overflow:auto;display:grid;place-items:center;padding:1rem;min-height:100%;height:auto}
+    html:not(.embed) .film{width:min(960px,100%);aspect-ratio:16/9;height:auto;border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  </style>
+</head>
+<body>
+  <div class="film" role="region" aria-label="마이안심이 소개 Film">
+    <div class="top">
+      <div class="t">마이안심이 · 소개</div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <div class="stage" id="stage">
+      <article class="shot on" data-ms="4500" data-tab="본체"><img src="cinema/00-product.jpg" alt="" /><div class="cap"><div class="n">1 / 5</div><h2>집 안에 두는 안심 본체</h2><p>재택방범 · SOS · 5분해제 버튼과 부저·마이크가 한곳에 있습니다.</p></div></article>
+      <article class="shot" data-ms="5000" data-tab="현관"><img src="cinema/01-gate.jpg" alt="" /><div class="cap"><div class="n">2 / 5 · 현관문방범</div><h2>현관문이 열리면 듣기 시작합니다</h2><p>대기시간 안에 비명 단어가 들리면 사이렌과 보호자 알림으로 이어집니다.</p></div></article>
+      <article class="shot" data-ms="4800" data-tab="침입"><img src="cinema/02-open.jpg" alt="" /><div class="cap"><div class="n">3 / 5</div><h2>열린 문, 짧아진 안심</h2><p>문이 열린 뒤가 가장 취약한 순간입니다. 마이안심이가 그사이를 지킵니다.</p></div></article>
+      <article class="shot" data-ms="4800" data-tab="알림"><img src="cinema/03-alert.jpg" alt="" /><div class="cap"><div class="n">4 / 5</div><h2>보호자 폰으로 바로</h2><p>사이렌은 앱 「부저 정지」로만 끌 수 있습니다.</p></div></article>
+      <article class="shot" data-ms="5200" data-tab="재택·버튼"><img src="cinema/05-buttons.jpg" alt="" /><div class="cap"><div class="n">5 / 5</div><h2>재택방범 · SOS · 5분해제</h2><p>왼쪽 재택방범, 가운데 SOS(3초), 오른쪽 5분해제.</p></div></article>
+    </div>
+    <div class="bot">
+      <button type="button" id="prev">이전</button>
+      <button type="button" class="p" id="play">일시정지</button>
+      <button type="button" id="next">다음</button>
+      <div class="bar"><i id="progress"></i></div>
+      <span class="hint">자동 · 무음</span>
+    </div>
+  </div>
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '0') document.documentElement.classList.remove('embed');
+    const shots=[...document.querySelectorAll('.shot')];
+    const tabs=document.getElementById('tabs');
+    const progress=document.getElementById('progress');
+    shots.forEach((sc,idx)=>{const b=document.createElement('button');b.type='button';b.textContent=sc.dataset.tab;if(!idx)b.classList.add('on');b.onclick=()=>{remain=+sc.dataset.ms;show(idx)};tabs.appendChild(b)});
+    const tabBtns=[...tabs.querySelectorAll('button')];
+    let i=0,playing=true,timer=null,started=0,remain=0;
+    function show(n){
+      i=(n+shots.length)%shots.length;
+      shots.forEach((el,idx)=>{const on=idx===i;el.classList.toggle('on',on);if(on){const img=el.querySelector('img');img.style.transition='none';img.style.transform='scale(1.04)';requestAnimationFrame(()=>requestAnimationFrame(()=>{img.style.transition='transform 5.8s linear';img.style.transform='scale(1)'}))}});
+      tabBtns.forEach((b,idx)=>b.classList.toggle('on',idx===i));
+      remain=+shots[i].dataset.ms;progress.style.width='0%';if(playing)arm();
+    }
+    function arm(){clearInterval(timer);started=performance.now();const total=remain;timer=setInterval(()=>{const p=Math.min(1,(performance.now()-started)/total);progress.style.width=(p*100)+'%';if(p>=1)show(i+1)},40)}
+    document.getElementById('play').onclick=()=>{playing=!playing;document.getElementById('play').textContent=playing?'일시정지':'재생';if(playing){remain=Math.max(700,remain-(performance.now()-started));arm()}else{clearInterval(timer);remain=Math.max(700,remain-(performance.now()-started))}};
+    document.getElementById('prev').onclick=()=>{remain=+shots[i].dataset.ms;show(i-1)};
+    document.getElementById('next').onclick=()=>{remain=+shots[i].dataset.ms;show(i+1)};
+    show(0);
+  </script>
+</body>
+</html>

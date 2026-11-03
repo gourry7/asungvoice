@@ -1,167 +1,206 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="embed">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>마이안심이 — 설치 영상 가이드</title>
+  <title>마이안심이 — 설치 · 연결</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <style>
-    :root {
-      --rose: #8a6a4e; --gold: #b8945a; --bg: #2a2624; --soft: #f3eee6;
+    :root{
+      --rose:#c45d6c; --ink:#1a2238; --mute:#5c6478; --line:#e8d8dc;
+      --cream:#faf6f2; --warm:#f3e8e4; --panel:#12151f;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font-family: Pretendard, sans-serif; background: var(--bg); color: #fff;
-      min-height: 100vh; display: grid; place-items: center; padding: 1.5rem;
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;overflow:hidden;font-family:Pretendard,system-ui,sans-serif;background:#0d0f14;color:#fff}
+    .player{width:100%;height:100%;display:flex;flex-direction:column;min-height:0;background:#0d0f14}
+    .stage{position:relative;flex:1 1 auto;min-height:0;background:var(--cream);overflow:hidden}
+
+    .slide{
+      position:absolute;inset:0;display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+      grid-template-rows:minmax(0,1fr);
+      opacity:0;pointer-events:none;transform:translateY(6px);
+      transition:opacity .45s ease, transform .45s ease;
+      padding:clamp(8px,1.8vmin,14px);gap:clamp(8px,1.6vmin,14px);align-items:stretch;
     }
-    .player {
-      width: min(920px, 100%);
-      background: #111; border-radius: 24px; overflow: hidden;
-      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+    .slide.active{opacity:1;pointer-events:auto;transform:none}
+
+    .media{
+      min-height:0;min-width:0;border-radius:12px;overflow:hidden;
+      background:linear-gradient(160deg,#fff,var(--warm));
+      border:1px solid var(--line);
+      display:grid;place-items:center;padding:clamp(6px,1.4vmin,12px);
     }
-    .stage {
-      position: relative; aspect-ratio: 16/9; background: var(--soft); overflow: hidden;
+    .media img{
+      width:100%;height:100%;max-width:100%;max-height:100%;
+      object-fit:contain;display:block;
     }
-    .slide {
-      position: absolute; inset: 0; display: grid; grid-template-columns: 1.15fr .85fr;
-      opacity: 0; pointer-events: none; transform: scale(1.02);
-      transition: opacity .5s ease, transform .5s ease;
-      padding: 1.25rem; gap: 1rem; align-items: center;
+
+    .copy{
+      min-height:0;min-width:0;display:flex;flex-direction:column;justify-content:center;
+      padding:clamp(4px,1vmin,8px) clamp(2px,.6vmin,6px) clamp(4px,1vmin,8px) 0;
+      overflow:hidden;
     }
-    .slide.active { opacity: 1; pointer-events: auto; transform: none; }
-    .slide .media {
-      height: 100%; border-radius: 16px; overflow: hidden;
-      background: linear-gradient(160deg, #f7f2ea, #ebe4da);
-      display: grid; place-items: center; padding: .75rem;
+    .badge{
+      display:inline-flex;align-self:flex-start;align-items:center;gap:6px;
+      background:var(--rose);color:#fff;font-weight:800;
+      border-radius:999px;padding:.22rem .65rem;
+      font-size:clamp(.62rem,1.5vmin,.74rem);margin-bottom:clamp(6px,1.4vmin,12px);
+      letter-spacing:.02em
     }
-    .slide img {
-      width: 100%; height: 100%; object-fit: contain; max-height: 100%;
+    .copy h2{
+      margin:0 0 clamp(6px,1.2vmin,10px);color:var(--ink);
+      font-size:clamp(.95rem,2.8vmin,1.45rem);letter-spacing:-.03em;line-height:1.25;
     }
-    .copy h2 {
-      margin: 0 0 .55rem; color: var(--rose); font-size: clamp(1.15rem, 2.4vw, 1.7rem);
-      letter-spacing: -.02em;
+    .copy p{
+      margin:0;color:var(--mute);
+      font-size:clamp(.72rem,1.9vmin,.95rem);line-height:1.45;
+      display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;
     }
-    .copy p { margin: 0; color: #5c5550; font-size: clamp(.88rem, 1.5vw, 1.02rem); line-height: 1.55; }
-    .badge {
-      display: inline-block; background: var(--gold); color: #fff; font-weight: 800;
-      border-radius: 999px; padding: .25rem .7rem; font-size: .72rem; margin-bottom: .65rem;
+    .copy p b{color:var(--ink);font-weight:700}
+    .tips{
+      margin-top:clamp(8px,1.6vmin,14px);display:grid;gap:4px;
+      font-size:clamp(.66rem,1.6vmin,.8rem);color:#7a6a68;line-height:1.35
     }
-    .controls {
-      display: flex; align-items: center; gap: .75rem; padding: .9rem 1.1rem; background: #181616;
+    .tips span{display:flex;gap:6px;align-items:flex-start}
+    .tips span::before{content:"";flex:0 0 5px;height:5px;margin-top:.45em;border-radius:50%;background:var(--rose)}
+
+    .controls{
+      flex:0 0 auto;display:flex;align-items:center;gap:.5rem;
+      padding:.45rem .7rem;background:var(--panel)
     }
-    button {
-      border: 0; background: var(--gold); color: #fff; font: inherit; font-weight: 700;
-      border-radius: 999px; padding: .55rem 1rem; cursor: pointer;
+    button{
+      border:0;background:var(--rose);color:#fff;font:inherit;font-weight:700;
+      border-radius:8px;padding:.35rem .7rem;cursor:pointer;font-size:.75rem
     }
-    button.ghost { background: #333; }
-    .bar { flex: 1; height: 6px; background: #333; border-radius: 99px; overflow: hidden; }
-    .bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), #f0e2d0); }
-    .dots { display: flex; gap: .35rem; }
-    .dots span { width: 8px; height: 8px; border-radius: 50%; background: #444; }
-    .dots span.on { background: #f0e2d0; }
-    .hint { color: #aaa; font-size: .8rem; margin-left: auto; }
-    @media (max-width: 700px) {
-      .slide { grid-template-columns: 1fr; }
-      .copy { order: -1; }
-      .hint { display: none; }
+    button.ghost{background:#2a3144}
+    .bar{flex:1;height:4px;background:#2a3144;border-radius:99px;overflow:hidden}
+    .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rose),#f0b8c0)}
+    .dots{display:flex;gap:.3rem;flex:0 0 auto}
+    .dots span{width:7px;height:7px;border-radius:50%;background:#3a4156}
+    .dots span.on{background:var(--rose)}
+    .hint{color:#8a93a8;font-size:.68rem;margin-left:.15rem;white-space:nowrap}
+
+    /* 좁은 높이·모바일: 세로 스택이 아니라 가로 유지하되 글자만 줄임 */
+    @media (max-width:520px){
+      .slide{grid-template-columns:1fr;grid-template-rows:minmax(0,1.15fr) minmax(0,.85fr);padding:6px;gap:6px}
+      .copy{padding:2px 4px 0;justify-content:flex-start}
+      .copy p{-webkit-line-clamp:3}
+      .tips{display:none}
+      .hint{display:none}
     }
+
+    /* 새 창 */
+    html:not(.embed) body{overflow:auto;display:grid;place-items:center;padding:1rem;min-height:100%;height:auto}
+    html:not(.embed) .player{width:min(960px,100%);height:auto;border-radius:18px;overflow:hidden;box-shadow:0 28px 70px rgba(0,0,0,.45);aspect-ratio:16/9}
+    html:not(.embed) .copy p{-webkit-line-clamp:unset;display:block}
   </style>
 </head>
 <body>
-  <div class="player" role="region" aria-label="설치 영상 가이드">
+  <div class="player" role="region" aria-label="설치 · 연결 가이드">
     <div class="stage" id="stage">
-      <div class="slide active" data-ms="4200">
+
+      <div class="slide active" data-ms="4800">
         <div class="media"><img src="../images/device.png" alt="마이안심이 본체" /></div>
         <div class="copy">
-          <div class="badge">STEP 1 / 10</div>
-          <h2>제품을 확인해요</h2>
-          <p>둥근 본체 윗면에 가로줄 무늬가 있고, 위쪽에 원형 그릴, 아래쪽에 버튼부가 있습니다.</p>
+          <div class="badge">01 · 구성</div>
+          <h2>상자에서 꺼낸 뒤<br>본체를 확인해요</h2>
+          <p>둥근 본체, USB-C 케이블, 현관용 문열림 센서가 들어 있습니다. 전원만 연결하면 바로 쓸 수 있는 상태로 출하됩니다.</p>
+          <div class="tips">
+            <span>상단 원형 그릴 = 경보 부저</span>
+            <span>하단 금색 패널 = 재택방범 · SOS · 5분해제</span>
+          </div>
         </div>
       </div>
-      <div class="slide" data-ms="4500">
-        <div class="media"><img src="../images/device-anatomy.png" alt="경보 부저 · 좌우 마이크 · STANDBY·SOS·CLEAR 버튼" /></div>
+
+      <div class="slide" data-ms="5000">
+        <div class="media"><img src="../images/device-anatomy.png" alt="부저 · 마이크 · 버튼 위치" /></div>
         <div class="copy">
-          <div class="badge">STEP 2 / 10</div>
-          <h2>부저·마이크·버튼을 확인해요</h2>
-          <p>상단 원형 그릴은 경보 부저, 좌·우 작은 구멍 2곳은 마이크, 하단은 STANDBY·SOS·CLEAR 버튼입니다.</p>
+          <div class="badge">02 · 부위</div>
+          <h2>소리가 드나드는 곳을<br>가리지 마세요</h2>
+          <p>부저와 좌우 마이크는 비명·경보의 핵심입니다. 천·스티커·테이프로 막으면 감지와 경보가 약해집니다.</p>
+          <div class="tips">
+            <span>버튼: <b>재택방범</b> · <b>SOS</b> · <b>5분해제</b></span>
+            <span>측면 아래 USB-C로 상시 전원</span>
+          </div>
         </div>
       </div>
-      <div class="slide" data-ms="4500">
-        <div class="media"><img src="../images/power-connect.png" alt="전원 연결 도식" /></div>
-        <div class="copy">
-          <div class="badge">STEP 3 / 10</div>
-          <h2>전원을 연결해요</h2>
-          <p>측면 USB-C 포트에 케이블을 꽂아 5V 어댑터로 연결하고, 부저 그릴과 마이크 구멍은 가리지 마세요.</p>
-        </div>
-      </div>
-      <div class="slide" data-ms="4200">
-        <div class="media"><img src="../images/connect-phone.png" alt="앱" /></div>
-        <div class="copy">
-          <div class="badge">STEP 4 / 10</div>
-          <h2>앱과 연결해요</h2>
-          <p>앱을 켜고 Bluetooth로 마이안심이를 찾아 연결합니다.</p>
-        </div>
-      </div>
-      <div class="slide" data-ms="4200">
-        <div class="media"><img src="../images/install-door-sensor.png" alt="센서" /></div>
-        <div class="copy">
-          <div class="badge">STEP 5 / 10</div>
-          <h2>센서를 붙여요</h2>
-          <p>문 닫힌 상태에서 센서·자석을 가깝게 붙이고, 문을 여닫아 앱 표시가 바뀌는지 확인합니다.</p>
-        </div>
-      </div>
-      <div class="slide" data-ms="4200">
-        <div class="media"><img src="../images/sensor-register.png" alt="상태 탭의 센서 등록 상태" /></div>
-        <div class="copy">
-          <div class="badge">STEP 6 / 10</div>
-          <h2>센서 등록을 확인해요</h2>
-          <p>센서는 공장에서 등록해 출하합니다. 상태 탭에서 <b>등록됨</b> 표시만 확인하세요.</p>
-        </div>
-      </div>
+
       <div class="slide" data-ms="4800">
-        <div class="media"><img src="../images/app-home-modes.png" alt="앱 홈 화면" /></div>
+        <div class="media"><img src="../images/power-connect.png" alt="전원 연결" /></div>
         <div class="copy">
-          <div class="badge">STEP 7 / 10</div>
-          <h2>방범을 켜요</h2>
-          <p>앱에서 현관문방범을 선택하면 준비 완료. 앱에서 통신 상태를 확인하세요.</p>
+          <div class="badge">03 · 전원</div>
+          <h2>콘센트에 꽂고<br>자리를 잡아요</h2>
+          <p>현관이 잘 보이는 선반·콘솔에 올려 둡니다. 5V 어댑터로 연결하면 부팅이 끝나고 앱 연결을 기다립니다.</p>
+          <div class="tips">
+            <span>문과 너무 멀면 소리 감지가 약해질 수 있어요</span>
+          </div>
         </div>
       </div>
+
+      <div class="slide" data-ms="4800">
+        <div class="media"><img src="../images/connect-phone.png" alt="앱 연결" /></div>
+        <div class="copy">
+          <div class="badge">04 · 앱</div>
+          <h2>스마트폰 앱과<br>Bluetooth로 연결해요</h2>
+          <p>마이안심이 앱을 켠 뒤 근처 기기를 찾아 연결합니다. 연결되면 홈 화면에서 방범 모드를 고를 수 있습니다.</p>
+          <div class="tips">
+            <span>첫 연결 때만 기기 옆에서 진행하세요</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-ms="5000">
+        <div class="media"><img src="../images/install-door-sensor.png" alt="문열림 센서 부착" /></div>
+        <div class="copy">
+          <div class="badge">05 · 센서</div>
+          <h2>현관문에 센서를<br>붙이고 여닫아 봐요</h2>
+          <p>문짝·문틀에 센서와 자석을 가까이 붙입니다. 문을 여닫을 때 앱의 문 상태가 바뀌면 정상입니다.</p>
+          <div class="tips">
+            <span>문이 닫힌 상태에서 두 부품이 맞닿게</span>
+            <span>센서는 공장에서 이미 등록되어 출하됩니다</span>
+          </div>
+        </div>
+      </div>
+
       <div class="slide" data-ms="5200">
-        <div class="media"><img src="../images/mode-compare.png" alt="모드별 동작 비교" /></div>
+        <div class="media"><img src="../images/app-home-modes.png" alt="방범 모드 선택" /></div>
         <div class="copy">
-          <div class="badge">STEP 8 / 10</div>
-          <h2>모드마다 다르게 지켜요</h2>
-          <p>현관문방범은 현관문만 감시하고 비명이 들리면 사이렌과 구조 문자를 보냅니다. 재택방범은 창문까지 감시하며 푸시로 알려 주고, 외출방범은 열림 즉시 짧은 부저로 퇴치합니다.</p>
+          <div class="badge">06 · 시작</div>
+          <h2>상황에 맞는 방범을<br>켜면 준비 끝</h2>
+          <p><b>현관문방범</b>은 기본. 집에 있을 땐 <b>재택방범</b>, 집을 비울 땐 <b>외출방범</b>을 고르세요. 본체 <b>재택방범</b> 버튼으로도 전환할 수 있습니다.</p>
+          <div class="tips">
+            <span>잠깐 나갈 땐 본체 <b>5분해제</b></span>
+            <span>위급하면 <b>SOS</b>를 3초 길게</span>
+          </div>
         </div>
       </div>
+
       <div class="slide" data-ms="5200">
-        <div class="media"><img src="../images/scream-words.png" alt="비명인식 단어 5가지" /></div>
+        <div class="media"><img src="../images/alarm-response.png" alt="알람이 울렸을 때" /></div>
         <div class="copy">
-          <div class="badge">STEP 9 / 10</div>
-          <h2>이 말을 크게 외쳐요</h2>
-          <p><b>강도야 · 사람살려 · 도와주세요 · 살려주세요 · 도둑이야</b> — 문이 열린 뒤 대기시간 안에 이 중 한 마디가 들리면 알람이 울립니다.</p>
-        </div>
-      </div>
-      <div class="slide" data-ms="4200">
-        <div class="media"><img src="../images/alarm-response.png" alt="알람 대응 3단계" /></div>
-        <div class="copy">
-          <div class="badge">STEP 10 / 10</div>
-          <h2>알람 대응을 익혀요</h2>
-          <p>안전을 확보하고 앱에서 알림을 확인한 뒤, 앱의 <b>부저 정지</b>로 사이렌을 끄세요. 침입자가 끌 수 없도록 앱으로만 끌 수 있습니다.</p>
+          <div class="badge">07 · 대응</div>
+          <h2>사이렌이 울리면<br>앱으로만 끄세요</h2>
+          <p>먼저 안전을 확인한 뒤 앱에서 알림을 보고 <b>부저 정지</b>를 누릅니다. 침입자가 본체에서 끌 수 없도록 설계되어 있습니다.</p>
+          <div class="tips">
+            <span>비명 단어: 강도야 · 사람살려 · 도와주세요 · 살려주세요 · 도둑이야</span>
+          </div>
         </div>
       </div>
     </div>
+
     <div class="controls">
       <button type="button" id="prev" class="ghost">이전</button>
       <button type="button" id="play">일시정지</button>
       <button type="button" id="next" class="ghost">다음</button>
       <div class="bar"><i id="progress"></i></div>
       <div class="dots" id="dots"></div>
-      <span class="hint">자동 재생 · 소리 없음</span>
+      <span class="hint">자동 · 무음</span>
     </div>
   </div>
   <script>
+    if (new URLSearchParams(location.search).get('embed') === '0') document.documentElement.classList.remove('embed');
     const slides = [...document.querySelectorAll('.slide')];
     const dots = document.getElementById('dots');
     const progress = document.getElementById('progress');
@@ -184,8 +223,7 @@
       started = performance.now();
       const total = remain;
       timer = setInterval(() => {
-        const elapsed = performance.now() - started;
-        const p = Math.min(1, elapsed / total);
+        const p = Math.min(1, (performance.now() - started) / total);
         progress.style.width = (p * 100) + '%';
         if (p >= 1) show(i + 1);
       }, 50);

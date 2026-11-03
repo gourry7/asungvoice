@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
   <meta name="description" content="마이안심이 간단 매뉴얼 (인쇄용)" />
   <title>마이안심이 간단 매뉴얼 (인쇄용)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <style>
-    :root { --rose:#8a6a4e; --gold:#b8945a; --ink:#2a2624; --soft:#6a625c; --line:#e5ddd2; }
+    :root { --rose:#7b61c6; --gold:#7b61c6; --ink:#2c2440; --soft:#8a8198; --line:#ede7f3; }
     * { box-sizing: border-box; }
     body {
       margin: 0; font-family: Pretendard, Apple SD Gothic Neo, Malgun Gothic, sans-serif;
-      color: var(--ink); background: #ebe4da; line-height: 1.45;
+      color: var(--ink); background: #f6f3fa; line-height: 1.45;
     }
     .sheet {
-      max-width: 920px; margin: 1rem auto; background: #fffcf7;
-      padding: 1.25rem 1.35rem 1.75rem; box-shadow: 0 8px 30px rgba(0,0,0,.08);
+      max-width: 920px; margin: 1rem auto; background: #fff;
+      padding: 1.25rem 1.35rem 1.75rem; box-shadow: 0 10px 28px rgba(56,36,97,.10);
     }
     header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
     header img.logo { height: 34px; }
@@ -122,14 +123,14 @@
 
     <div class="hero-row">
       <img src="images/device.png" alt="마이안심이 본체를 위에서 본 모습" />
-      <img src="images/device-anatomy.png" alt="경보 부저 · 좌우 마이크 · STANDBY·SOS·CLEAR 버튼 위치" />
+      <img src="images/device-anatomy.png" alt="경보 부저 · 좌우 마이크 · 재택방범·SOS·5분해제 버튼 위치" />
     </div>
 
     <div class="grid">
       <div class="card">
         <img src="images/device.png" alt="본체 부위" />
         <div class="b"><h2><span class="n">0</span>본체 부위</h2>
-          <p>상단 원형 그릴=경보 부저 · 좌우 작은 구멍=마이크 · 하단=STANDBY·SOS·CLEAR 버튼 · 측면 아래쪽=USB-C 충전 포트.</p></div>
+          <p>상단 원형 그릴=경보 부저 · 좌우 작은 구멍=마이크 · 하단=재택방범·SOS·5분해제 버튼 · 측면 아래쪽=USB-C 충전 포트.</p></div>
       </div>
       <div class="card">
         <img src="images/power-connect.png" alt="전원 연결 도식" />
@@ -178,12 +179,12 @@
       <div class="words">
         <span>강도야</span><span>사람살려</span><span>도와주세요</span><span>살려주세요</span><span>도둑이야</span>
       </div>
-      <p>문이 열린 뒤 대기시간(앱 설정: 10~60초, 기본 60초) 안에 위 다섯 마디 중 하나가 들리면 알람이 울립니다.</p>
+      <p>문이 열린 뒤 대기시간(15 · 20 · 30초, 기본 30초) 안에 위 다섯 마디 중 하나가 들리면 알람이 울립니다.</p>
       <div class="modelist">
         <div><b>현관문방범</b> — 현관문만(창문 무시) · 문 열림 + 비명 → 사이렌 + 구조 문자 · 부저는 <b>앱으로만</b> 정지</div>
-        <div><b>재택방범</b> — 현관문 + 창문 · 감지기 동작 → 사이렌 없이 스마트폰 푸시</div>
-        <div><b>외출방범</b> — 문·창문 열림 즉시 → 짧은 부저(퇴치) + 푸시 알람</div>
-        <div>재택·외출을 스스로 파악 · 폰이 멀어지면 외출방범, 다시 연결되면 현관문방범 · 5분 일시정지는 5분 뒤 복귀</div>
+        <div><b>재택방범</b> — 현관문 + 창문 · 사이렌 없이 앱 알람 → 이후 현관문방범으로 전환</div>
+        <div><b>외출방범</b> — 창문 즉시 / 현관문 15초 유예 · 부저 약 1초 · 10초 녹음</div>
+        <div>문 닫힌 뒤 앱 끊김 약 60초 → 외출방범 · 재연결 → 현관문방범 · 5분 일시정지는 5분 뒤 복귀</div>
       </div>
     </div>
 
