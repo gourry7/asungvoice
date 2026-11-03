@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="마이안심이 사용 설명서 — 설치·앱 연결·방범 모드·비명인식 안내" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>마이안심이 — 그림으로 보는 사용 설명서</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <style>
     :root {
-      /* 제품 톤: 크림 · 웜 그레이 · 골드 포인트 */
-      --bg: #f3eee6;
-      --paper: #fffcf7;
-      --ink: #2a2624;
-      --soft: #6a625c;
-      --line: #e5ddd2;
-      --rose: #8a6a4e;
-      --rose-soft: #f0e2d0;
-      --teal: #6b5a48;
-      --teal-soft: #ebe3d6;
-      --gold: #b8945a;
-      --warn: #6c5d32;
-      --warn-soft: #f0dba5;
+      /* Figma「마이안심이 리뉴얼」 */
+      --bg: #f6f3fa;
+      --paper: #ffffff;
+      --ink: #2c2440;
+      --soft: #8a8198;
+      --line: #ede7f3;
+      --rose: #7b61c6;
+      --rose-soft: #f1e8f8;
+      --teal: #684eae;
+      --teal-soft: #e8e4f8;
+      --gold: #7b61c6;
+      --warn: #c9841a;
+      --warn-soft: #f7ebd2;
       --danger: #ba1a1a;
       --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      --shadow: 0 18px 50px rgba(42,38,36,.08);
+      --shadow: 0 10px 28px rgba(56,36,97,.10);
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -32,8 +32,8 @@
       font-family: var(--font);
       color: var(--ink);
       background:
-        radial-gradient(900px 420px at 0% 0%, #f0e2d088, transparent 60%),
-        radial-gradient(800px 400px at 100% 10%, #e8dfd255, transparent 55%),
+        radial-gradient(900px 420px at 0% 0%, #e4d8fa88, transparent 60%),
+        radial-gradient(800px 400px at 100% 10%, #d8c6f155, transparent 55%),
         var(--bg);
       line-height: 1.55;
     }
@@ -184,10 +184,10 @@
     .mode img { width: 48px; height: 48px; object-fit: contain; margin-bottom: .5rem; }
     .mode strong { display: block; font-size: 1.05rem; margin-bottom: .25rem; }
     .mode span { color: var(--soft); font-size: .9rem; }
-    .mode.m1 { background: linear-gradient(160deg, #fff, #ffeef2); }
-    .mode.m2 { background: linear-gradient(160deg, #fff, #eef6f5); }
-    .mode.m3 { background: linear-gradient(160deg, #fff, #f7f1e3); }
-    .mode.m4 { background: linear-gradient(160deg, #fff, #f2f0ee); }
+    .mode.m1 { background: linear-gradient(160deg, #fff, #f1e8f8); }
+    .mode.m2 { background: linear-gradient(160deg, #fff, #e8e4f8); }
+    .mode.m3 { background: linear-gradient(160deg, #fff, #f0e6fb); }
+    .mode.m4 { background: linear-gradient(160deg, #fff, #ede7f3); }
 
     .video-card {
       background: #1b1c1a; border-radius: 24px; overflow: hidden;
@@ -304,9 +304,8 @@
 <body>
   <nav class="topnav" id="topnav">
     <img src="images/logo.png" alt="마이안심이" />
-    <a href="../home-keeper.html">← 제품소개</a>
     <a href="#product">본체</a>
-    <a href="#video">영상</a>
+    <a href="#video">동작</a>
     <a href="#box">구성품</a>
     <a href="#setup">설치</a>
     <a href="#app">앱</a>
@@ -328,12 +327,12 @@
         <p>집에 있을 때나 외출할 때, 상황을 자동으로 인식해 24시간 지켜 줍니다. 기계가 익숙하지 않아도 쉽게 설치하고 쓸 수 있습니다.</p>
         <div class="cta-row">
           <a class="btn" href="#product">본체 알아보기</a>
-          <a class="btn sec" href="#video">▶ 설치 영상</a>
+          <a class="btn sec" href="#video">▶ 동작·설치 가이드</a>
           <a class="btn sec" href="간단매뉴얼.html">인쇄용 간단 매뉴얼</a>
         </div>
       </div>
       <div class="hero-visual">
-        <img src="images/device.png" alt="마이안심이 본체를 위에서 본 모습 · 경보 부저와 좌우 마이크, STANDBY·SOS·CLEAR 버튼" />
+        <img src="images/device.png" alt="마이안심이 본체를 위에서 본 모습 · 경보 부저와 좌우 마이크, 재택방범·SOS·5분해제 버튼" />
       </div>
     </header>
 
@@ -343,22 +342,32 @@
     <section class="section" id="product" data-k="본체 경보 부저 듀얼 마이크 전원 소리 USB-C 충전 포트 케이블">
       <h2>본체 알아보기</h2>
       <p class="lead">소리가 나오고 들어오는 곳, 버튼, 그리고 측면 충전 포트 위치를 확인하세요.</p>
-      <img class="pic-full" src="images/device-parts.png" alt="본체 부위 안내 · 위에서 본 경보 부저와 좌우 마이크, STANDBY·SOS·CLEAR 버튼, 측면 아래쪽 USB-C 충전 포트" />
+      <img class="pic-full" src="images/device-parts.png" alt="본체 부위 안내 · 위에서 본 경보 부저와 좌우 마이크, 재택방범·SOS·5분해제 버튼, 측면 아래쪽 USB-C 충전 포트" />
       <div class="parts-grid audio-parts">
-        <div class="part"><span class="tag">STANDBY</span><b>5분 일시정지</b></div>
+        <div class="part"><span class="tag">재택방범</span><b>재택 모드 · 해제</b></div>
         <div class="part sos"><span class="tag">SOS</span><b>비상 도움 요청</b><span>3초 이상 누르기</span></div>
-        <div class="part"><span class="tag">CLEAR</span><b>비상 해제</b></div>
+        <div class="part"><span class="tag">5분해제</span><b>5분 일시정지</b></div>
       </div>
     </section>
 
-    <!-- VIDEO -->
-    <section class="section" id="video" data-k="영상 비디오 가이드 자동재생">
-      <h2>설치 영상 가이드</h2>
-      <p class="lead">소리 없이 자동으로 넘어가는 짧은 가이드입니다. 재생·일시정지·다음을 눌러 보세요.</p>
+    <!-- SCENARIO + SETUP -->
+    <section class="section" id="video" data-k="영상 비디오 가이드 시나리오 동작">
+      <h2>상황별 동작 가이드</h2>
+      <p class="lead">현관문방범 · 재택방범 · 외출방범 · 본체 버튼을 골라 단계별로 확인하세요.</p>
+      <div class="video-card">
+        <iframe src="videos/scenario-guide.html" title="마이안심이 상황별 동작" loading="lazy"></iframe>
+        <div class="cap">
+          <span>상황 선택형 · 단계별 동작</span>
+          <a href="videos/scenario-guide.html?embed=0" target="_blank" rel="noopener" style="color:#f0e2d0">새 창에서 크게 보기</a>
+        </div>
+      </div>
+
+      <h3 class="sub" style="margin-top:1.6rem">설치 영상 가이드</h3>
+      <p class="lead">소리 없이 자동으로 넘어가는 짧은 설치 안내입니다.</p>
       <div class="video-card">
         <iframe src="videos/setup-guide.html" title="마이안심이 설치 영상 가이드" loading="lazy"></iframe>
         <div class="cap">
-          <span>실제 제품 사진 기반 · 로컬 제작 가이드</span>
+          <span>전원 · 앱 · 센서 · 방범 시작</span>
           <a href="videos/setup-guide.html" target="_blank" rel="noopener" style="color:#f0e2d0">새 창에서 크게 보기</a>
         </div>
       </div>
@@ -391,7 +400,7 @@
           <ul>
             <li>상단 중앙 <b>경보 부저 원형 그릴</b>을 가리지 않기</li>
             <li>좌·우 <b>마이크 구멍 2곳</b>을 가리지 않기</li>
-            <li>하단 <b>버튼부(STANDBY·SOS·CLEAR)</b>가 손에 닿는 방향으로 두기</li>
+            <li>하단 <b>버튼부(재택방범·SOS·5분해제)</b>가 손에 닿는 방향으로 두기</li>
             <li>마이크 구멍에 이물질을 넣지 않기</li>
             <li>TV·스피커 바로 옆은 피하기</li>
           </ul>
@@ -500,7 +509,10 @@
 
       <h3 class="sub">모드마다 이렇게 동작합니다</h3>
       <p class="sub-lead">무엇을 감시하고, 어떤 때 울리고, 어떻게 알려 주는지가 다릅니다.</p>
-      <img class="pic-full" src="images/mode-compare.png" alt="모드별 동작 비교 · 현관문방범은 현관문만·비명 시 사이렌과 구조 문자, 재택방범은 창문까지·푸시 알람, 외출방범은 열림 즉시 짧은 부저와 푸시" />
+      <img class="pic-full" src="images/mode-gate-flow.png?v=20261103redraw" alt="현관문방범 5단계" />
+      <img class="pic-full" src="images/mode-home-flow.png?v=20261103redraw" alt="재택방범 5단계" style="margin-top:1rem" />
+      <img class="pic-full" src="images/mode-out-flow.png?v=20261103out2" alt="외출방범 5단계" style="margin-top:1rem" />
+      <img class="pic-full" src="images/mode-compare.png" alt="모드별 동작 비교 · 현관문방범은 현관문만·비명 시 사이렌과 구조 문자, 재택방범은 창문까지·푸시 알람, 외출방범은 열림 즉시 짧은 부저와 푸시" style="margin-top:1rem" />
 
       <article class="step">
         <div class="step-body" style="grid-column:1/-1">
@@ -521,9 +533,9 @@
           <h3>재택방범 — 집에 혼자 있을 때</h3>
           <p>현관문방범에 더해 <b>창문 감지기</b> 보안이 함께 켜집니다. 외부 침입이 걱정될 때 쓰세요.</p>
           <ul>
-            <li>창문을 통해 누군가 들어오려 해 창문 감지기가 동작하면, <b>즉시 스마트폰으로 푸시 알람</b>을 보내 위험을 알려 줍니다.</li>
-            <li>사이렌은 울리지 않습니다. 집에 있는 사람에게 조용히 알려 주기 위함입니다.</li>
-            <li>알람이 오면 앱에서 어느 문·창문인지 확인하고, 위급하면 <b>112·119</b>에 신고하세요.</li>
+            <li>문·창문 감지기가 동작하면 <b>사이렌 없이 앱으로 알람</b>을 보냅니다.</li>
+            <li>알람을 보낸 뒤 모드는 <b>현관문방범</b>으로 바뀌고, 비명 인식 대기가 시작됩니다.</li>
+            <li>앱에서 어느 문·창문인지 확인하고, 위급하면 <b>112·119</b>에 신고하세요.</li>
           </ul>
         </div>
       </article>
@@ -534,19 +546,19 @@
           <h3>외출방범 — 집을 비웠을 때</h3>
           <p>빈집의 출입을 철저히 감시합니다. 침입이 감지되면 즉시 대응합니다.</p>
           <ul>
-            <li>문·창문이 열리면 <b>곧바로</b> 스마트폰으로 경고 푸시 알람이 갑니다.</li>
-            <li>집 안 본체에서는 <b>짧고 강렬한 부저</b>를 울려 침입자가 놀라 도망가도록 합니다.</li>
-            <li>알림은 Wi-Fi와 서버를 거쳐 밖에 있는 스마트폰으로 전달됩니다.</li>
-            <li>집에 돌아와 앱이 다시 연결되면 <b>현관문방범</b>으로 돌아오고, 외출 중 기록을 앱에서 확인할 수 있습니다.</li>
+            <li><b>창문</b>이 열리면 즉시 앱으로 경고 알람이 갑니다.</li>
+            <li><b>현관문</b>이 열리면 15초 안에 앱이 연결되면 알람을 내지 않고, 연결되지 않으면 알람이 갑니다.</li>
+            <li>본체는 약 <b>1초</b> 부저를 울리고 <b>10초</b> 녹음합니다. 앱이 다시 붙으면 녹음을 받을 수 있습니다.</li>
+            <li>집에 돌아와 앱이 다시 연결되면 <b>현관문방범</b>으로 돌아옵니다.</li>
           </ul>
         </div>
       </article>
 
       <div class="callout ok">
-        <strong>모드가 저절로 바뀔 때</strong> — 시스템이 재택·외출을 스스로 파악합니다. 스마트폰이 본체와 멀어져 블루투스가 끊기면 <b>외출방범</b>으로, 집에 돌아와 다시 연결되면 <b>현관문방범</b>으로 바뀝니다. 설정에서 <b>위치 기반 외출 방범</b>을 켤 수도 있습니다.
+        <strong>모드가 저절로 바뀔 때</strong> — 현관문이 열렸다 닫힌 뒤 앱(블루투스)이 끊기면 약 <b>60초</b> 후 <b>외출방범</b>으로 들어갑니다. 집에 돌아와 다시 연결되면 <b>현관문방범</b>으로 바뀝니다. 설정에서 <b>위치 기반 외출 방범</b>을 켤 수도 있습니다.
       </div>
       <div class="callout warn">
-        <strong>5분 일시정지</strong> — 택배·청소처럼 잠깐 끌 때만 쓰세요. 앱의 <b>방범 일시정지(5분)</b> 또는 본체 <b>STANDBY</b>를 누르면 5분 뒤 현관문방범으로 자동 복귀합니다. 외출방범에서는 동작하지 않습니다.
+        <strong>5분 일시정지</strong> — 택배·청소처럼 잠깐 끌 때만 쓰세요. 앱의 <b>방범 일시정지(5분)</b> 또는 본체 <b>5분해제</b>를 누르면 5분 뒤 현관문방범으로 자동 복귀합니다. 외출방범에서는 동작하지 않습니다.
       </div>
 
       <img class="pic-full" src="images/mode-icons.jpg" alt="모드 아이콘 참고" style="max-height:280px;object-fit:contain;background:#fff" />
@@ -568,7 +580,7 @@
         <div class="mini-card">
           <div class="txt">
             <h3>비명인식 대기시간</h3>
-            <p>문이 열린 뒤 <b>얼마 동안 들을지</b> 정합니다. 앱 설정에서 10 · 20 · 30 · 60초 중에 고르고, 기본은 60초입니다. 길게 두면 늦게 외쳐도 잡히고, 짧게 두면 오경보가 줄어듭니다.</p>
+            <p>문이 열린 뒤 <b>얼마 동안 들을지</b> 정합니다. <b>15 · 20 · 30초</b> 중에 고르고, 기본은 <b>30초</b>입니다. 길게 두면 늦게 외쳐도 잡히고, 짧게 두면 오경보가 줄어듭니다.</p>
           </div>
         </div>
         <div class="mini-card">
@@ -608,7 +620,7 @@
         </div>
       </article>
       <div class="callout danger">
-        <strong>사이렌은 앱으로만 끕니다</strong> — 침입자가 임의로 끌 수 없도록, 부저는 <b>마이안심이 앱의 「부저 정지」</b>로만 정지합니다. 오경보가 잦으면 본체 <b>STANDBY</b> 또는 앱의 방범 일시정지(5분)를 쓰세요.
+        <strong>사이렌은 앱으로만 끕니다</strong> — 침입자가 임의로 끌 수 없도록, 부저는 <b>마이안심이 앱의 「부저 정지」</b>로만 정지합니다. 오경보가 잦으면 본체 <b>5분해제</b> 또는 앱의 방범 일시정지(5분)를 쓰세요.
       </div>
     </section>
 
