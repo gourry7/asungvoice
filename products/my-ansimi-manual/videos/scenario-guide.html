@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko" class="embed">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>마이안심이 — 상황별 동작</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root{
+      --bg:#f7f4f0; --ink:#1c2233; --mute:#667085; --line:#e6ddd6;
+      --rose:#c45d6c; --card:#fffdfb; --soft:#f3ebe6;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;overflow:hidden;font-family:Pretendard,system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+    .app{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0}
+
+    .head{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      padding:8px 10px;border-bottom:1px solid var(--line);background:#fff
+    }
+    .head h1{margin:0;font-size:.82rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+    .modes{display:flex;gap:5px;flex:1;overflow-x:auto;scrollbar-width:none}
+    .modes::-webkit-scrollbar{display:none}
+    .modes button{
+      border:1px solid var(--line);background:var(--soft);color:var(--mute);
+      font:inherit;font-size:.72rem;font-weight:700;padding:.4rem .7rem;border-radius:999px;
+      cursor:pointer;white-space:nowrap
+    }
+    .modes button.on{background:var(--rose);border-color:var(--rose);color:#fff}
+
+    .body{
+      min-height:0;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+      gap:0
+    }
+    .visual{
+      position:relative;min-height:0;background:linear-gradient(165deg,#fff 0%,var(--soft) 100%);
+      border-right:1px solid var(--line);display:grid;place-items:center;padding:12px
+    }
+    .visual img{
+      width:min(78%,280px);height:auto;display:block;
+      filter:drop-shadow(0 14px 28px rgba(80,50,40,.16));
+      transition:transform .45s ease, opacity .35s ease
+    }
+    .visual .badge{
+      position:absolute;left:12px;top:12px;background:rgba(28,34,51,.86);color:#fff;
+      font-size:.65rem;font-weight:700;padding:.28rem .55rem;border-radius:999px
+    }
+    .panel{
+      min-height:0;display:flex;flex-direction:column;padding:12px 14px 10px;overflow:hidden;background:var(--card)
+    }
+    .panel .lead{margin:0 0 10px;color:var(--mute);font-size:clamp(.72rem,1.6vh,.84rem);line-height:1.4}
+    .panel h2{margin:0 0 4px;font-size:clamp(1rem,2.3vh,1.25rem);letter-spacing:-.03em}
+
+    .steps{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:7px;padding-right:2px}
+    .step{
+      display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;
+      padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:#fff;
+      opacity:.38;transform:translateX(6px);transition:opacity .35s ease, transform .35s ease, border-color .25s ease, background .25s ease
+    }
+    .step.on{opacity:1;transform:none;border-color:#efc5cb;background:#fff8f8}
+    .step i{
+      width:28px;height:28px;border-radius:50%;background:var(--soft);color:var(--mute);
+      display:grid;place-items:center;font-style:normal;font-size:.72rem;font-weight:800
+    }
+    .step.on i{background:var(--rose);color:#fff}
+    .step strong{display:block;font-size:clamp(.8rem,1.7vh,.92rem);margin-bottom:2px}
+    .step span{display:block;font-size:clamp(.7rem,1.45vh,.8rem);color:var(--mute);line-height:1.35}
+
+    .foot{
+      flex:0 0 auto;display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:8px;
+      border-top:1px solid var(--line)
+    }
+    .foot button{
+      border:0;background:var(--rose);color:#fff;font:inherit;font-weight:700;font-size:.74rem;
+      border-radius:8px;padding:.4rem .75rem;cursor:pointer
+    }
+    .foot button.ghost{background:#2a3140}
+    .foot .note{margin-left:auto;font-size:.66rem;color:#98a;white-space:nowrap}
+
+    @media (max-width:620px){
+      .body{grid-template-columns:1fr;grid-template-rows:minmax(0,.42fr) minmax(0,.58fr)}
+      .visual{border-right:0;border-bottom:1px solid var(--line);padding:8px}
+      .visual img{width:min(42%,160px)}
+    }
+
+    html:not(.embed) body{overflow:auto;display:grid;place-items:center;padding:1rem;min-height:100%;height:auto;background:#1a1f2b}
+    html:not(.embed) .app{
+      width:min(960px,100%);aspect-ratio:16/9;height:auto;border-radius:14px;overflow:hidden;
+      box-shadow:0 24px 60px rgba(0,0,0,.4)
+    }
+  </style>
+</head>
+<body>
+  <div class="app" role="region" aria-label="마이안심이 상황별 동작">
+    <div class="head">
+      <h1>상황별 동작</h1>
+      <div class="modes" id="modes" role="tablist" aria-label="시나리오 선택"></div>
+    </div>
+    <div class="body">
+      <div class="visual">
+        <div class="badge" id="badge">본체</div>
+        <img id="device" src="../images/device.png" alt="마이안심이 본체" />
+      </div>
+      <div class="panel">
+        <h2 id="title">—</h2>
+        <p class="lead" id="lead">—</p>
+        <div class="steps" id="steps"></div>
+        <div class="foot">
+          <button type="button" class="ghost" id="prev">이전 상황</button>
+          <button type="button" id="next">다음 단계</button>
+          <span class="note">선택형 · 자동 Film 아님</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * 시나리오 소스: videos/SCENARIO.md
+     * A 현관문방범 / B 재택방범 / C 외출방범 / D 본체 버튼
+     */
+    if (new URLSearchParams(location.search).get('embed') === '0') {
+      document.documentElement.classList.remove('embed');
+    }
+
+    const SCENES = [
+      {
+        id: 'gate',
+        tab: '현관문방범',
+        badge: '기본 모드',
+        title: '현관문이 열렸을 때',
+        lead: '창문 감지기는 보지 않습니다. 현관문만 보고, 열린 뒤 비명을 듣습니다.',
+        steps: [
+          ['문 열림', '현관 센서가 열림을 감지합니다.'],
+          ['비명 대기', '15 · 20 · 30초(기본 30초) 동안 마이크가 듣습니다.'],
+          ['비명 인식', '강도야 · 사람살려 · 도와주세요 · 살려주세요 · 도둑이야'],
+          ['사이렌 · 알림', '110dB 사이렌과 보호자 문자·앱 알림이 갑니다.'],
+          ['부저 정지', '사이렌은 앱 「부저 정지」로만 끌 수 있습니다.']
+        ]
+      },
+      {
+        id: 'home',
+        tab: '재택방범',
+        badge: '집에 있을 때',
+        title: '혼자 있을 때 · 재택방범',
+        lead: '현관문에 더해 창문까지 함께 봅니다. 열리면 사이렌 없이 앱으로만 알립니다.',
+        steps: [
+          ['재택 전환', '앱 또는 본체 왼쪽 「재택방범」으로 켭니다.'],
+          ['창문·현관 감시', '창·문이 열리면 바로 감지합니다.'],
+          ['앱 알람', '사이렌은 울리지 않고 스마트폰 푸시만 갑니다.'],
+          ['현관문방범 전환', '알람 후 현관문방범으로 바뀌어 비명 대기가 시작됩니다.']
+        ]
+      },
+      {
+        id: 'out',
+        tab: '외출방범',
+        badge: '집을 비울 때',
+        title: '외출 중 · 빈집 감시',
+        lead: '문 닫힌 뒤 앱이 끊기면 약 60초 후 외출방범으로 바뀝니다.',
+        steps: [
+          ['외출 전환', 'Bluetooth 끊김 약 60초(또는 위치 기반)로 외출방범 시작.'],
+          ['창문 / 현관', '창문은 즉시, 현관은 15초 유예 후 알람.'],
+          ['짧은 부저', '약 1초 부저 · 10초 녹음 · 서버 경유 푸시.'],
+          ['귀가 복귀', '앱이 다시 연결되면 현관문방범으로 돌아갑니다.']
+        ]
+      },
+      {
+        id: 'btn',
+        tab: '본체 버튼',
+        badge: '재택방범 · SOS · 5분해제',
+        title: '본체에서 바로 다루는 세 가지',
+        lead: '왼쪽부터 재택방범 · SOS · 5분해제입니다. (가운데 SOS가 가장 큽니다.)',
+        steps: [
+          ['재택방범', '왼쪽 — 재택 모드를 켜거나 끕니다.'],
+          ['SOS', '가운데 — 3초 길게 누르면 비상 호출.'],
+          ['5분해제', '오른쪽 — 방범을 5분만 잠시 끕니다. 끝나면 현관문방범으로 복귀.'],
+          ['비밀번호 초기화', '양쪽 버튼을 함께 길게 누르면 초기화됩니다.']
+        ]
+      }
+    ];
+
+    const modes = document.getElementById('modes');
+    const stepsEl = document.getElementById('steps');
+    const title = document.getElementById('title');
+    const lead = document.getElementById('lead');
+    const badge = document.getElementById('badge');
+    const device = document.getElementById('device');
+
+    let si = 0;      // scene index
+    let ki = 0;      // revealed step index
+    let auto = null;
+
+    SCENES.forEach((sc, idx) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = sc.tab;
+      b.setAttribute('role', 'tab');
+      if (idx === 0) b.classList.add('on');
+      b.onclick = () => select(idx);
+      modes.appendChild(b);
+    });
+    const modeBtns = [...modes.querySelectorAll('button')];
+
+    function renderSteps() {
+      const sc = SCENES[si];
+      stepsEl.innerHTML = '';
+      sc.steps.forEach((pair, idx) => {
+        const el = document.createElement('div');
+        el.className = 'step' + (idx <= ki ? ' on' : '');
+        el.innerHTML = `<i>${idx + 1}</i><div><strong>${pair[0]}</strong><span>${pair[1]}</span></div>`;
+        stepsEl.appendChild(el);
+      });
+    }
+
+    function select(n) {
+      si = (n + SCENES.length) % SCENES.length;
+      ki = 0;
+      const sc = SCENES[si];
+      title.textContent = sc.title;
+      lead.textContent = sc.lead;
+      badge.textContent = sc.badge;
+      modeBtns.forEach((b, idx) => b.classList.toggle('on', idx === si));
+      device.style.transform = 'scale(.96)';
+      device.style.opacity = '.85';
+      setTimeout(() => {
+        device.style.transform = 'scale(1)';
+        device.style.opacity = '1';
+      }, 160);
+      renderSteps();
+      armReveal();
+    }
+
+    function revealNext() {
+      const max = SCENES[si].steps.length - 1;
+      if (ki < max) {
+        ki += 1;
+        renderSteps();
+      } else {
+        select(si + 1);
+      }
+    }
+
+    function armReveal() {
+      clearInterval(auto);
+      auto = setInterval(() => {
+        const max = SCENES[si].steps.length - 1;
+        if (ki < max) {
+          ki += 1;
+          renderSteps();
+        } else {
+          clearInterval(auto);
+        }
+      }, 1600);
+    }
+
+    document.getElementById('next').onclick = () => {
+      clearInterval(auto);
+      revealNext();
+      if (ki < SCENES[si].steps.length - 1) armReveal();
+    };
+    document.getElementById('prev').onclick = () => {
+      clearInterval(auto);
+      select(si - 1);
+    };
+
+    select(0);
+  </script>
+</body>
+</html>
