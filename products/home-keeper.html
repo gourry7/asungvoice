@@ -9,8 +9,20 @@
 <link rel="icon" href="../assets/images/logo.png?v=2" type="image/png">
 <title>마이안심이 | 아성보이스</title>
 <meta name="description" content="마이안심이 — 1인 여성 가구 라이프스타일 안심 오브제, On-Device AI 비명 인식">
-<link rel="stylesheet" href="../css/style.css?v=20260810e">
-
+<link rel="stylesheet" href="../css/style.css?v=20261103c">
+<style>
+.use-demo{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);border:1px solid var(--border);overflow:hidden}
+.use-demo__frame{aspect-ratio:16/9;background:#111;border:0;width:100%;display:block;max-height:min(62vw,520px)}
+.use-demo__cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;font-size:.88rem;color:var(--text-2);border-top:1px solid var(--border)}
+.use-demo__cap a{color:var(--pink-dark);font-weight:700}
+.use-demo__img{width:100%;display:block;background:#f7f3ee}
+.mode-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.mode-tabs button{border:1px solid var(--border);background:var(--white);color:var(--text-2);font:inherit;font-weight:700;font-size:.86rem;padding:.55rem 1rem;border-radius:999px;cursor:pointer}
+.mode-tabs button.on{background:var(--pink);border-color:var(--pink);color:#fff}
+.mode-panel{display:none}
+.mode-panel.on{display:block}
+.manual-links{margin-top:10px}
+</style>
 </head>
 <body class="page-neu page-sub">
 <a href="#main" class="skip">본문 바로가기</a>
@@ -33,18 +45,19 @@
 </nav>
 <section class="page-hero"><div class="container"><div class="breadcrumb"><a href="../index.html">홈</a> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>제품소개</span> <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> <span>마이안심이</span></div><h1>마이안심이</h1></div></section>
 <main id="main"><div class="container sub-layout"><aside class="sidebar"><div class="sidebar__title">제품소개</div><nav class="sidebar__nav"><a href="home-keeper.html" class="is-active">마이안심이</a><a href="elevator.html" class="">승강기 비명감지기</a><a href="restroom.html" class="">화장실 비명감지기</a><a href="light-switch.html" class="">비명인식 일괄소등스위치</a><a href="module.html" class="">비명인식 모듈</a></nav></aside><div class="content-area">
+
 <div class="prod-hero reveal prod-hero--pink">
 <div class="prod-hero__img"><img src="../assets/images/products/home-keeper.png?v=3" alt="마이안심이"></div>
 <div class="prod-hero__info"><span class="model">마이안심이 · 실용신안 KR 20-0498161</span><h2>마이안심이</h2>
-<p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구(280만)를 위한 재택 방범 디바이스. 비명 하나로 110dB 이상 강력 경보와 보호자 앱 알림을 즉시 전송합니다.</p>
+<p><strong>나를 지켜주는 스마트한 안심 파트너.</strong> 1인 여성 가구를 위한 재택 방범 디바이스. 비명 인식 시 110dB 이상 경보와 보호자 앱 알림을 보냅니다. 상시 감청 없이, 비상 시에만 동작합니다.</p>
 <div class="prod-hero__actions">
-<a href="my-ansimi-manual/index.html" class="btn btn--pink">사용 설명서 보기</a>
-<a href="../support/inquiry.html" class="btn btn--outline">도입 문의</a>
+<a href="#how" class="btn btn--pink">동작 순서 보기</a>
+<a href="#manual" class="btn btn--outline">사용 설명서</a>
 </div></div></div>
 
 <div class="content-block reveal" id="manual">
 <h2>사용 설명서</h2>
-<p class="section-sub">마이안심이 설치·사용 매뉴얼</p>
+<p class="section-sub">설치·앱·모드 안내 — 웹 / 간단 / PDF</p>
 <div class="manual-links">
 <a class="manual-card neu-card" href="my-ansimi-manual/index.html">
 <strong>웹 사용설명서</strong>
@@ -61,6 +74,53 @@
 </div>
 </div>
 
+<div class="content-block reveal" id="how">
+<h2>동작 순서</h2>
+<p class="section-sub">문 열림부터 보호자 알림까지</p>
+<figure class="ir-figure ir-figure--full neu-card"><img src="../assets/images/diagrams/homekeeper-system.png?v=20261103keep" alt="마이안심이 동작 순서" loading="lazy"><figcaption>① 문열림 감지 → ② AI 비명인식 → ③ 110dB 경보 → ④ 보호자 앱·문자 알림</figcaption></figure>
+</div>
+
+<div class="content-block reveal" id="how-modes">
+<h2>모드별 동작</h2>
+<p class="section-sub">현관문방범 · 재택방범 · 외출방범 — 모드를 고르면 단계별 동작이 보입니다</p>
+<div class="mode-tabs" role="tablist" aria-label="방범 모드">
+<button type="button" class="on" data-mode="gate">현관문방범</button>
+<button type="button" data-mode="home">재택방범</button>
+<button type="button" data-mode="out">외출방범</button>
+</div>
+<div class="mode-panel on" id="mode-gate" role="tabpanel">
+<figure class="use-demo" style="margin:0">
+<img class="use-demo__img" src="my-ansimi-manual/images/mode-gate-flow.png?v=20261103style" alt="현관문방범 5단계 — 문 열림, 자석감지기, 비명인식 대기, 사이렌, 보호자 알림">
+<div class="use-demo__cap"><span>문 열림 → 비명 대기 → 사이렌 → 보호자 알림</span><a href="my-ansimi-manual/images/mode-gate-flow.png" target="_blank" rel="noopener">크게 보기</a></div>
+</figure>
+</div>
+<div class="mode-panel" id="mode-home" role="tabpanel">
+<figure class="use-demo" style="margin:0">
+<img class="use-demo__img" src="my-ansimi-manual/images/mode-home-flow.png?v=20261103top" alt="재택방범 5단계 — 재택 시작, 창문·현관 감시, 열림 감지, 앱 알람, 현관문방범 전환">
+<div class="use-demo__cap"><span>재택 감시 → 열림 → 앱 알람(사이렌 없음) → 현관문방범 전환</span><a href="my-ansimi-manual/images/mode-home-flow.png" target="_blank" rel="noopener">크게 보기</a></div>
+</figure>
+</div>
+<div class="mode-panel" id="mode-out" role="tabpanel">
+<figure class="use-demo" style="margin:0">
+<img class="use-demo__img" src="my-ansimi-manual/images/mode-out-flow.png?v=20261103style" alt="외출방범 5단계 — 외출, 60초 전환, 창문·현관 감지, 짧은 부저, 푸시 알림">
+<div class="use-demo__cap"><span>외출 전환 → 창문 즉시/현관 15초 → 짧은 부저 → 푸시</span><a href="my-ansimi-manual/images/mode-out-flow.png" target="_blank" rel="noopener">크게 보기</a></div>
+</figure>
+</div>
+</div>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.mode-tabs button');
+  var panels={gate:document.getElementById('mode-gate'),home:document.getElementById('mode-home'),out:document.getElementById('mode-out')};
+  tabs.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      tabs.forEach(function(b){b.classList.remove('on')});
+      btn.classList.add('on');
+      Object.keys(panels).forEach(function(k){panels[k].classList.toggle('on',k===btn.dataset.mode)});
+    });
+  });
+})();
+</script>
+
 <div class="content-block reveal"><h2>범죄 노출 vs 마이안심이 솔루션</h2>
 <p class="section-sub">1인 여성가구 방범의 필요성</p>
 <div class="vs-block">
@@ -68,11 +128,11 @@
 <div class="vs-block__badge">VS</div>
 <div class="vs-block__col vs-block__col--solve"><div class="vs-block__label">마이안심이 SOLUTION</div><ul><li><strong>110dB 이상 강력 경보</strong><span>비명 인식 즉시 강력 경고음 송출 — 범죄자 퇴치</span></li><li><strong>지정 보호자 즉시 통보</strong><span>부모님·지인 등 사전 등록 연락처로 비상 상황 자동 전송</span></li><li><strong>모바일 앱 연동</strong><span>집안 상태 모니터링·설정 — 언제 어디서나 나만의 보안관</span></li></ul></div>
 </div>
-</div><div class="content-block reveal"><h2>동작 순서</h2>
-<figure class="ir-figure ir-figure--full neu-card"><img src="../assets/images/diagrams/homekeeper-system.png?v=7" alt="마이안심이 동작 순서" loading="lazy"><figcaption>① 문열림 감지 → ② AI 비명인식 → ③ 110dB 경보 → ④ 보호자 앱·문자 알림</figcaption></figure></div>
+</div>
+
 <div class="content-block reveal"><h2>기술 사양</h2><table class="spec-table">
 <tr><th>제품명</th><td>마이안심이</td></tr>
-<tr><th>인식 방식</th><td>On-Device AI 비명 인식 (음원 패턴만 분석)</td></tr>
+<tr><th>인식 방식</th><td>On-Device AI 비명 인식 (상시 감청 없음)</td></tr>
 <tr><th>알람</th><td>110dB 이상 사이렌 + SOS 비상호출</td></tr>
 <tr><th>센서</th><td>BLE 자석감지기 (CR2032, 약 1년)</td></tr>
 <tr><th>통신</th><td>WiFi (2.4GHz) · BLE</td></tr>
@@ -87,5 +147,4 @@
 <address class="footer__info">대표: 이승현 | 서울시 금천구 가산디지털1로 149, 3층 304디-14호 | <a href="tel:07087099911">070-8709-9911</a> | 팩스: 02-6203-1689<br>사업자등록번호 118-87-00016 | Copyright &copy; 2016 아성보이스.</address>
 </div></footer>
 <script src="../js/main.js?v=20260625"></script>
-
 </body></html>
