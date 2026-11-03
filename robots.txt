@@ -1,5 +1,3 @@
 User-agent: *
-Disallow: /ops/
-Disallow: /asungvoice/ops/
 Disallow: /support/admin.html
 Disallow: /asungvoice/support/admin.html
