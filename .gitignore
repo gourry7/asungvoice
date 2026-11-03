@@ -3,3 +3,11 @@
 _gen_pages.py
 # GitHub 100MB file limit — notice-139 video linked via YouTube in content
 data/downloads/notices/notice-139-142.mp4
+
+# local / publish junk
+**/__pycache__/
+**/*before-*.png
+**/_debug*
+assets/images/my-ansimi-figma/
+assets/images/ir/
+css/my-ansimi.css
